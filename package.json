@@ -7,6 +7,11 @@
     "dist",
     "src"
   ],
+  "homepage": "https://github.com/aboveyunhai/chakra-dayzed-datepicker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aboveyunhai/chakra-dayzed-datepicker.git"
+  },
   "engines": {
     "node": ">=10"
   },
