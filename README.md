@@ -2,8 +2,8 @@
 
 Every individual component is using Chakra UI. So it should respect all Chakra UI Configs without problem.
 
-![datepicker](https://user-images.githubusercontent.com/35160613/127602650-ca858edc-eb8d-4c9b-af70-d16f472a12dc.gif)
-
+<img src="https://user-images.githubusercontent.com/35160613/141594524-35a0c536-d9fd-4528-bd56-f647b98755be.gif" height="50%"/>
+<img src="https://user-images.githubusercontent.com/35160613/141594549-31f55369-6e0e-4818-9351-6f515e3f1f84.gif" height="50%"/>
 
 The componenent itself has to use some `date` library
 
@@ -18,7 +18,8 @@ npm i chakra-dayzed-datepicker
 ```
 
 ## Basic usage
-```js
+### Single
+```jsx
   const [date, setDate] = useState(new Date());
   
   <SingleDatepicker
@@ -27,4 +28,14 @@ npm i chakra-dayzed-datepicker
     onDateChange={setDate}
   />
 
+```
+### Range:
+```jsx
+  const [selectedDates, setSelectedDates] = useState<Date[]>([new Date(), new Date()]);
+  const [date, setDate] = useState(new Date());
+  
+  <RangeDatepicker
+    selectedDates={selectedDates}
+    onDateChange={setSelectedDates}
+  />
 ```
