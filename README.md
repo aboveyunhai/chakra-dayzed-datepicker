@@ -7,7 +7,7 @@ Every individual component is using Chakra UI. So it should respect all Chakra U
 
 The componenent itself has to use some `date` library
 
-Highly recommend just copy/paste the source code from `/src/index.tsx` to customize however you want. 
+Highly recommend just copy/paste the source code from `/src` to customize however you want. 
 
 ## Install the dependency
 ```
