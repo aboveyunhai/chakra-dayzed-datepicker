@@ -1,21 +1,29 @@
 import 'react-app-polyfill/ie11';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { Center, ChakraProvider } from '@chakra-ui/react';
-import { SingleDatepicker } from '../.';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { ChakraProvider, VStack } from '@chakra-ui/react';
+import { SingleDatepicker, RangeDatepicker } from '../src';
 import { useState } from 'react';
 
 const App = () => {
   const [date, setDate] = useState(new Date());
+  const [selectedDates, setSelectedDates] = useState<Date[]>([
+    new Date(),
+    new Date(),
+  ]);
   return (
     <ChakraProvider>
-      <Center padding={'1em'} minHeight="500px">
+      <VStack padding={'1em'} spacing={5} minHeight={'600px'}>
         <SingleDatepicker
           name="date-input"
           date={date}
           onDateChange={setDate}
         />
-      </Center>
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+        />
+      </VStack>
     </ChakraProvider>
   );
 };
