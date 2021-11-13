@@ -1,6 +1,9 @@
 # A Simple Chakra Datepicker based on Dayzed.
 
-Every individual component is using Chakra UI. So it should respect all Chakra UI Configs without problem.
+[![npm version](https://badge.fury.io/js/chakra-dayzed-datepicker.svg)](https://badge.fury.io/js/chakra-dayzed-datepicker) ![Downloads](https://img.shields.io/npm/dm/chakra-dayzed-datepicker.svg)
+
+
+Every individual component is using Chakra UI. So it should respect all [Chakra UI](https://github.com/chakra-ui/chakra-ui) Configs without problem.
 
 <img src="https://user-images.githubusercontent.com/35160613/141594524-35a0c536-d9fd-4528-bd56-f647b98755be.gif" height="50%"/>
 <img src="https://user-images.githubusercontent.com/35160613/141594549-31f55369-6e0e-4818-9351-6f515e3f1f84.gif" height="50%"/>
