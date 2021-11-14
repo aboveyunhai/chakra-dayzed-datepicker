@@ -57,7 +57,7 @@
     }
   ],
   "devDependencies": {
-    "@chakra-ui/react": "^1.6.5",
+    "@chakra-ui/react": "^1.7.1",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@size-limit/preset-small-lib": "^6.0.4",
