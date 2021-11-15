@@ -9,25 +9,21 @@ import {
 } from '@chakra-ui/react';
 import { RenderProps } from 'dayzed';
 import React from 'react';
+import { DatepickerConfigs, DatepickerProps } from '../utils/commonTypes';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
 import { DayOfMonth } from './dayOfMonth';
 
-interface CalendarPaneProps {
+interface CalendarPanelProps extends DatepickerProps {
   renderProps: RenderProps;
   configs: DatepickerConfigs;
   onMouseEnterHighlight?: (date: Date) => void;
   isInRange?: (date: Date) => boolean | null;
 }
 
-export interface DatepickerConfigs {
-  dateFormat: string;
-  monthNames: string[];
-  dayNames: string[];
-}
-
-export const CalendarPanel: React.FC<CalendarPaneProps> = ({
+export const CalendarPanel: React.FC<CalendarPanelProps> = ({
   renderProps,
   configs,
+  styleConfigs,
   onMouseEnterHighlight,
   isInRange,
 }) => {
@@ -54,6 +50,7 @@ export const CalendarPanel: React.FC<CalendarPaneProps> = ({
               <DatepickerBackBtns
                 calendars={calendars}
                 getBackProps={getBackProps}
+                styleConfigs={styleConfigs}
               />
               <Heading size="sm" textAlign="center">
                 {configs.monthNames[calendar.month]} {calendar.year}
@@ -61,6 +58,7 @@ export const CalendarPanel: React.FC<CalendarPaneProps> = ({
               <DatepickerForwardBtns
                 calendars={calendars}
                 getForwardProps={getForwardProps}
+                styleConfigs={styleConfigs}
               />
             </HStack>
             <Divider />
@@ -83,6 +81,7 @@ export const CalendarPanel: React.FC<CalendarPaneProps> = ({
                     <DayOfMonth
                       key={key}
                       dateObj={dateObj}
+                      styleConfigs={styleConfigs}
                       renderProps={renderProps}
                       isInRange={isInRange && isInRange(date)}
                       onMouseEnter={() => {

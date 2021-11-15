@@ -10,10 +10,14 @@ import {
 import { useDayzed } from 'dayzed';
 import { format } from 'date-fns';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
-import { CalendarPanel, DatepickerConfigs } from './components/calendarPanel';
-import { OnDateSelected } from './utils/commonTypes';
+import { CalendarPanel } from './components/calendarPanel';
+import {
+  DatepickerConfigs,
+  DatepickerProps,
+  OnDateSelected,
+} from './utils/commonTypes';
 
-export interface SingleDatepickerProps {
+export interface SingleDatepickerProps extends DatepickerProps {
   date: Date;
   configs?: DatepickerConfigs;
   disabled?: boolean;
@@ -30,6 +34,7 @@ const DefaultConfigs = {
 
 export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   configs = DefaultConfigs,
+  styleConfigs,
   ...props
 }) => {
   const { date, name, disabled, onDateChange, id } = props;
@@ -84,7 +89,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
       </PopoverTrigger>
       <PopoverContent ref={ref} width="100%">
         <PopoverBody>
-          <CalendarPanel renderProps={dayzedData} configs={configs} />
+          <CalendarPanel
+            renderProps={dayzedData}
+            configs={configs}
+            styleConfigs={styleConfigs}
+          />
         </PopoverBody>
       </PopoverContent>
     </Popover>

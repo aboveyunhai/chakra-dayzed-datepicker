@@ -35,10 +35,28 @@ npm i chakra-dayzed-datepicker
 ### Range:
 ```jsx
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date(), new Date()]);
-  const [date, setDate] = useState(new Date());
   
   <RangeDatepicker
     selectedDates={selectedDates}
     onDateChange={setSelectedDates}
   />
+```
+### StyleConfigs: 
+`dateNavBtnProps` and `dayOfMonthBtnProps` extends from `ButtonProps` of Chakra-UI
+
+<br/>Example:
+```js
+  styleConfigs={{
+    dateNavBtnProps: {
+      colorScheme: "blue",
+      variant: "outline"
+    },
+    dayOfMonthBtnProps: {
+      borderColor: "red.300",
+      selectedBg: "blue.200",
+      _hover: {
+        bg: 'blue.400',
+      }
+    }
+  }}
 ```

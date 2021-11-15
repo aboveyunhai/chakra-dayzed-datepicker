@@ -23,6 +23,23 @@ const App = () => {
           selectedDates={selectedDates}
           onDateChange={setSelectedDates}
         />
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+          styleConfigs={{
+            dateNavBtnProps: {
+              colorScheme: "blue",
+              variant: "outline"
+            },
+            dayOfMonthBtnProps: {
+              borderColor: "red.300",
+              selectedBg: "blue.200",
+              _hover: {
+                bg: 'blue.400',
+              }
+            }
+          }}
+        />
       </VStack>
     </ChakraProvider>
   );

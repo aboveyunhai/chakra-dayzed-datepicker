@@ -11,18 +11,25 @@ import {
   PopoverTrigger,
   useOutsideClick,
 } from '@chakra-ui/react';
-import { CalendarPanel, DatepickerConfigs } from './components/calendarPanel';
-import { OnDateSelected } from './utils/commonTypes';
+import { CalendarPanel } from './components/calendarPanel';
+import {
+  DatepickerConfigs,
+  DatepickerProps,
+  OnDateSelected,
+  StyleConfigs,
+} from './utils/commonTypes';
 import { format } from 'date-fns';
 
 interface RangeCalendarPanelProps {
   configs: DatepickerConfigs;
+  styleConfigs?: StyleConfigs;
   selected?: Date | Date[];
   renderProps: RenderProps;
 }
 
 const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
   configs,
+  styleConfigs,
   selected,
   renderProps,
 }) => {
@@ -97,6 +104,7 @@ const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
       <CalendarPanel
         renderProps={renderProps}
         configs={configs}
+        styleConfigs={styleConfigs}
         isInRange={isInRange}
         onMouseEnterHighlight={onMouseEnterHighlight}
       />
@@ -104,7 +112,7 @@ const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
   );
 };
 
-export interface RangeDatepickerProps {
+export interface RangeDatepickerProps extends DatepickerProps {
   initDate?: Date;
   selectedDates: Date[];
   minDate?: Date;
@@ -124,6 +132,7 @@ const DefaultConfigs = {
 
 export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   configs = DefaultConfigs,
+  styleConfigs = {},
   initDate = new Date(),
   id,
   name,
@@ -209,6 +218,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
           <RangeCalendarPanel
             renderProps={dayzedData}
             configs={configs}
+            styleConfigs={styleConfigs}
             selected={selectedDates}
           />
         </PopoverBody>

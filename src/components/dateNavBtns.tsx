@@ -1,8 +1,9 @@
 import { Button, ButtonProps } from '@chakra-ui/react';
 import { Calendar, GetBackForwardPropsOptions } from 'dayzed';
 import React, { Fragment } from 'react';
+import { DatepickerProps } from '../utils/commonTypes';
 
-export interface DatepickerBackBtnsProps {
+export interface DatepickerBackBtnsProps extends DatepickerProps {
   calendars: Calendar[];
   getBackProps: (data: GetBackForwardPropsOptions) => Record<string, any>;
 }
@@ -16,6 +17,7 @@ export const DatepickerBackBtns: React.FC<DatepickerBackBtnsProps> = (
   props
 ) => {
   const { calendars, getBackProps } = props;
+  const customBtnProps = props.styleConfigs?.dateNavBtnProps;
   return (
     <Fragment>
       <Button
@@ -24,26 +26,38 @@ export const DatepickerBackBtns: React.FC<DatepickerBackBtnsProps> = (
           offset: 12,
         })}
         {...DefaultBtnStyle}
+        {...customBtnProps}
       >
         {'<<'}
       </Button>
-      <Button {...getBackProps({ calendars })} {...DefaultBtnStyle}>
+      <Button
+        {...getBackProps({ calendars })}
+        {...DefaultBtnStyle}
+        {...customBtnProps}
+      >
         {'<'}
       </Button>
     </Fragment>
   );
 };
 
-export interface DatepickerForwardBtnsProps {
+export interface DatepickerForwardBtnsProps extends DatepickerProps {
   calendars: Calendar[];
   getForwardProps: (data: GetBackForwardPropsOptions) => Record<string, any>;
 }
 
-export const DatepickerForwardBtns = (props: DatepickerForwardBtnsProps) => {
+export const DatepickerForwardBtns: React.FC<DatepickerForwardBtnsProps> = (
+  props
+) => {
   const { calendars, getForwardProps } = props;
+  const customBtnProps = props.styleConfigs?.dateNavBtnProps;
   return (
     <Fragment>
-      <Button {...getForwardProps({ calendars })} {...DefaultBtnStyle}>
+      <Button
+        {...getForwardProps({ calendars })}
+        {...DefaultBtnStyle}
+        {...customBtnProps}
+      >
         {'>'}
       </Button>
       <Button
@@ -52,6 +66,7 @@ export const DatepickerForwardBtns = (props: DatepickerForwardBtnsProps) => {
           offset: 12,
         })}
         {...DefaultBtnStyle}
+        {...customBtnProps}
       >
         {'>>'}
       </Button>

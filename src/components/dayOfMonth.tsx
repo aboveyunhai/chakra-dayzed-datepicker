@@ -1,8 +1,9 @@
 import { Button } from '@chakra-ui/react';
 import { DateObj, RenderProps } from 'dayzed';
 import React from 'react';
+import { DatepickerProps } from '../utils/commonTypes';
 
-interface DayOfMonthProps {
+interface DayOfMonthProps extends DatepickerProps {
   renderProps: RenderProps;
   isInRange?: boolean | null;
   dateObj: DateObj;
@@ -11,14 +12,19 @@ interface DayOfMonthProps {
 
 export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   dateObj,
+  styleConfigs,
   isInRange,
   renderProps,
   onMouseEnter,
 }) => {
   const { date, selected, selectable, today } = dateObj;
   const { getDateProps } = renderProps;
-  let bg = selected || isInRange ? 'purple.200' : 'transparent';
-  bg = !selectable ? 'red.200' : bg;
+  const customBtnProps = styleConfigs?.dayOfMonthBtnProps;
+  let bg =
+    selected || isInRange
+      ? customBtnProps?.selectedBg || 'purple.200'
+      : 'transparent';
+  bg = !selectable ? customBtnProps?.disabledBg || 'red.200' : bg;
   const halfGap = 0.125; //default Chakra-gap-space-1 is 0.25rem
   return (
     <Button
@@ -30,7 +36,6 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
       disabled={!selectable}
       size="sm"
       variant="outline"
-      borderColor={today ? 'blue.400' : 'transparent'}
       bg={bg}
       _hover={{
         bg: 'purple.400',
@@ -47,6 +52,10 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
         borderWidth: `${halfGap}rem`,
         borderColor: 'transparent',
       }}
+      {...customBtnProps}
+      borderColor={
+        today ? customBtnProps?.borderColor || 'blue.400' : 'transparent'
+      }
     >
       {selectable ? date.getDate() : 'X'}
     </Button>
