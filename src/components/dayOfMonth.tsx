@@ -19,11 +19,9 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
 }) => {
   const { date, selected, selectable, today } = dateObj;
   const { getDateProps } = renderProps;
-  const { selectedBg, ...customBtnProps } = propsConfigs?.dayOfMonthBtnProps || {};
-  let bg =
-    selected || isInRange
-      ? selectedBg || 'purple.200'
-      : 'transparent';
+  const { selectedBg, ...customBtnProps } =
+    propsConfigs?.dayOfMonthBtnProps || {};
+  let bg = selected || isInRange ? selectedBg || 'purple.200' : 'transparent';
   bg = !selectable ? customBtnProps?.disabledBg || 'red.200' : bg;
   const halfGap = 0.125; //default Chakra-gap-space-1 is 0.25rem
   return (
