@@ -12,17 +12,17 @@ interface DayOfMonthProps extends DatepickerProps {
 
 export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   dateObj,
-  propsConfigs = {},
+  propsConfigs,
   isInRange,
   renderProps,
   onMouseEnter,
 }) => {
   const { date, selected, selectable, today } = dateObj;
   const { getDateProps } = renderProps;
-  const customBtnProps = propsConfigs?.dayOfMonthBtnProps;
+  const { selectedBg, ...customBtnProps } = propsConfigs?.dayOfMonthBtnProps || {};
   let bg =
     selected || isInRange
-      ? customBtnProps?.selectedBg || 'purple.200'
+      ? selectedBg || 'purple.200'
       : 'transparent';
   bg = !selectable ? customBtnProps?.disabledBg || 'red.200' : bg;
   const halfGap = 0.125; //default Chakra-gap-space-1 is 0.25rem
