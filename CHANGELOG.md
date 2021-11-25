@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.4] - 2021-11-25
  
 ### Added
- 
+- add `inputProps` to customize `Input` element
 ### Changed
 
 - breaking: `styleConfigs` -> `propsConfigs` for its true intent
