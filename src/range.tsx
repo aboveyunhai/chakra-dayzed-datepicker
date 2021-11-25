@@ -16,20 +16,20 @@ import {
   DatepickerConfigs,
   DatepickerProps,
   OnDateSelected,
-  StyleConfigs,
+  PropsConfigs,
 } from './utils/commonTypes';
 import { format } from 'date-fns';
 
 interface RangeCalendarPanelProps {
   configs: DatepickerConfigs;
-  styleConfigs?: StyleConfigs;
+  propsConfigs?: PropsConfigs;
   selected?: Date | Date[];
   renderProps: RenderProps;
 }
 
 const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
   configs,
-  styleConfigs,
+  propsConfigs,
   selected,
   renderProps,
 }) => {
@@ -104,7 +104,7 @@ const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
       <CalendarPanel
         renderProps={renderProps}
         configs={configs}
-        styleConfigs={styleConfigs}
+        propsConfigs={propsConfigs}
         isInRange={isInRange}
         onMouseEnterHighlight={onMouseEnterHighlight}
       />
@@ -132,7 +132,7 @@ const DefaultConfigs = {
 
 export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   configs = DefaultConfigs,
-  styleConfigs = {},
+  propsConfigs = {},
   initDate = new Date(),
   id,
   name,
@@ -211,6 +211,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
           name={name}
           value={intVal}
           onChange={(e) => e.target.value}
+          {...propsConfigs.inputProps}
         />
       </PopoverTrigger>
       <PopoverContent ref={ref} width="100%">
@@ -218,7 +219,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
           <RangeCalendarPanel
             renderProps={dayzedData}
             configs={configs}
-            styleConfigs={styleConfigs}
+            propsConfigs={propsConfigs}
             selected={selectedDates}
           />
         </PopoverBody>

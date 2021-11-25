@@ -12,14 +12,14 @@ interface DayOfMonthProps extends DatepickerProps {
 
 export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   dateObj,
-  styleConfigs,
+  propsConfigs = {},
   isInRange,
   renderProps,
   onMouseEnter,
 }) => {
   const { date, selected, selectable, today } = dateObj;
   const { getDateProps } = renderProps;
-  const customBtnProps = styleConfigs?.dayOfMonthBtnProps;
+  const customBtnProps = propsConfigs?.dayOfMonthBtnProps;
   let bg =
     selected || isInRange
       ? customBtnProps?.selectedBg || 'purple.200'

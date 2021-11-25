@@ -23,7 +23,7 @@ interface CalendarPanelProps extends DatepickerProps {
 export const CalendarPanel: React.FC<CalendarPanelProps> = ({
   renderProps,
   configs,
-  styleConfigs,
+  propsConfigs,
   onMouseEnterHighlight,
   isInRange,
 }) => {
@@ -50,7 +50,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
               <DatepickerBackBtns
                 calendars={calendars}
                 getBackProps={getBackProps}
-                styleConfigs={styleConfigs}
+                propsConfigs={propsConfigs}
               />
               <Heading size="sm" textAlign="center">
                 {configs.monthNames[calendar.month]} {calendar.year}
@@ -58,7 +58,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
               <DatepickerForwardBtns
                 calendars={calendars}
                 getForwardProps={getForwardProps}
-                styleConfigs={styleConfigs}
+                propsConfigs={propsConfigs}
               />
             </HStack>
             <Divider />
@@ -81,7 +81,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                     <DayOfMonth
                       key={key}
                       dateObj={dateObj}
-                      styleConfigs={styleConfigs}
+                      propsConfigs={propsConfigs}
                       renderProps={renderProps}
                       isInRange={isInRange && isInRange(date)}
                       onMouseEnter={() => {

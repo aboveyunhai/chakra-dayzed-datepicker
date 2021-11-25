@@ -26,7 +26,7 @@ const App = () => {
         <RangeDatepicker
           selectedDates={selectedDates}
           onDateChange={setSelectedDates}
-          styleConfigs={{
+          propsConfigs={{
             dateNavBtnProps: {
               colorScheme: "blue",
               variant: "outline"
@@ -37,6 +37,9 @@ const App = () => {
               _hover: {
                 bg: 'blue.400',
               }
+            },
+            inputProps: {
+              size: "sm"
             }
           }}
         />

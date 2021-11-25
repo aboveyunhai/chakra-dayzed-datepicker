@@ -34,7 +34,7 @@ const DefaultConfigs = {
 
 export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   configs = DefaultConfigs,
-  styleConfigs,
+  propsConfigs,
   ...props
 }) => {
   const { date, name, disabled, onDateChange, id } = props;
@@ -85,6 +85,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           name={name}
           value={format(date, configs.dateFormat)}
           onChange={(e) => e.target.value}
+          {...propsConfigs?.inputProps}
         />
       </PopoverTrigger>
       <PopoverContent ref={ref} width="100%">
@@ -92,7 +93,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           <CalendarPanel
             renderProps={dayzedData}
             configs={configs}
-            styleConfigs={styleConfigs}
+            propsConfigs={propsConfigs}
           />
         </PopoverBody>
       </PopoverContent>

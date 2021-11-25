@@ -41,12 +41,13 @@ npm i chakra-dayzed-datepicker
     onDateChange={setSelectedDates}
   />
 ```
-### StyleConfigs: 
+### propsConfigs: 
 `dateNavBtnProps` and `dayOfMonthBtnProps` extends from `ButtonProps` of Chakra-UI
+This allows you to override the default behavior however your want as long as supported by Chakra-UI.
 
 <br/>Example:
 ```js
-  styleConfigs={{
+  propsConfigs={{
     dateNavBtnProps: {
       colorScheme: "blue",
       variant: "outline"
@@ -57,6 +58,9 @@ npm i chakra-dayzed-datepicker
       _hover: {
         bg: 'blue.400',
       }
+    },
+    inputProps: {
+      size: "sm"
     }
   }}
 ```
