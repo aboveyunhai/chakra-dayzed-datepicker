@@ -18,7 +18,7 @@ import {
 } from './utils/commonTypes';
 
 export interface SingleDatepickerProps extends DatepickerProps {
-  date: Date;
+  date?: Date;
   configs?: DatepickerConfigs;
   disabled?: boolean;
   onDateChange: (date: Date) => void;
@@ -83,7 +83,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           ref={initialFocusRef}
           onClick={() => setPopoverOpen(!popoverOpen)}
           name={name}
-          value={format(date, configs.dateFormat)}
+          value={date ? format(date, configs.dateFormat) : ''}
           onChange={(e) => e.target.value}
           {...propsConfigs?.inputProps}
         />
