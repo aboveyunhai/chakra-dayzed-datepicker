@@ -4,11 +4,20 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [0.1.5] - 2022-01-27
+
+### Changed
+
+- allow `undefined` date, kudos @jcdogo 
+
  
 ## [0.1.4] - 2021-11-25
  
 ### Added
+
 - add `inputProps` to customize `Input` element
+
 ### Changed
 
 - breaking: `styleConfigs` -> `propsConfigs` for its true intent
