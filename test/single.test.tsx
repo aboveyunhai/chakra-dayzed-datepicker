@@ -11,4 +11,13 @@ describe('it', () => {
     );
     ReactDOM.unmountComponentAtNode(div);
   });
+
+  it('renders without crashing with undefined date', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(
+      <SingleDatepicker date={undefined} onDateChange={() => {}} />,
+      div
+    );
+    ReactDOM.unmountComponentAtNode(div);
+  });
 });
