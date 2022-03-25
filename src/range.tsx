@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   useOutsideClick,
+  Portal,
 } from '@chakra-ui/react';
 import { CalendarPanel } from './components/calendarPanel';
 import {
@@ -122,6 +123,7 @@ export interface RangeDatepickerProps extends DatepickerProps {
   onDateChange: (date: Date[]) => void;
   id?: string;
   name?: string;
+  usePortal?: boolean;
 }
 
 const DefaultConfigs = {
@@ -136,6 +138,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   initDate = new Date(),
   id,
   name,
+  usePortal,
   ...props
 }) => {
   const { selectedDates, minDate, maxDate, onDateChange, disabled } = props;
@@ -192,6 +195,8 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
     ? ` - ${format(selectedDates[1], configs.dateFormat)}`
     : '';
 
+  const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
+
   return (
     <Popover
       placement="bottom-start"
@@ -214,16 +219,18 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
           {...propsConfigs.inputProps}
         />
       </PopoverTrigger>
-      <PopoverContent ref={ref} width="100%">
-        <PopoverBody>
-          <RangeCalendarPanel
-            renderProps={dayzedData}
-            configs={configs}
-            propsConfigs={propsConfigs}
-            selected={selectedDates}
-          />
-        </PopoverBody>
-      </PopoverContent>
+      <PopoverContentWrapper>
+        <PopoverContent ref={ref} width="100%">
+          <PopoverBody>
+            <RangeCalendarPanel
+              renderProps={dayzedData}
+              configs={configs}
+              propsConfigs={propsConfigs}
+              selected={selectedDates}
+            />
+          </PopoverBody>
+        </PopoverContent>
+      </PopoverContentWrapper>
     </Popover>
   );
 };

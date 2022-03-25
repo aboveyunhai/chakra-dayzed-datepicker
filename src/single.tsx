@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   useOutsideClick,
+  Portal,
 } from '@chakra-ui/react';
 import { useDayzed } from 'dayzed';
 import { format } from 'date-fns';
@@ -24,6 +25,7 @@ export interface SingleDatepickerProps extends DatepickerProps {
   onDateChange: (date: Date) => void;
   id?: string;
   name?: string;
+  usePortal?: boolean;
 }
 
 const DefaultConfigs = {
@@ -35,6 +37,7 @@ const DefaultConfigs = {
 export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   configs = DefaultConfigs,
   propsConfigs,
+  usePortal,
   ...props
 }) => {
   const { date, name, disabled, onDateChange, id } = props;
@@ -66,6 +69,8 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     selected: date,
   });
 
+  const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
+
   return (
     <Popover
       placement="bottom-start"
@@ -88,15 +93,17 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           {...propsConfigs?.inputProps}
         />
       </PopoverTrigger>
-      <PopoverContent ref={ref} width="100%">
-        <PopoverBody>
-          <CalendarPanel
-            renderProps={dayzedData}
-            configs={configs}
-            propsConfigs={propsConfigs}
-          />
-        </PopoverBody>
-      </PopoverContent>
+      <PopoverContentWrapper>
+        <PopoverContent ref={ref} width="100%">
+          <PopoverBody>
+            <CalendarPanel
+              renderProps={dayzedData}
+              configs={configs}
+              propsConfigs={propsConfigs}
+            />
+          </PopoverBody>
+        </PopoverContent>
+      </PopoverContentWrapper>
     </Popover>
   );
 };
