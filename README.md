@@ -64,3 +64,10 @@ This allows you to override the default behavior however your want as long as su
     }
   }}
 ```
+
+### other props: 
+
+Name                  | Type                   | Default value           | Description
+----------------------|------------------------|-------------------------|--------------
+name                  | string                 | undefined               | name attribute for `<input />` element
+usePortal             | boolean                | undefined               | to prevent parent styles from clipping or hiding content
