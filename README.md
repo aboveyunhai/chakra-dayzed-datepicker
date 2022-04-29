@@ -45,7 +45,7 @@ npm i chakra-dayzed-datepicker
 `dateNavBtnProps` extends from `ButtonProps` of Chakra-UI
 This allows you to override the default behavior however your want as long as supported by Chakra-UI.</br>
 
-```
+```ts
 dayOfMonthBtnProps = {
   defaultBtnProps,
   isInRangeBtnProp,
@@ -86,10 +86,21 @@ Style precedence: `default` < `isInRange` < `seleted` < `today`.
     }
   }}
 ```
-
 ### other props: 
 
 Name                  | Type                   | Default value           | Description
 ----------------------|------------------------|-------------------------|--------------
 name                  | string                 | undefined               | name attribute for `<input />` element
 usePortal             | boolean                | undefined               | to prevent parent styles from clipping or hiding content
+
+For version < `npm@0.1.6`:</br>
+`dayOfMonthBtnProps` extends from `ButtonProps` and has only `selectedBg` support,
+```ts
+  dayOfMonthBtnProps: {
+    borderColor: "red.300",
+    selectedBg: "blue.200",
+    _hover: {
+      bg: 'blue.400',
+    }
+  },
+```
