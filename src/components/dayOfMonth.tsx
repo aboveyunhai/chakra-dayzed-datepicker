@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react';
 import { DateObj, RenderProps } from 'dayzed';
-import React from 'react';
-import { DatepickerProps } from '../utils/commonTypes';
+import React, { useMemo } from 'react';
+import { DatepickerProps, DayOfMonthBtnStyleProps } from '../utils/commonTypes';
 
 interface DayOfMonthProps extends DatepickerProps {
   renderProps: RenderProps;
@@ -9,6 +9,8 @@ interface DayOfMonthProps extends DatepickerProps {
   dateObj: DateObj;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }
+
+const halfGap = 0.125; //default Chakra-gap-space-1 is 0.25rem
 
 export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   dateObj,
@@ -19,11 +21,53 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
 }) => {
   const { date, selected, selectable, today } = dateObj;
   const { getDateProps } = renderProps;
-  const { selectedBg, ...customBtnProps } =
-    propsConfigs?.dayOfMonthBtnProps || {};
-  let bg = selected || isInRange ? selectedBg || 'purple.200' : 'transparent';
-  bg = !selectable ? customBtnProps?.disabledBg || 'red.200' : bg;
-  const halfGap = 0.125; //default Chakra-gap-space-1 is 0.25rem
+  const {
+    defaultBtnProps,
+    isInRangeBtnProps,
+    selectedBtnProps,
+    todayBtnProps,
+  } = propsConfigs?.dayOfMonthBtnProps || {};
+
+  const styleBtnProps: DayOfMonthBtnStyleProps = useMemo(
+    () => ({
+      defaultBtnProps: {
+        size: 'sm',
+        variant: 'outline',
+        background: 'transparent',
+        borderColor: 'transparent',
+        _hover: {
+          bg: 'purple.400',
+        },
+        // this intends to fill the visual gap from Grid to improve the UX
+        // so the button active area is actually larger than what it's seen
+        _after: {
+          content: "''",
+          position: 'absolute',
+          top: `-${halfGap}rem`,
+          left: `-${halfGap}rem`,
+          bottom: `-${halfGap}rem`,
+          right: `-${halfGap}rem`,
+          borderWidth: `${halfGap}rem`,
+          borderColor: 'transparent',
+        },
+        ...defaultBtnProps,
+      },
+      isInRangeBtnProps: {
+        background: 'purple.200',
+        ...isInRangeBtnProps,
+      },
+      selectedBtnProps: {
+        background: 'purple.200',
+        ...selectedBtnProps,
+      },
+      todayBtnProps: {
+        borderColor: 'blue.400',
+        ...todayBtnProps,
+      },
+    }),
+    [defaultBtnProps, isInRangeBtnProps, selectedBtnProps, todayBtnProps]
+  );
+
   return (
     <Button
       {...getDateProps({
@@ -32,28 +76,10 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
         onMouseEnter: onMouseEnter,
       })}
       disabled={!selectable}
-      size="sm"
-      variant="outline"
-      bg={bg}
-      _hover={{
-        bg: 'purple.400',
-      }}
-      // this intends to fill the visual gap from Grid to improve the UX
-      // so the button active area is actually larger than when it's seen
-      _after={{
-        content: "''",
-        position: 'absolute',
-        top: `-${halfGap}rem`,
-        left: `-${halfGap}rem`,
-        bottom: `-${halfGap}rem`,
-        right: `-${halfGap}rem`,
-        borderWidth: `${halfGap}rem`,
-        borderColor: 'transparent',
-      }}
-      {...customBtnProps}
-      borderColor={
-        today ? customBtnProps?.borderColor || 'blue.400' : 'transparent'
-      }
+      {...styleBtnProps.defaultBtnProps}
+      {...(isInRange && selectable && styleBtnProps.isInRangeBtnProps)}
+      {...(selected && selectable && styleBtnProps.selectedBtnProps)}
+      {...(today && styleBtnProps.todayBtnProps)}
     >
       {selectable ? date.getDate() : 'X'}
     </Button>
