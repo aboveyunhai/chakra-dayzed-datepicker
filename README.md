@@ -77,6 +77,9 @@ Style precedence: `default` < `isInRange` < `seleted` < `today`.
         background: "blue.200",
         color: "green",
       },
+      todayBtnProps: {
+        background: "teal.400",
+      }
     },
     inputProps: {
       size: "sm"

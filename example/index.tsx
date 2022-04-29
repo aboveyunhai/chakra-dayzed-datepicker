@@ -45,6 +45,9 @@ const App = () => {
                 background: "blue.200",
                 color: "green",
               },
+              todayBtnProps: {
+                background: "teal.400",
+              }
             },
             inputProps: {
               size: "sm"
