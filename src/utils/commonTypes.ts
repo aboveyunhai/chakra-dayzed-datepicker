@@ -1,5 +1,5 @@
 import { ButtonProps } from '@chakra-ui/button';
-import { BackgroundProps, InputProps } from '@chakra-ui/react';
+import { InputProps } from '@chakra-ui/react';
 import { DateObj } from 'dayzed';
 
 export type OnDateSelected = (
@@ -11,9 +11,11 @@ export interface DatepickerProps {
   propsConfigs?: PropsConfigs;
 }
 
-export interface DayOfMonthBtnStyleProps extends ButtonProps {
-  selectedBg?: BackgroundProps['bg'];
-  disabledBg?: BackgroundProps['bg'];
+export interface DayOfMonthBtnStyleProps {
+  defaultBtnProps?: ButtonProps;
+  isInRangeBtnProps?: ButtonProps;
+  selectedBtnProps?: ButtonProps;
+  todayBtnProps?: ButtonProps;
 }
 
 export interface PropsConfigs {

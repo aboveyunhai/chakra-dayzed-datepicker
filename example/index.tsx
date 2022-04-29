@@ -32,10 +32,21 @@ const App = () => {
               variant: "outline"
             },
             dayOfMonthBtnProps: {
-              borderColor: "red.300",
-              selectedBg: "blue.200",
-              _hover: {
-                bg: 'blue.400',
+              defaultBtnProps: {
+                borderColor: "red.300",
+                _hover: {
+                  background: 'blue.400',
+                }
+              },
+              isInRangeBtnProps: {
+                color: "yellow",
+              },
+              selectedBtnProps: {
+                background: "blue.200",
+                color: "green",
+              },
+              todayBtnProps: {
+                background: "teal.400",
               }
             },
             inputProps: {
