@@ -33,6 +33,7 @@ npm i chakra-dayzed-datepicker
 
 ```
 ### Range:
+Note that this list will have one value during the selection process. Your system won't work if you try to control this directly as `[startDate, endDate]` because we'll try to set `selectedDates` to `[intermediateSelection]` and the length of the resulting `selectedDates` is meaningful to the datepicker.
 ```jsx
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date(), new Date()]);
   
