@@ -63,11 +63,11 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
             </HStack>
             <Divider />
             <SimpleGrid columns={7} spacing={1} textAlign="center">
-              {configs.dayNames.map((day) => (
+              {configs.dayNames.map((day, i) => (
                 <Box
                   fontSize="sm"
                   fontWeight="semibold"
-                  key={`${calendar.month}${calendar.year}${day}`}
+                  key={`${calendar.month}${calendar.year}dayname${i}`}
                 >
                   {day}
                 </Box>
