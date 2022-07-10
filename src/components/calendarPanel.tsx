@@ -63,18 +63,18 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
             </HStack>
             <Divider />
             <SimpleGrid columns={7} spacing={1} textAlign="center">
-              {configs.dayNames.map((day, i) => (
+              {configs.dayNames.map((day, index) => (
                 <Box
                   fontSize="sm"
                   fontWeight="semibold"
-                  key={`${calendar.month}${calendar.year}dayname${i}`}
+                  key={`${calendar.month}-${calendar.year}-${day}-${index}`}
                 >
                   {day}
                 </Box>
               ))}
               {calendar.weeks.map((week, weekIdx) => {
                 return week.map((dateObj, index) => {
-                  const key = `${calendar.month}${calendar.year}${weekIdx}${index}`;
+                  const key = `${calendar.month}-${calendar.year}-${weekIdx}-${index}`;
                   if (!dateObj) return <Box key={key} />;
                   const { date } = dateObj;
                   return (
