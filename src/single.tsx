@@ -22,6 +22,7 @@ export interface SingleDatepickerProps extends DatepickerProps {
   date?: Date;
   configs?: DatepickerConfigs;
   disabled?: boolean;
+  defaultIsOpen?: boolean;
   onDateChange: (date: Date) => void;
   id?: string;
   name?: string;
@@ -38,6 +39,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   configs = DefaultConfigs,
   propsConfigs,
   usePortal,
+  defaultIsOpen = false,
   ...props
 }) => {
   const { date, name, disabled, onDateChange, id } = props;
@@ -46,7 +48,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   const ref = useRef<HTMLElement>(null);
   const initialFocusRef = useRef<HTMLInputElement>(null);
 
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(defaultIsOpen);
 
   useOutsideClick({
     ref: ref,

@@ -120,6 +120,7 @@ export interface RangeDatepickerProps extends DatepickerProps {
   maxDate?: Date;
   configs?: DatepickerConfigs;
   disabled?: boolean;
+  defaultIsOpen?: boolean;
   onDateChange: (date: Date[]) => void;
   id?: string;
   name?: string;
@@ -139,6 +140,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   id,
   name,
   usePortal,
+  defaultIsOpen = false,
   ...props
 }) => {
   const { selectedDates, minDate, maxDate, onDateChange, disabled } = props;
@@ -147,7 +149,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   const ref = useRef<HTMLElement>(null);
   const initialFocusRef = useRef<HTMLInputElement>(null);
 
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(defaultIsOpen);
 
   useOutsideClick({
     ref: ref,

@@ -28,30 +28,40 @@ const App = () => {
           onDateChange={setSelectedDates}
           propsConfigs={{
             dateNavBtnProps: {
-              colorScheme: "blue",
-              variant: "outline"
+              colorScheme: 'blue',
+              variant: 'outline',
             },
             dayOfMonthBtnProps: {
               defaultBtnProps: {
-                borderColor: "red.300",
+                borderColor: 'red.300',
                 _hover: {
                   background: 'blue.400',
-                }
+                },
               },
               isInRangeBtnProps: {
-                color: "yellow",
+                color: 'yellow',
               },
               selectedBtnProps: {
-                background: "blue.200",
-                color: "green",
+                background: 'blue.200',
+                color: 'green',
               },
               todayBtnProps: {
-                background: "teal.400",
-              }
+                background: 'teal.400',
+              },
             },
             inputProps: {
-              size: "sm"
-            }
+              size: 'sm',
+            },
+          }}
+        />
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+          defaultIsOpen={true}
+          configs={{
+            dateFormat: 'yyyy-MM-dd',
+            dayNames: Array(7).fill('day'),
+            monthNames: Array(12).fill('month'),
           }}
         />
       </VStack>
