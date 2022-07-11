@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.1] - 2022-07-11
+
+### Added
+
+ - add `defaultIsOpen` 
+ - doc clarification regarding the RangeDatepicker date state
+
+### Fixed
+
+ - duplicate key error when labels use the same name (kudos @david-morris)
+
 ## [0.2.0] - 2022-04-29
 
 ### Changed
