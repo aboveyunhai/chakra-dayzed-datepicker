@@ -1,15 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Input,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  useOutsideClick,
   Portal,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { useDayzed } from 'dayzed';
 import { format } from 'date-fns';
+import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
@@ -20,10 +20,10 @@ import {
 
 export interface SingleDatepickerProps extends DatepickerProps {
   date?: Date;
+  onDateChange: (date: Date) => void;
   configs?: DatepickerConfigs;
   disabled?: boolean;
   defaultIsOpen?: boolean;
-  onDateChange: (date: Date) => void;
   id?: string;
   name?: string;
   usePortal?: boolean;
@@ -42,34 +42,30 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   defaultIsOpen = false,
   ...props
 }) => {
-  const { date, name, disabled, onDateChange, id } = props;
+  const { date: selectedDate, name, disabled, onDateChange, id } = props;
 
-  // chakra popover utils
-  const ref = useRef<HTMLElement>(null);
-  const initialFocusRef = useRef<HTMLInputElement>(null);
+  const [dateInView, setDateInView] = useState(selectedDate);
+  const [offset, setOffset] = useState(0);
 
-  const [popoverOpen, setPopoverOpen] = useState(defaultIsOpen);
+  const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
 
-  useOutsideClick({
-    ref: ref,
-    handler: () => setPopoverOpen(false),
-  });
+  const onPopoverClose = () => {
+    onClose();
+    if (true) {
+      setDateInView(selectedDate);
+      setOffset(0);
+    }
+  };
 
   // dayzed utils
   const handleOnDateSelected: OnDateSelected = ({ selectable, date }) => {
     if (!selectable) return;
     if (date instanceof Date && !isNaN(date.getTime())) {
       onDateChange(date);
-      setPopoverOpen(false);
+      onClose();
       return;
     }
   };
-
-  const dayzedData = useDayzed({
-    showOutsideDays: true,
-    onDateSelected: handleOnDateSelected,
-    selected: date,
-  });
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
 
@@ -77,9 +73,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     <Popover
       placement="bottom-start"
       variant="responsive"
-      isOpen={popoverOpen}
-      onClose={() => setPopoverOpen(false)}
-      initialFocusRef={initialFocusRef}
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onPopoverClose}
       isLazy
     >
       <PopoverTrigger>
@@ -87,22 +83,29 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           id={id}
           autoComplete="off"
           isDisabled={disabled}
-          ref={initialFocusRef}
-          onClick={() => setPopoverOpen(!popoverOpen)}
           name={name}
-          value={date ? format(date, configs.dateFormat) : ''}
+          value={selectedDate ? format(selectedDate, configs.dateFormat) : ''}
           onChange={(e) => e.target.value}
           {...propsConfigs?.inputProps}
         />
       </PopoverTrigger>
       <PopoverContentWrapper>
-        <PopoverContent ref={ref} width="100%">
+        <PopoverContent width="100%">
           <PopoverBody>
-            <CalendarPanel
-              renderProps={dayzedData}
-              configs={configs}
-              propsConfigs={propsConfigs}
-            />
+            <FocusLock>
+              <CalendarPanel
+                dayzedHookProps={{
+                  showOutsideDays: true,
+                  onDateSelected: handleOnDateSelected,
+                  selected: selectedDate,
+                  date: dateInView,
+                  offset: offset,
+                  onOffsetChanged: setOffset,
+                }}
+                configs={configs}
+                propsConfigs={propsConfigs}
+              />
+            </FocusLock>
           </PopoverBody>
         </PopoverContent>
       </PopoverContentWrapper>

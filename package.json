@@ -77,6 +77,7 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "arrow-keys-react": "^1.0.6"
+    "arrow-keys-react": "^1.0.6",
+    "react-focus-lock": "^2.5.2"
   }
 }

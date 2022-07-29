@@ -7,27 +7,60 @@ import {
   Box,
   Stack,
 } from '@chakra-ui/react';
-import { RenderProps } from 'dayzed';
-import React from 'react';
+import { useDayzed, Props as DayzedHookProps } from 'dayzed';
+import ArrowKeysReact from 'arrow-keys-react';
+import React, { useCallback } from 'react';
 import { DatepickerConfigs, DatepickerProps } from '../utils/commonTypes';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
 import { DayOfMonth } from './dayOfMonth';
 
 interface CalendarPanelProps extends DatepickerProps {
-  renderProps: RenderProps;
+  dayzedHookProps: DayzedHookProps;
   configs: DatepickerConfigs;
   onMouseEnterHighlight?: (date: Date) => void;
   isInRange?: (date: Date) => boolean | null;
 }
 
 export const CalendarPanel: React.FC<CalendarPanelProps> = ({
-  renderProps,
+  dayzedHookProps,
   configs,
   propsConfigs,
   onMouseEnterHighlight,
   isInRange,
 }) => {
+  const renderProps = useDayzed(dayzedHookProps);
   const { calendars, getBackProps, getForwardProps } = renderProps;
+
+  // looking for a useRef() approach to replace it
+  const getKeyOffset = useCallback((num: number) => {
+    const e = document.activeElement;
+    let buttons = document.querySelectorAll('button');
+    buttons.forEach((el, i) => {
+      const newNodeKey = i + num;
+      if (el === e) {
+        if (newNodeKey <= buttons.length - 1 && newNodeKey >= 0) {
+          buttons[newNodeKey].focus();
+        } else {
+          buttons[0].focus();
+        }
+      }
+    });
+  }, []);
+
+  ArrowKeysReact.config({
+    left: () => {
+      getKeyOffset(-1);
+    },
+    right: () => {
+      getKeyOffset(1);
+    },
+    up: () => {
+      getKeyOffset(-7);
+    },
+    down: () => {
+      getKeyOffset(7);
+    },
+  });
 
   if (calendars.length <= 0) {
     return null;
@@ -37,14 +70,15 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
     <Stack
       className="datepicker-calendar"
       direction={['column', 'column', 'row']}
+      {...ArrowKeysReact.events}
     >
-      {calendars.map((calendar) => {
+      {calendars.map((calendar, calendarIdx) => {
         return (
           <VStack
-            key={`${calendar.month}${calendar.year}`}
+            key={calendarIdx}
             height="100%"
             borderWidth="1px"
-            padding="5px 10px"
+            padding="0.5rem 0.75rem"
           >
             <HStack>
               <DatepickerBackBtns
@@ -52,7 +86,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 getBackProps={getBackProps}
                 propsConfigs={propsConfigs}
               />
-              <Heading size="sm" textAlign="center">
+              <Heading size="sm" minWidth={'5rem'} textAlign="center">
                 {configs.monthNames[calendar.month]} {calendar.year}
               </Heading>
               <DatepickerForwardBtns
@@ -63,12 +97,8 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
             </HStack>
             <Divider />
             <SimpleGrid columns={7} spacing={1} textAlign="center">
-              {configs.dayNames.map((day, index) => (
-                <Box
-                  fontSize="sm"
-                  fontWeight="semibold"
-                  key={`${calendar.month}-${calendar.year}-${day}-${index}`}
-                >
+              {configs.dayNames.map((day, dayIdx) => (
+                <Box fontSize="sm" fontWeight="semibold" key={dayIdx}>
                   {day}
                 </Box>
               ))}

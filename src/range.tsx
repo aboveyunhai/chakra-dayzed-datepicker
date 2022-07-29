@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { RenderProps, useDayzed } from 'dayzed';
-import ArrowKeysReact from 'arrow-keys-react';
+import React, { useState } from 'react';
+import { Props as DayzedHookProps } from 'dayzed';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import {
   Flex,
@@ -9,8 +8,8 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  useOutsideClick,
   Portal,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { CalendarPanel } from './components/calendarPanel';
 import {
@@ -20,53 +19,22 @@ import {
   PropsConfigs,
 } from './utils/commonTypes';
 import { format } from 'date-fns';
+import FocusLock from 'react-focus-lock';
 
 interface RangeCalendarPanelProps {
+  dayzedHookProps: DayzedHookProps;
   configs: DatepickerConfigs;
   propsConfigs?: PropsConfigs;
   selected?: Date | Date[];
-  renderProps: RenderProps;
 }
 
 const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
+  dayzedHookProps,
   configs,
   propsConfigs,
   selected,
-  renderProps,
 }) => {
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-  const { calendars } = renderProps;
-
-  // looking for a useRef() approach to replace it
-  const getKeyOffset = (num: number) => {
-    const e = document.activeElement;
-    let buttons = document.querySelectorAll('button');
-    buttons.forEach((el, i) => {
-      const newNodeKey = i + num;
-      if (el === e) {
-        if (newNodeKey <= buttons.length - 1 && newNodeKey >= 0) {
-          buttons[newNodeKey].focus();
-        } else {
-          buttons[0].focus();
-        }
-      }
-    });
-  };
-
-  ArrowKeysReact.config({
-    left: () => {
-      getKeyOffset(-1);
-    },
-    right: () => {
-      getKeyOffset(1);
-    },
-    up: () => {
-      getKeyOffset(-7);
-    },
-    down: () => {
-      getKeyOffset(7);
-    },
-  });
 
   // Calendar level
   const onMouseLeave = () => {
@@ -98,12 +66,10 @@ const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
     }
   };
 
-  if (!(calendars.length > 0)) return null;
-
   return (
-    <Flex {...ArrowKeysReact.events} onMouseLeave={onMouseLeave}>
+    <Flex onMouseLeave={onMouseLeave}>
       <CalendarPanel
-        renderProps={renderProps}
+        dayzedHookProps={dayzedHookProps}
         configs={configs}
         propsConfigs={propsConfigs}
         isInRange={isInRange}
@@ -114,7 +80,6 @@ const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
 };
 
 export interface RangeDatepickerProps extends DatepickerProps {
-  initDate?: Date;
   selectedDates: Date[];
   minDate?: Date;
   maxDate?: Date;
@@ -136,7 +101,6 @@ const DefaultConfigs = {
 export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   configs = DefaultConfigs,
   propsConfigs = {},
-  initDate = new Date(),
   id,
   name,
   usePortal,
@@ -146,15 +110,9 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   const { selectedDates, minDate, maxDate, onDateChange, disabled } = props;
 
   // chakra popover utils
-  const ref = useRef<HTMLElement>(null);
-  const initialFocusRef = useRef<HTMLInputElement>(null);
-
-  const [popoverOpen, setPopoverOpen] = useState(defaultIsOpen);
-
-  useOutsideClick({
-    ref: ref,
-    handler: () => setPopoverOpen(false),
-  });
+  const [dateInView, setDateInView] = useState(selectedDates[0] || new Date());
+  const [offset, setOffset] = useState(0);
+  const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
 
   // dayzed utils
   const handleOnDateSelected: OnDateSelected = ({ selectable, date }) => {
@@ -180,14 +138,11 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
     }
   };
 
-  const dayzedData = useDayzed({
-    onDateSelected: handleOnDateSelected,
-    selected: selectedDates,
-    monthsToDisplay: 2,
-    date: initDate,
-    minDate: minDate,
-    maxDate: maxDate,
-  });
+  const onPopoverClose = () => {
+    onClose();
+    setDateInView(selectedDates[0] || new Date());
+    setOffset(0);
+  };
 
   // eventually we want to allow user to freely type their own input and parse the input
   let intVal = selectedDates[0]
@@ -203,9 +158,9 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
     <Popover
       placement="bottom-start"
       variant="responsive"
-      isOpen={popoverOpen}
-      onClose={() => setPopoverOpen(false)}
-      initialFocusRef={initialFocusRef}
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onPopoverClose}
       isLazy
     >
       <PopoverTrigger>
@@ -213,8 +168,6 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
           id={id}
           autoComplete="off"
           isDisabled={disabled}
-          ref={initialFocusRef}
-          onClick={() => setPopoverOpen(!popoverOpen)}
           name={name}
           value={intVal}
           onChange={(e) => e.target.value}
@@ -222,14 +175,25 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
         />
       </PopoverTrigger>
       <PopoverContentWrapper>
-        <PopoverContent ref={ref} width="100%">
+        <PopoverContent width="100%">
           <PopoverBody>
-            <RangeCalendarPanel
-              renderProps={dayzedData}
-              configs={configs}
-              propsConfigs={propsConfigs}
-              selected={selectedDates}
-            />
+            <FocusLock>
+              <RangeCalendarPanel
+                dayzedHookProps={{
+                  onDateSelected: handleOnDateSelected,
+                  selected: selectedDates,
+                  monthsToDisplay: 2,
+                  date: dateInView,
+                  minDate: minDate,
+                  maxDate: maxDate,
+                  offset: offset,
+                  onOffsetChanged: setOffset,
+                }}
+                configs={configs}
+                propsConfigs={propsConfigs}
+                selected={selectedDates}
+              />
+            </FocusLock>
           </PopoverBody>
         </PopoverContent>
       </PopoverContentWrapper>
