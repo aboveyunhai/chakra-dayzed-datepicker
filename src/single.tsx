@@ -42,7 +42,15 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   defaultIsOpen = false,
   ...props
 }) => {
-  const { date: selectedDate, name, disabled, onDateChange, id } = props;
+  const {
+    date: selectedDate,
+    name,
+    disabled,
+    onDateChange,
+    id,
+    minDate,
+    maxDate,
+  } = props;
 
   const [dateInView, setDateInView] = useState(selectedDate);
   const [offset, setOffset] = useState(0);
@@ -80,6 +88,12 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     >
       <PopoverTrigger>
         <Input
+          onKeyPress={(e) => {
+            if (e.key === ' ' && !isOpen) {
+              e.preventDefault();
+              onOpen();
+            }
+          }}
           id={id}
           autoComplete="off"
           isDisabled={disabled}
@@ -99,6 +113,8 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
                   onDateSelected: handleOnDateSelected,
                   selected: selectedDate,
                   date: dateInView,
+                  minDate: minDate,
+                  maxDate: maxDate,
                   offset: offset,
                   onOffsetChanged: setOffset,
                 }}
