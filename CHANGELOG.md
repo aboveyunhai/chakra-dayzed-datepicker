@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.2] - 2022-07-30
+
+ - add `minDate` and `maxDate` for `SingleDatepicker`
+
+ ### Fixed
+
+ - focus issue when activate navigation button inside calendar
+
 ## [0.2.1] - 2022-07-11
 
 ### Added
