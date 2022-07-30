@@ -81,8 +81,6 @@ const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
 
 export interface RangeDatepickerProps extends DatepickerProps {
   selectedDates: Date[];
-  minDate?: Date;
-  maxDate?: Date;
   configs?: DatepickerConfigs;
   disabled?: boolean;
   defaultIsOpen?: boolean;

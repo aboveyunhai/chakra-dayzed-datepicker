@@ -8,6 +8,8 @@ export type OnDateSelected = (
 ) => void;
 
 export interface DatepickerProps {
+  minDate?: Date;
+  maxDate?: Date;
   propsConfigs?: PropsConfigs;
 }
 

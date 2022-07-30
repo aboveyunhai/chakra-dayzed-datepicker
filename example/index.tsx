@@ -6,7 +6,7 @@ import { SingleDatepicker, RangeDatepicker } from '../src';
 import { useState } from 'react';
 
 const App = () => {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date("07/28/2022"));
   const [selectedDates, setSelectedDates] = useState<Date[]>([
     new Date(),
     new Date(),
@@ -17,6 +17,8 @@ const App = () => {
         <SingleDatepicker
           name="date-input"
           date={date}
+          minDate={new Date("07/25/2022")}
+          maxDate={new Date("08/05/2022")}
           onDateChange={setDate}
         />
         <RangeDatepicker

@@ -35,9 +35,6 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
         variant: 'outline',
         background: 'transparent',
         borderColor: 'transparent',
-        _hover: {
-          bg: 'purple.400',
-        },
         // this intends to fill the visual gap from Grid to improve the UX
         // so the button active area is actually larger than what it's seen
         _after: {
@@ -51,6 +48,12 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
           borderColor: 'transparent',
         },
         ...defaultBtnProps,
+        _hover: selectable
+          ? {
+              bg: 'purple.400',
+              ...defaultBtnProps?._hover,
+            }
+          : undefined,
       },
       isInRangeBtnProps: {
         background: 'purple.200',
@@ -65,7 +68,13 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
         ...todayBtnProps,
       },
     }),
-    [defaultBtnProps, isInRangeBtnProps, selectedBtnProps, todayBtnProps]
+    [
+      defaultBtnProps,
+      isInRangeBtnProps,
+      selectedBtnProps,
+      todayBtnProps,
+      selectable,
+    ]
   );
 
   return (
@@ -81,7 +90,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
       {...(selected && selectable && styleBtnProps.selectedBtnProps)}
       {...(today && styleBtnProps.todayBtnProps)}
     >
-      {selectable ? date.getDate() : 'X'}
+      {date.getDate()}
     </Button>
   );
 };
