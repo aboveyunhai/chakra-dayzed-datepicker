@@ -94,6 +94,8 @@ Name                  | Type                   | Default value           | Descr
 name                  | string                 | undefined               | name attribute for `<input />` element
 usePortal             | boolean                | undefined               | to prevent parent styles from clipping or hiding content
 defaultIsOpen         | boolean                | undefined               | open the date panel at the beginning
+minDate               | Date                   | undefined               | minimum date
+maxDate               | Date                   | undefined               | maximum date
 
 For version < `npm@0.1.6`:</br>
 `dayOfMonthBtnProps` extends from `ButtonProps` and has only `selectedBg` support,
