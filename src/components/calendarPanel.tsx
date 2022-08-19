@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { useDayzed, Props as DayzedHookProps } from 'dayzed';
-import ArrowKeysReact from 'arrow-keys-react';
+import { ArrowKeysReact } from '../utils/reactKeysArrow';
 import React, { useCallback } from 'react';
 import { DatepickerConfigs, DatepickerProps } from '../utils/commonTypes';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
@@ -47,7 +47,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
     });
   }, []);
 
-  ArrowKeysReact.config({
+  const arrowKeysReact = new ArrowKeysReact({
     left: () => {
       getKeyOffset(-1);
     },
@@ -70,7 +70,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
     <Stack
       className="datepicker-calendar"
       direction={['column', 'column', 'row']}
-      {...ArrowKeysReact.events}
+      {...arrowKeysReact.getEvents()}
     >
       {calendars.map((calendar, calendarIdx) => {
         return (
