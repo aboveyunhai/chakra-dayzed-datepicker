@@ -1,3 +1,6 @@
+// Based on: https://github.com/leon-good-life/arrow-keys-react
+// re-implemented by @hexelon in https://github.com/hexelon/chakra-dayzed-datepicker/commit/4f44e565e3975f613b54304d1fdaeb97dd7dfa15
+
 import type { KeyboardEvent } from 'react';
 
 export interface ArrowKeysReactConfig {
