@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.3] - 2022-08-22
+
+ ### Fixed
+
+ - ArrowKeysReact.config isn't define
+ - remove arrow-keys-react dependency
+ - range picker input doesn't open when `space` key was pressed
+
 ## [0.2.2] - 2022-07-30
 
  - add `minDate` and `maxDate` for `SingleDatepicker`
