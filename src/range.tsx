@@ -163,6 +163,12 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
     >
       <PopoverTrigger>
         <Input
+          onKeyPress={(e) => {
+            if (e.key === ' ' && !isOpen) {
+              e.preventDefault();
+              onOpen();
+            }
+          }}
           id={id}
           autoComplete="off"
           isDisabled={disabled}
