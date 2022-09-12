@@ -13,11 +13,20 @@ The componenent itself has to use some `date` library
 Highly recommend just copy/paste the source code from `/src` to customize however you want. 
 
 ## Install the dependency
+Npm
 ```
 npm i date-fns dayzed
 ```
 ```
 npm i chakra-dayzed-datepicker
+```
+
+Yarn:
+```
+yarn add date-fns dayzed
+```
+```
+yarn add chakra-dayzed-datepicker
 ```
 
 ## Basic usage
