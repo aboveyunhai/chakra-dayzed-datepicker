@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { ChakraProvider, VStack } from '@chakra-ui/react';
 import { SingleDatepicker, RangeDatepicker } from '../src';
 import { useState } from 'react';
+import { Month_Names_Full } from '../src/utils/calanderUtils';
 
 const App = () => {
   const [date, setDate] = useState(new Date("07/28/2022"));
@@ -20,6 +21,25 @@ const App = () => {
           minDate={new Date("07/25/2022")}
           maxDate={new Date("08/05/2022")}
           onDateChange={setDate}
+        />
+        <SingleDatepicker
+          name="date-input"
+          date={date}
+          onDateChange={setDate}
+          configs={{
+            dateFormat: 'yyyy-MM-dd',
+            dayNames: [
+              'Mon',
+              'Tue',
+              'Wed',
+              'Thu',
+              'Fri',
+              'Sat',
+              'Sun',
+            ],
+            monthNames: Month_Names_Full,
+            firstDayOfWeek: 1,
+          }}
         />
         <RangeDatepicker
           selectedDates={selectedDates}
@@ -64,6 +84,26 @@ const App = () => {
             dateFormat: 'yyyy-MM-dd',
             dayNames: Array(7).fill('day'),
             monthNames: Array(12).fill('month'),
+            firstDayOfWeek: 0,
+          }}
+        />
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+          defaultIsOpen={true}
+          configs={{
+            dateFormat: 'yyyy-MM-dd',
+            dayNames: [
+              'Mon',
+              'Tue',
+              'Wed',
+              'Thu',
+              'Fri',
+              'Sat',
+              'Sun',
+            ],
+            monthNames: Array(12).fill('month'),
+            firstDayOfWeek: 1,
           }}
         />
       </VStack>

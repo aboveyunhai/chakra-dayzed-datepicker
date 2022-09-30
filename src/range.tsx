@@ -90,10 +90,11 @@ export interface RangeDatepickerProps extends DatepickerProps {
   usePortal?: boolean;
 }
 
-const DefaultConfigs = {
+const DefaultConfigs: DatepickerConfigs = {
   dateFormat: 'MM/dd/yyyy',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
+  firstDayOfWeek: 0,
 };
 
 export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
@@ -151,6 +152,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
     : '';
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
+  const firstDayOfWeek = configs.firstDayOfWeek;
 
   return (
     <Popover
@@ -192,6 +194,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
                   maxDate: maxDate,
                   offset: offset,
                   onOffsetChanged: setOffset,
+                  firstDayOfWeek: firstDayOfWeek,
                 }}
                 configs={configs}
                 propsConfigs={propsConfigs}

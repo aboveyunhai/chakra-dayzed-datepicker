@@ -30,4 +30,5 @@ export interface DatepickerConfigs {
   dateFormat: string;
   monthNames: string[];
   dayNames: string[];
+  firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }

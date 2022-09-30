@@ -29,10 +29,11 @@ export interface SingleDatepickerProps extends DatepickerProps {
   usePortal?: boolean;
 }
 
-const DefaultConfigs = {
+const DefaultConfigs: DatepickerConfigs = {
   dateFormat: 'yyyy-MM-dd',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
+  firstDayOfWeek: 0,
 };
 
 export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
@@ -76,6 +77,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   };
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
+  const firstDayOfWeek = configs.firstDayOfWeek;
 
   return (
     <Popover
@@ -117,6 +119,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
                   maxDate: maxDate,
                   offset: offset,
                   onOffsetChanged: setOffset,
+                  firstDayOfWeek: firstDayOfWeek,
                 }}
                 configs={configs}
                 propsConfigs={propsConfigs}
