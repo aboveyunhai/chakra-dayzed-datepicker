@@ -117,7 +117,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   const calendarConfigs: CalendarConfigs = {
     ...DefaultConfigs,
     ...configs,
-  }
+  };
 
   // dayzed utils
   const handleOnDateSelected: OnDateSelected = ({ selectable, date }) => {

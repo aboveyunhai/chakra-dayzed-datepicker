@@ -9,12 +9,10 @@ import {
   HStack,
   VStack,
 } from '@chakra-ui/react';
-import { SingleDatepicker, RangeDatepicker } from '../src';
+import { SingleDatepicker, RangeDatepicker, DatepickerConfigs, Weekday_Names_Short } from '../src';
 import { useState } from 'react';
-import { DatepickerConfigs } from '../src/utils/commonTypes';
-import { Weekday_Names_Short } from '../src/utils/calanderUtils';
 
-type FirstDayOfWeek = DatepickerConfigs['firstDayOfWeek'];
+type FirstDayOfWeek = DatepickerConfigs["firstDayOfWeek"];
 const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
 
 const App = () => {

@@ -62,7 +62,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   const calendarConfigs: CalendarConfigs = {
     ...DefaultConfigs,
     ...configs,
-  }
+  };
 
   const onPopoverClose = () => {
     onClose();
@@ -105,7 +105,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           autoComplete="off"
           isDisabled={disabled}
           name={name}
-          value={selectedDate ? format(selectedDate, calendarConfigs.dateFormat) : ''}
+          value={
+            selectedDate ? format(selectedDate, calendarConfigs.dateFormat) : ''
+          }
           onChange={(e) => e.target.value}
           {...propsConfigs?.inputProps}
         />
