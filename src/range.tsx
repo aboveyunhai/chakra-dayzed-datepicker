@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { CalendarPanel } from './components/calendarPanel';
 import {
+  CalendarConfigs,
   DatepickerConfigs,
   DatepickerProps,
   OnDateSelected,
@@ -23,7 +24,7 @@ import FocusLock from 'react-focus-lock';
 
 interface RangeCalendarPanelProps {
   dayzedHookProps: DayzedHookProps;
-  configs: DatepickerConfigs;
+  configs: CalendarConfigs;
   propsConfigs?: PropsConfigs;
   selected?: Date | Date[];
 }
@@ -90,14 +91,15 @@ export interface RangeDatepickerProps extends DatepickerProps {
   usePortal?: boolean;
 }
 
-const DefaultConfigs = {
+const DefaultConfigs: CalendarConfigs = {
   dateFormat: 'MM/dd/yyyy',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
+  firstDayOfWeek: 0,
 };
 
 export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
-  configs = DefaultConfigs,
+  configs,
   propsConfigs = {},
   id,
   name,
@@ -111,6 +113,11 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   const [dateInView, setDateInView] = useState(selectedDates[0] || new Date());
   const [offset, setOffset] = useState(0);
   const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
+
+  const calendarConfigs: CalendarConfigs = {
+    ...DefaultConfigs,
+    ...configs,
+  }
 
   // dayzed utils
   const handleOnDateSelected: OnDateSelected = ({ selectable, date }) => {
@@ -144,10 +151,10 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
 
   // eventually we want to allow user to freely type their own input and parse the input
   let intVal = selectedDates[0]
-    ? `${format(selectedDates[0], configs.dateFormat)}`
+    ? `${format(selectedDates[0], calendarConfigs.dateFormat)}`
     : '';
   intVal += selectedDates[1]
-    ? ` - ${format(selectedDates[1], configs.dateFormat)}`
+    ? ` - ${format(selectedDates[1], calendarConfigs.dateFormat)}`
     : '';
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
@@ -192,8 +199,9 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
                   maxDate: maxDate,
                   offset: offset,
                   onOffsetChanged: setOffset,
+                  firstDayOfWeek: calendarConfigs.firstDayOfWeek,
                 }}
-                configs={configs}
+                configs={calendarConfigs}
                 propsConfigs={propsConfigs}
                 selected={selectedDates}
               />

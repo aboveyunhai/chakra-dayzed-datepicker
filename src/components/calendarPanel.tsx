@@ -9,14 +9,14 @@ import {
 } from '@chakra-ui/react';
 import { useDayzed, Props as DayzedHookProps } from 'dayzed';
 import { ArrowKeysReact } from '../utils/reactKeysArrow';
-import React, { useCallback } from 'react';
-import { DatepickerConfigs, DatepickerProps } from '../utils/commonTypes';
+import React, { useCallback, useMemo } from 'react';
+import { CalendarConfigs, DatepickerProps } from '../utils/commonTypes';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
 import { DayOfMonth } from './dayOfMonth';
 
 interface CalendarPanelProps extends DatepickerProps {
-  dayzedHookProps: DayzedHookProps;
-  configs: DatepickerConfigs;
+  dayzedHookProps: Omit<DayzedHookProps, 'children' | 'render'>;
+  configs: CalendarConfigs;
   onMouseEnterHighlight?: (date: Date) => void;
   isInRange?: (date: Date) => boolean | null;
 }
@@ -30,6 +30,17 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
 }) => {
   const renderProps = useDayzed(dayzedHookProps);
   const { calendars, getBackProps, getForwardProps } = renderProps;
+
+  const weekdayNames = useMemo(() => {
+    const firstDayOfWeek = configs.firstDayOfWeek;
+    const dayNames = configs.dayNames;
+    if (firstDayOfWeek && firstDayOfWeek > 0) {
+      return configs.dayNames
+        .slice(firstDayOfWeek, dayNames.length)
+        .concat(dayNames.slice(0, firstDayOfWeek));
+    }
+    return dayNames;
+  }, [configs.firstDayOfWeek, configs.dayNames]);
 
   // looking for a useRef() approach to replace it
   const getKeyOffset = useCallback((num: number) => {
@@ -97,7 +108,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
             </HStack>
             <Divider />
             <SimpleGrid columns={7} spacing={1} textAlign="center">
-              {configs.dayNames.map((day, dayIdx) => (
+              {weekdayNames.map((day, dayIdx) => (
                 <Box fontSize="sm" fontWeight="semibold" key={dayIdx}>
                   {day}
                 </Box>
