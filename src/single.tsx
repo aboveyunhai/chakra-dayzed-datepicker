@@ -13,6 +13,7 @@ import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
+  CalendarConfigs,
   DatepickerConfigs,
   DatepickerProps,
   OnDateSelected,
@@ -29,7 +30,7 @@ export interface SingleDatepickerProps extends DatepickerProps {
   usePortal?: boolean;
 }
 
-const DefaultConfigs: DatepickerConfigs = {
+const DefaultConfigs: CalendarConfigs = {
   dateFormat: 'yyyy-MM-dd',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
@@ -37,7 +38,7 @@ const DefaultConfigs: DatepickerConfigs = {
 };
 
 export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
-  configs = DefaultConfigs,
+  configs,
   propsConfigs,
   usePortal,
   defaultIsOpen = false,
@@ -58,6 +59,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
 
   const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
 
+  const calendarConfigs: CalendarConfigs = {
+    ...DefaultConfigs,
+    ...configs,
+  }
+
   const onPopoverClose = () => {
     onClose();
     if (true) {
@@ -77,7 +83,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   };
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
-  const firstDayOfWeek = configs.firstDayOfWeek;
 
   return (
     <Popover
@@ -100,7 +105,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           autoComplete="off"
           isDisabled={disabled}
           name={name}
-          value={selectedDate ? format(selectedDate, configs.dateFormat) : ''}
+          value={selectedDate ? format(selectedDate, calendarConfigs.dateFormat) : ''}
           onChange={(e) => e.target.value}
           {...propsConfigs?.inputProps}
         />
@@ -119,9 +124,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
                   maxDate: maxDate,
                   offset: offset,
                   onOffsetChanged: setOffset,
-                  firstDayOfWeek: firstDayOfWeek,
+                  firstDayOfWeek: calendarConfigs.firstDayOfWeek,
                 }}
-                configs={configs}
+                configs={calendarConfigs}
                 propsConfigs={propsConfigs}
               />
             </FocusLock>
