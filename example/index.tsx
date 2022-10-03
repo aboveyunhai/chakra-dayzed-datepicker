@@ -88,7 +88,6 @@ const App = () => {
             dateFormat: 'yyyy-MM-dd',
             dayNames: 'abcdefg'.split(''), // length of 7
             monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
-            firstDayOfWeek: 0,
           }}
         />
         <Heading>With Offset:</Heading>
@@ -116,7 +115,7 @@ const App = () => {
           selectedDates={selectedDates}
           onDateChange={setSelectedDates}
           configs={{
-            firstDayOfWeek: 1,
+            firstDayOfWeek,
           }}
         />
       </VStack>
