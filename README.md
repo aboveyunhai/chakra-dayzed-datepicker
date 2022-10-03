@@ -96,6 +96,18 @@ Style precedence: `default` < `isInRange` < `seleted` < `today`.
     }
   }}
 ```
+
+### propsConfigs: 
+Non Chakra-related configurations :
+```
+  configs={{
+    dateFormat: 'yyyy-MM-dd',
+    dayNames: 'abcdefg'.split(''), // length of 7
+    monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
+    firstDayOfWeek: 2, // default is 0, the dayNames[0], which is Sunday if you don't specify your own dayNames,
+  }}
+```
+
 ### other props: 
 
 Name                  | Type                   | Default value           | Description
