@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.4] - 2022-10-03
+
+ ### Added
+
+ - add `firstDayOfWeek` into `configs` (kudos @biko8, PR #26)
+ - add `configs` in documentation
+
 ## [0.2.3] - 2022-08-22
 
  ### Fixed
@@ -14,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  - range picker input doesn't open when `space` key was pressed
 
 ## [0.2.2] - 2022-07-30
+
+### Added
 
  - add `minDate` and `maxDate` for `SingleDatepicker`
 
