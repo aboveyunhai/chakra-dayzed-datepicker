@@ -97,7 +97,7 @@ Style precedence: `default` < `isInRange` < `seleted` < `today`.
   }}
 ```
 
-### propsConfigs: 
+### configs: 
 Non Chakra-related configurations :
 ```
   configs={{
