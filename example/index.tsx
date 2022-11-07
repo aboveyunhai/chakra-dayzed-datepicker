@@ -37,6 +37,40 @@ const App = () => {
           minDate={new Date('07/25/2022')}
           maxDate={new Date('08/05/2022')}
           onDateChange={setDate}
+          propsConfigs={{
+            dateNavBtnProps: {
+              colorScheme: 'blue',
+              variant: 'outline',
+            },
+            dayOfMonthBtnProps: {
+              defaultBtnProps: {
+                borderColor: 'red.300',
+                _hover: {
+                  background: 'blue.400',
+                },
+              },
+              isInRangeBtnProps: {
+                color: 'purple.800',
+                borderColor: 'blue.300',
+              },
+              selectedBtnProps: {
+                background: 'blue.200',
+                borderColor: 'blue.300',
+                color: 'blue.600',
+              },
+              todayBtnProps: {
+                background: 'teal.200',
+                color: 'teal.700',
+              },
+            },
+            inputProps: {
+              size: 'sm',
+            },
+            popoverProps: {
+              bg: "red",
+              color: "green",
+            }
+          }}
         />
         <Heading>Range:</Heading>
         <RangeDatepicker
