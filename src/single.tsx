@@ -113,7 +113,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
         />
       </PopoverTrigger>
       <PopoverContentWrapper>
-        <PopoverContent {...propsConfigs?.popoverProps} width="100%">
+        <PopoverContent width="100%" {...propsConfigs?.popoverProps}>
           <PopoverBody>
             <FocusLock>
               <CalendarPanel
