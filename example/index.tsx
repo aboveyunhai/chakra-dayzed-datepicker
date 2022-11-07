@@ -37,6 +37,12 @@ const App = () => {
           minDate={new Date('07/25/2022')}
           maxDate={new Date('08/05/2022')}
           onDateChange={setDate}
+          propsConfigs: {{
+            popoverProps: {
+              bg: "red",
+              color: "green",
+            },
+          }}
         />
         <Heading>Range:</Heading>
         <RangeDatepicker
