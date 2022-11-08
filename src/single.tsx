@@ -113,8 +113,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
         />
       </PopoverTrigger>
       <PopoverContentWrapper>
-        <PopoverContent width="100%" {...propsConfigs?.popoverProps}>
-          <PopoverBody>
+        <PopoverContent
+          width="100%"
+          {...propsConfigs?.popoverCompProps?.popoverContentProps}
+        >
+          <PopoverBody {...propsConfigs?.popoverCompProps?.popoverBodyProps}>
             <FocusLock>
               <CalendarPanel
                 dayzedHookProps={{
