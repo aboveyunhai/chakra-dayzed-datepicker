@@ -66,6 +66,14 @@ dayOfMonthBtnProps = {
 `dayOfMonthBtnProps` allows you to customzie date btn style based on the state. </br>
 Style precedence: `default` < `isInRange` < `seleted` < `today`.
 
+`popoverCompProps` might be useful when you want to setup some simple styles like text color globally
+```ts
+popoverCompProps = {
+  popoverContentProps,
+  popoverBodyProps
+}
+```
+
 <br/>Example:
 ```js
   propsConfigs={{
@@ -93,7 +101,13 @@ Style precedence: `default` < `isInRange` < `seleted` < `today`.
     },
     inputProps: {
       size: "sm"
-    }
+    },
+    popoverCompProps: {
+      popoverContentProps: {
+        background: "gray.700",
+        color: "white",
+      },
+    },
   }}
 ```
 
