@@ -1,5 +1,6 @@
 import { ButtonProps } from '@chakra-ui/button';
-import { InputProps } from '@chakra-ui/react';
+import { InputProps, PopoverBodyProps } from '@chakra-ui/react';
+import { PopoverContentProps } from '@chakra-ui/react';
 import { DateObj } from 'dayzed';
 
 export type OnDateSelected = (
@@ -20,10 +21,16 @@ export interface DayOfMonthBtnStyleProps {
   todayBtnProps?: ButtonProps;
 }
 
+export interface PopoverCompProps {
+  popoverContentProps?: PopoverContentProps;
+  popoverBodyProps?: PopoverBodyProps;
+}
+
 export interface PropsConfigs {
   dateNavBtnProps?: ButtonProps;
   dayOfMonthBtnProps?: DayOfMonthBtnStyleProps;
   inputProps?: InputProps;
+  popoverCompProps?: PopoverCompProps;
 }
 
 export interface DatepickerConfigs {

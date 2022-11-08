@@ -186,8 +186,11 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
         />
       </PopoverTrigger>
       <PopoverContentWrapper>
-        <PopoverContent width="100%">
-          <PopoverBody>
+        <PopoverContent
+          width="100%"
+          {...propsConfigs?.popoverCompProps?.popoverContentProps}
+        >
+          <PopoverBody {...propsConfigs.popoverCompProps?.popoverBodyProps}>
             <FocusLock>
               <RangeCalendarPanel
                 dayzedHookProps={{
