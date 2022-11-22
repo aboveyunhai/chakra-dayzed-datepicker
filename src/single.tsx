@@ -10,13 +10,19 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import FocusLock from 'react-focus-lock';
-import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
+import {
+  Month_Names_Short,
+  Weekday_Names_Short,
+  DATE_FORMAT,
+} from './utils/calanderUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
   CalendarConfigs,
   DatepickerConfigs,
   DatepickerProps,
   OnDateSelected,
+  CustomDateButton,
+  OnMonthViewChange,
 } from './utils/commonTypes';
 
 export interface SingleDatepickerProps extends DatepickerProps {
@@ -28,10 +34,13 @@ export interface SingleDatepickerProps extends DatepickerProps {
   id?: string;
   name?: string;
   usePortal?: boolean;
+  onMonthViewChange?: OnMonthViewChange;
+  customDateButton?: CustomDateButton;
+  onPopoverOpen?: () => void;
 }
 
 const DefaultConfigs: CalendarConfigs = {
-  dateFormat: 'yyyy-MM-dd',
+  dateFormat: DATE_FORMAT,
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
   firstDayOfWeek: 0,
@@ -52,6 +61,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     id,
     minDate,
     maxDate,
+    onMonthViewChange,
+    customDateButton,
+    onPopoverOpen,
   } = props;
 
   const [dateInView, setDateInView] = useState(selectedDate);
@@ -89,7 +101,10 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
       placement="bottom-start"
       variant="responsive"
       isOpen={isOpen}
-      onOpen={onOpen}
+      onOpen={() => {
+        onPopoverOpen && onPopoverOpen();
+        onOpen();
+      }}
       onClose={onPopoverClose}
       isLazy
     >
@@ -133,6 +148,8 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
                 }}
                 configs={calendarConfigs}
                 propsConfigs={propsConfigs}
+                onMonthViewChange={onMonthViewChange}
+                customDateButton={customDateButton}
               />
             </FocusLock>
           </PopoverBody>

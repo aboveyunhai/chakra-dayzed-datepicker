@@ -10,7 +10,12 @@ import {
 import { useDayzed, Props as DayzedHookProps } from 'dayzed';
 import { ArrowKeysReact } from '../utils/reactKeysArrow';
 import React, { useCallback, useMemo } from 'react';
-import { CalendarConfigs, DatepickerProps } from '../utils/commonTypes';
+import {
+  CalendarConfigs,
+  DatepickerProps,
+  CustomDateButton,
+  OnMonthViewChange,
+} from '../utils/commonTypes';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
 import { DayOfMonth } from './dayOfMonth';
 
@@ -19,6 +24,8 @@ interface CalendarPanelProps extends DatepickerProps {
   configs: CalendarConfigs;
   onMouseEnterHighlight?: (date: Date) => void;
   isInRange?: (date: Date) => boolean | null;
+  onMonthViewChange?: OnMonthViewChange;
+  customDateButton?: CustomDateButton;
 }
 
 export const CalendarPanel: React.FC<CalendarPanelProps> = ({
@@ -27,6 +34,8 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
   propsConfigs,
   onMouseEnterHighlight,
   isInRange,
+  onMonthViewChange,
+  customDateButton,
 }) => {
   const renderProps = useDayzed(dayzedHookProps);
   const { calendars, getBackProps, getForwardProps } = renderProps;
@@ -96,6 +105,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 calendars={calendars}
                 getBackProps={getBackProps}
                 propsConfigs={propsConfigs}
+                onMonthViewChange={onMonthViewChange}
               />
               <Heading size="sm" minWidth={'5rem'} textAlign="center">
                 {configs.monthNames[calendar.month]} {calendar.year}
@@ -104,6 +114,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 calendars={calendars}
                 getForwardProps={getForwardProps}
                 propsConfigs={propsConfigs}
+                onMonthViewChange={onMonthViewChange}
               />
             </HStack>
             <Divider />
@@ -128,6 +139,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                       onMouseEnter={() => {
                         if (onMouseEnterHighlight) onMouseEnterHighlight(date);
                       }}
+                      customDateButton={customDateButton}
                     />
                   );
                 });

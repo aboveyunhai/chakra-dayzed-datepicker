@@ -1,13 +1,18 @@
 import { Button } from '@chakra-ui/react';
 import { DateObj, RenderProps } from 'dayzed';
 import React, { useMemo } from 'react';
-import { DatepickerProps, DayOfMonthBtnStyleProps } from '../utils/commonTypes';
+import {
+  CustomDateButton,
+  DatepickerProps,
+  DayOfMonthBtnStyleProps,
+} from '../utils/commonTypes';
 
 interface DayOfMonthProps extends DatepickerProps {
   renderProps: RenderProps;
   isInRange?: boolean | null;
   dateObj: DateObj;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  customDateButton?: CustomDateButton;
 }
 
 const halfGap = 0.125; //default Chakra-gap-space-1 is 0.25rem
@@ -18,6 +23,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   isInRange,
   renderProps,
   onMouseEnter,
+  customDateButton,
 }) => {
   const { date, selected, selectable, today } = dateObj;
   const { getDateProps } = renderProps;
@@ -77,7 +83,19 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
     ]
   );
 
-  return (
+  return customDateButton ? (
+    customDateButton(
+      { ...dateObj, isInRange },
+      {
+        dateProps: getDateProps({
+          dateObj,
+          disabled: !selectable,
+          onMouseEnter,
+        }),
+        btnProps: styleBtnProps,
+      }
+    )
+  ) : (
     <Button
       {...getDateProps({
         dateObj,
