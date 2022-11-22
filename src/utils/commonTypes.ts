@@ -1,7 +1,8 @@
 import { ButtonProps } from '@chakra-ui/button';
 import { InputProps, PopoverBodyProps } from '@chakra-ui/react';
 import { PopoverContentProps } from '@chakra-ui/react';
-import { DateObj } from 'dayzed';
+import { DateObj, Calendar } from 'dayzed';
+import { ReactElement } from 'react';
 
 export type OnDateSelected = (
   selectedDate: DateObj,
@@ -46,3 +47,25 @@ export interface CalendarConfigs {
   dayNames: string[];
   firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
+
+export type DateObjExtended = DateObj & {
+  isInRange: boolean | null | undefined;
+};
+
+export type CustomDateButtonProps = {
+  dateProps: Record<string, unknown>;
+  btnProps: DayOfMonthBtnStyleProps;
+};
+
+export type OnMonthViewChange = ({
+  calendars,
+  offset,
+}: {
+  calendars: Calendar[];
+  offset: number;
+}) => void;
+
+export type CustomDateButton = (
+  dateObj: DateObjExtended,
+  { dateProps, btnProps }: CustomDateButtonProps
+) => ReactElement;

@@ -124,13 +124,17 @@ Non Chakra-related configurations :
 
 ### other props: 
 
-Name                  | Type                   | Default value           | Description
-----------------------|------------------------|-------------------------|--------------
-name                  | string                 | undefined               | name attribute for `<input />` element
-usePortal             | boolean                | undefined               | to prevent parent styles from clipping or hiding content
-defaultIsOpen         | boolean                | undefined               | open the date panel at the beginning
-minDate               | Date                   | undefined               | minimum date
-maxDate               | Date                   | undefined               | maximum date
+Name                  | Type                   | Default value           | Description                                            | Single/Range
+----------------------|------------------------|-------------------------|--------------------------------------------------------|---------------
+name                  | string                 | undefined               | name attribute for `<input />` element                  | both
+usePortal             | boolean                | undefined               | to prevent parent styles from clipping or hiding content| both
+defaultIsOpen         | boolean                | undefined               | open the date panel at the beginning                    | both
+minDate               | Date                   | undefined               | minimum date                                            | both
+maxDate               | Date                   | undefined               | maximum date                                            | both
+onMonthViewChange     | ({calendars, offset}: {calendars: Calendar[]; offset: number;}) => void | undefined | runs when the current month is changed | single
+onPopoverOpen         | () => void             | undefined               | runs when the calendar popover is opened  | single
+customDateButton      | (dateObj: DateObjExtended, { dateProps, btnProps }: CustomDateButtonProps) => ReactElement; | undefined | custom date button renderer that replaces the original one | single
+
 
 For version < `npm@0.1.6`:</br>
 `dayOfMonthBtnProps` extends from `ButtonProps` and has only `selectedBg` support,

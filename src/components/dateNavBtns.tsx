@@ -1,11 +1,15 @@
 import { Button, ButtonProps } from '@chakra-ui/react';
 import { Calendar, GetBackForwardPropsOptions } from 'dayzed';
-import React, { Fragment } from 'react';
-import { DatepickerProps } from '../utils/commonTypes';
+import React from 'react';
+import {
+  DatepickerProps,
+  OnMonthViewChange,
+} from '../utils/commonTypes';
 
 export interface DatepickerBackBtnsProps extends DatepickerProps {
   calendars: Calendar[];
   getBackProps: (data: GetBackForwardPropsOptions) => Record<string, any>;
+  onMonthViewChange?: OnMonthViewChange;
 }
 
 const DefaultBtnStyle: ButtonProps = {
@@ -16,60 +20,77 @@ const DefaultBtnStyle: ButtonProps = {
 export const DatepickerBackBtns: React.FC<DatepickerBackBtnsProps> = (
   props
 ) => {
-  const { calendars, getBackProps } = props;
+  const { calendars, getBackProps, onMonthViewChange } = props;
   const customBtnProps = props.propsConfigs?.dateNavBtnProps;
+
+  const backProps = getBackProps({ calendars });
+  const backPropsWithOffset = getBackProps({ calendars, offset: 12 });
   return (
-    <Fragment>
+    <>
       <Button
-        {...getBackProps({
-          calendars,
-          offset: 12,
-        })}
+        {...backPropsWithOffset}
         {...DefaultBtnStyle}
         {...customBtnProps}
+        onClick={(e) => {
+          onMonthViewChange && onMonthViewChange({ calendars, offset: -12 })
+          backPropsWithOffset.onClick(e)
+        }}
       >
         {'<<'}
       </Button>
       <Button
-        {...getBackProps({ calendars })}
+        {...backProps}
         {...DefaultBtnStyle}
         {...customBtnProps}
+        onClick={(e) => {
+          onMonthViewChange && onMonthViewChange({ calendars, offset: -1 })
+          backProps.onClick(e)
+        }}
       >
         {'<'}
       </Button>
-    </Fragment>
+    </>
   );
 };
 
 export interface DatepickerForwardBtnsProps extends DatepickerProps {
   calendars: Calendar[];
   getForwardProps: (data: GetBackForwardPropsOptions) => Record<string, any>;
+  onMonthViewChange?: OnMonthViewChange;
 }
 
 export const DatepickerForwardBtns: React.FC<DatepickerForwardBtnsProps> = (
   props
 ) => {
-  const { calendars, getForwardProps } = props;
+  const { calendars, getForwardProps, onMonthViewChange } = props;
   const customBtnProps = props.propsConfigs?.dateNavBtnProps;
+
+  const forwardProps = getForwardProps({ calendars });
+  const forwardPropsWithOffset = getForwardProps({ calendars, offset: 12 });
   return (
-    <Fragment>
+    <>
       <Button
-        {...getForwardProps({ calendars })}
+        {...forwardProps}
         {...DefaultBtnStyle}
         {...customBtnProps}
+        onClick={(e) => {
+          onMonthViewChange && onMonthViewChange({ calendars, offset: 1 })
+          forwardProps.onClick(e)
+        }}
       >
         {'>'}
       </Button>
       <Button
-        {...getForwardProps({
-          calendars,
-          offset: 12,
-        })}
+        {...forwardPropsWithOffset}
         {...DefaultBtnStyle}
         {...customBtnProps}
+        onClick={(e) => {
+          onMonthViewChange && onMonthViewChange({ calendars, offset: 12 })
+          forwardPropsWithOffset.onClick(e)
+        }}
       >
         {'>>'}
       </Button>
-    </Fragment>
+    </>
   );
 };
