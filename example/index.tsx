@@ -7,8 +7,11 @@ import {
   ChakraProvider,
   ColorModeScript,
   extendTheme,
+  Flex,
   Heading,
   HStack,
+  StackDivider,
+  Switch,
   ThemeConfig,
   useColorMode,
   VStack,
@@ -23,6 +26,16 @@ import {
 type FirstDayOfWeek = DatepickerConfigs['firstDayOfWeek'];
 const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
 
+const Section: React.FC<React.PropsWithChildren<{ title?: string }>> = ({
+  title,
+  children,
+}) => (
+  <VStack spacing={3} alignItems="flex-start" padding={'0.25rem'}>
+    <Heading size="lg">{title}</Heading>
+    {children}
+  </VStack>
+);
+
 const App = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [date, setDate] = useState(new Date('07/28/2022'));
@@ -31,134 +44,161 @@ const App = () => {
     new Date(),
   ]);
   const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeek>(1);
+  const [isSingleChecked, setSingleCheck] = useState(true);
+  const [isRangeChecked, setRangeCheck] = useState(true);
+
   return (
     <VStack
-      padding={'1em'}
-      spacing={5}
+      paddingX={{ base: '2rem', md: '8rem' }}
+      paddingY={{ base: '1rem', md: '4rem' }}
+      spacing={4}
       minHeight={'600px'}
       alignItems="flex-start"
+      divider={<StackDivider />}
     >
-      <Heading>Single:</Heading>
-      <SingleDatepicker
-        name="date-input"
-        date={date}
-        minDate={new Date('07/25/2022')}
-        maxDate={new Date('08/05/2022')}
-        onDateChange={setDate}
-      />
-      <Heading>Range:</Heading>
-      <RangeDatepicker
-        selectedDates={selectedDates}
-        onDateChange={setSelectedDates}
-      />
-      <Heading>Custom Styles:</Heading>
-      <p>
-        If you used light/dark theme, just be aware of your style under specific
-        mode.
-      </p>
-      <Button size="sm" onClick={toggleColorMode}>
-        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
-      </Button>
-      <SingleDatepicker
-        name="date-input"
-        date={date}
-        onDateChange={setDate}
-        propsConfigs={{
-          dayOfMonthBtnProps: {
-            defaultBtnProps: {
-              _hover: {
-                background: 'blue.300',
+      <Section title="Single:">
+        <Flex alignItems={'center'}>
+          <Box marginRight={'1rem'}>closeOnSelect:</Box>
+          <Switch
+            isChecked={isSingleChecked}
+            onChange={(e) => setSingleCheck(e.currentTarget.checked)}
+          />
+        </Flex>
+        <SingleDatepicker
+          name="date-input"
+          date={date}
+          minDate={new Date('07/25/2022')}
+          maxDate={new Date('08/05/2022')}
+          onDateChange={setDate}
+          closeOnSelect={isSingleChecked}
+        />
+      </Section>
+      <Section title="Range:">
+        <Flex alignItems={'center'}>
+          <Box marginRight={'1rem'}>closeOnSelect:</Box>
+          <Switch
+            isChecked={isRangeChecked}
+            onChange={(e) => setRangeCheck(e.currentTarget.checked)}
+          />
+        </Flex>
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+          closeOnSelect={isRangeChecked}
+        />
+      </Section>
+      <Section title="Custom Styles:">
+        Custom Styles:
+        <p>
+          If you used light/dark theme, just be aware of your style under
+          specific mode.
+        </p>
+        <Button size="sm" onClick={toggleColorMode}>
+          Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+        </Button>
+        <SingleDatepicker
+          name="date-input"
+          date={date}
+          onDateChange={setDate}
+          propsConfigs={{
+            dayOfMonthBtnProps: {
+              defaultBtnProps: {
+                _hover: {
+                  background: 'blue.300',
+                },
+              },
+              selectedBtnProps: {
+                background: '#0085f230',
               },
             },
-            selectedBtnProps: {
-              background: '#0085f230',
-            },
-          },
-          dateNavBtnProps: {
-            _hover: {
-              background: '#0085f230',
-            },
-          },
-          popoverCompProps: {
-            popoverContentProps: {
-              background: 'gray.700',
-              color: 'white',
-            },
-          },
-        }}
-      />
-      <RangeDatepicker
-        selectedDates={selectedDates}
-        onDateChange={setSelectedDates}
-        propsConfigs={{
-          dateNavBtnProps: {
-            colorScheme: 'blue',
-            variant: 'outline',
-          },
-          dayOfMonthBtnProps: {
-            defaultBtnProps: {
-              borderColor: 'red.300',
+            dateNavBtnProps: {
               _hover: {
-                background: 'blue.400',
+                background: '#0085f230',
               },
             },
-            isInRangeBtnProps: {
-              color: 'purple.800',
-              borderColor: 'blue.300',
+            popoverCompProps: {
+              popoverContentProps: {
+                background: 'gray.700',
+                color: 'white',
+              },
             },
-            selectedBtnProps: {
-              background: 'blue.200',
-              borderColor: 'blue.300',
-              color: 'blue.600',
+          }}
+        />
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+          propsConfigs={{
+            dateNavBtnProps: {
+              colorScheme: 'blue',
+              variant: 'outline',
             },
-            todayBtnProps: {
-              background: 'teal.200',
-              color: 'teal.700',
+            dayOfMonthBtnProps: {
+              defaultBtnProps: {
+                borderColor: 'red.300',
+                _hover: {
+                  background: 'blue.400',
+                },
+              },
+              isInRangeBtnProps: {
+                color: 'purple.800',
+                borderColor: 'blue.300',
+              },
+              selectedBtnProps: {
+                background: 'blue.200',
+                borderColor: 'blue.300',
+                color: 'blue.600',
+              },
+              todayBtnProps: {
+                background: 'teal.200',
+                color: 'teal.700',
+              },
             },
-          },
-          inputProps: {
-            size: 'sm',
-          },
-        }}
-      />
-      <Heading>Custom Month/Weekday/Format:</Heading>
-      <RangeDatepicker
-        selectedDates={selectedDates}
-        onDateChange={setSelectedDates}
-        configs={{
-          dateFormat: 'yyyy-MM-dd',
-          dayNames: 'abcdefg'.split(''), // length of 7
-          monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
-        }}
-      />
-      <Heading>With Offset:</Heading>
-      <Box>First Day of Week: {Weekday_Names_Short[firstDayOfWeek || 0]}</Box>
-      <HStack spacing={1}>
-        {offsets.map((e) => (
-          <Button
-            key={e}
-            onClick={() => setFirstDayOfWeek(e)}
-            backgroundColor={firstDayOfWeek === e ? 'green.300' : undefined}
-          >
-            {e}
-          </Button>
-        ))}
-      </HStack>
-      <SingleDatepicker
-        name="date-input"
-        date={date}
-        onDateChange={setDate}
-        configs={{
-          firstDayOfWeek,
-        }}
-      />
-      <RangeDatepicker
-        selectedDates={selectedDates}
-        onDateChange={setSelectedDates}
-        configs={{
-          firstDayOfWeek,
-        }}
-      />
+            inputProps: {
+              size: 'sm',
+            },
+          }}
+        />
+      </Section>
+      <Section title="Custom Month/Weekday/Format:">
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+          configs={{
+            dateFormat: 'yyyy-MM-dd',
+            dayNames: 'abcdefg'.split(''), // length of 7
+            monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
+          }}
+        />
+      </Section>
+      <Section title="With Offset:">
+        <Box>First Day of Week: {Weekday_Names_Short[firstDayOfWeek || 0]}</Box>
+        <HStack spacing={1}>
+          {offsets.map((e) => (
+            <Button
+              key={e}
+              onClick={() => setFirstDayOfWeek(e)}
+              backgroundColor={firstDayOfWeek === e ? 'green.300' : undefined}
+            >
+              {e}
+            </Button>
+          ))}
+        </HStack>
+        <SingleDatepicker
+          name="date-input"
+          date={date}
+          onDateChange={setDate}
+          configs={{
+            firstDayOfWeek,
+          }}
+        />
+        <RangeDatepicker
+          selectedDates={selectedDates}
+          onDateChange={setSelectedDates}
+          configs={{
+            firstDayOfWeek,
+          }}
+        />
+      </Section>
     </VStack>
   );
 };

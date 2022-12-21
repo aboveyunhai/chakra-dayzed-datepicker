@@ -25,6 +25,7 @@ export interface SingleDatepickerProps extends DatepickerProps {
   configs?: DatepickerConfigs;
   disabled?: boolean;
   defaultIsOpen?: boolean;
+  closeOnSelect?: boolean;
   id?: string;
   name?: string;
   usePortal?: boolean;
@@ -42,6 +43,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   propsConfigs,
   usePortal,
   defaultIsOpen = false,
+  closeOnSelect = true,
   ...props
 }) => {
   const {
@@ -66,10 +68,8 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
 
   const onPopoverClose = () => {
     onClose();
-    if (true) {
-      setDateInView(selectedDate);
-      setOffset(0);
-    }
+    setDateInView(selectedDate);
+    setOffset(0);
   };
 
   // dayzed utils
@@ -77,7 +77,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     if (!selectable) return;
     if (date instanceof Date && !isNaN(date.getTime())) {
       onDateChange(date);
-      onClose();
+      if (closeOnSelect) onClose();
       return;
     }
   };
