@@ -85,6 +85,7 @@ export interface RangeDatepickerProps extends DatepickerProps {
   configs?: DatepickerConfigs;
   disabled?: boolean;
   defaultIsOpen?: boolean;
+  closeOnSelect?: boolean;
   onDateChange: (date: Date[]) => void;
   id?: string;
   name?: string;
@@ -105,6 +106,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   name,
   usePortal,
   defaultIsOpen = false,
+  closeOnSelect = true,
   ...props
 }) => {
   const { selectedDates, minDate, maxDate, onDateChange, disabled } = props;
@@ -119,7 +121,12 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
     ...configs,
   };
 
-  // dayzed utils
+  const onPopoverClose = () => {
+    onClose();
+    setDateInView(selectedDates[0] || new Date());
+    setOffset(0);
+  };
+
   const handleOnDateSelected: OnDateSelected = ({ selectable, date }) => {
     if (!selectable) {
       return;
@@ -134,19 +141,19 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
           newDates.unshift(date);
         }
         onDateChange(newDates);
-      } else if (newDates.length === 2) {
+
+        if (closeOnSelect) onClose();
+        return;
+      }
+
+      if (newDates.length === 2) {
         onDateChange([date]);
+        return;
       }
     } else {
       newDates.push(date);
       onDateChange(newDates);
     }
-  };
-
-  const onPopoverClose = () => {
-    onClose();
-    setDateInView(selectedDates[0] || new Date());
-    setOffset(0);
   };
 
   // eventually we want to allow user to freely type their own input and parse the input

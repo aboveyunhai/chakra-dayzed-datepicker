@@ -128,7 +128,8 @@ Name                  | Type                   | Default value           | Descr
 ----------------------|------------------------|-------------------------|--------------
 name                  | string                 | undefined               | name attribute for `<input />` element
 usePortal             | boolean                | undefined               | to prevent parent styles from clipping or hiding content
-defaultIsOpen         | boolean                | undefined               | open the date panel at the beginning
+defaultIsOpen         | boolean                | false                   | open the date panel at the beginning
+closeOnSelect         | boolean                | true                    | close the date panel upon the complete selection
 minDate               | Date                   | undefined               | minimum date
 maxDate               | Date                   | undefined               | maximum date
 
