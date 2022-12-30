@@ -67,7 +67,7 @@
     "@types/react-dom": "^17.0.9",
     "date-fns": "^2.23.0",
     "dayzed": "^3.2.2",
-    "dts-cli": "^0.19.5",
+    "dts-cli": "^1.6.3",
     "framer-motion": "^4.1.17",
     "husky": "^7.0.4",
     "react": "^17.0.2",
@@ -77,6 +77,6 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "react-focus-lock": "^2.5.2"
+    "react-focus-lock": "^2.9.2"
   }
 }
