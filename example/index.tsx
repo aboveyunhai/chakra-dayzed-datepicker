@@ -22,6 +22,7 @@ import {
   DatepickerConfigs,
   Weekday_Names_Short,
 } from '../src';
+import GitHubButton from 'react-github-btn';
 
 type FirstDayOfWeek = DatepickerConfigs['firstDayOfWeek'];
 const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
@@ -56,6 +57,15 @@ const App = () => {
       alignItems="flex-start"
       divider={<StackDivider />}
     >
+      <Heading>Chakra-Dayzed-Datepicker</Heading>
+      <GitHubButton
+        href="https://github.com/aboveyunhai/chakra-dayzed-datepicker"
+        data-size="large"
+        data-show-count="true"
+        aria-label="Star aboveyunhai/chakra-dayzed-datepicker on GitHub"
+      >
+        Star
+      </GitHubButton>
       <Section title="Single:">
         <Flex alignItems={'center'}>
           <Box marginRight={'1rem'}>closeOnSelect:</Box>
