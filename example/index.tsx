@@ -10,6 +10,7 @@ import {
   Flex,
   Heading,
   HStack,
+  Link,
   StackDivider,
   Switch,
   ThemeConfig,
@@ -58,14 +59,19 @@ const App = () => {
       divider={<StackDivider />}
     >
       <Heading>Chakra-Dayzed-Datepicker</Heading>
-      <GitHubButton
-        href="https://github.com/aboveyunhai/chakra-dayzed-datepicker"
-        data-size="large"
-        data-show-count="true"
-        aria-label="Star aboveyunhai/chakra-dayzed-datepicker on GitHub"
-      >
-        Star
-      </GitHubButton>
+      <Flex gridGap={5} height="28px">
+        <GitHubButton
+          href="https://github.com/aboveyunhai/chakra-dayzed-datepicker"
+          data-size="large"
+          data-show-count="true"
+          aria-label="Star aboveyunhai/chakra-dayzed-datepicker on GitHub"
+        >
+          Star
+        </GitHubButton>
+        <Link href="https://github.com/aboveyunhai/chakra-dayzed-datepicker/blob/main/example/index.tsx">
+          Source code of all examples
+        </Link>
+      </Flex>
       <Section title="Single:">
         <Flex alignItems={'center'}>
           <Box marginRight={'1rem'}>closeOnSelect:</Box>
