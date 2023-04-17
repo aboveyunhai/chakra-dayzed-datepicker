@@ -54,7 +54,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
           ...defaultBtnProps?._after,
         },
         _hover: {
-          bg: 'gray.200',
+          bg: 'purple.400',
           ...defaultBtnProps?._hover,
           _disabled: {
             bg: 'gray.100',
