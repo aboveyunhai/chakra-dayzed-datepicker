@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react';
 import { DateObj, RenderProps } from 'dayzed';
 import React, { useMemo } from 'react';
 import { DatepickerProps, DayOfMonthBtnStyleProps } from '../utils/commonTypes';
@@ -9,6 +9,10 @@ interface DayOfMonthProps extends DatepickerProps {
   dateObj: DateObj;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }
+
+type HoverStyle =
+  | (ButtonProps['_hover'] & { _disabled: ButtonProps['_disabled'] })
+  | undefined;
 
 const halfGap = 0.125; //default Chakra-gap-space-1 is 0.25rem
 
@@ -32,11 +36,12 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
     () => ({
       defaultBtnProps: {
         size: 'sm',
-        variant: 'outline',
-        background: 'transparent',
-        borderColor: 'transparent',
+        variant: 'ghost',
+        // background: 'transparent',
+        // borderColor: 'transparent',
         // this intends to fill the visual gap from Grid to improve the UX
         // so the button active area is actually larger than what it's seen
+        ...defaultBtnProps,
         _after: {
           content: "''",
           position: 'absolute',
@@ -46,14 +51,17 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
           right: `-${halfGap}rem`,
           borderWidth: `${halfGap}rem`,
           borderColor: 'transparent',
+          ...defaultBtnProps?._after,
         },
-        ...defaultBtnProps,
-        _hover: selectable
-          ? {
-              bg: 'purple.400',
-              ...defaultBtnProps?._hover,
-            }
-          : undefined,
+        _hover: {
+          bg: 'purple.400',
+          ...defaultBtnProps?._hover,
+          _disabled: {
+            bg: 'gray.100',
+            // temperory hack to persist the typescript checking
+            ...(defaultBtnProps?._hover as HoverStyle)?._disabled,
+          },
+        },
       },
       isInRangeBtnProps: {
         background: 'purple.200',
