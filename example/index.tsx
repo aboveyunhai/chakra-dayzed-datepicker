@@ -24,6 +24,7 @@ import {
   Weekday_Names_Short,
 } from '../src';
 import GitHubButton from 'react-github-btn';
+import { subDays, addDays, startOfDay } from 'date-fns';
 
 type FirstDayOfWeek = DatepickerConfigs['firstDayOfWeek'];
 const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
@@ -40,7 +41,8 @@ const Section: React.FC<React.PropsWithChildren<{ title?: string }>> = ({
 
 const App = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const [date, setDate] = useState(new Date('07/28/2022'));
+  const demoDate = new Date();
+  const [date, setDate] = useState(demoDate);
   const [selectedDates, setSelectedDates] = useState<Date[]>([
     new Date(),
     new Date(),
@@ -83,8 +85,15 @@ const App = () => {
         <SingleDatepicker
           name="date-input"
           date={date}
-          minDate={new Date('07/25/2022')}
-          maxDate={new Date('08/05/2022')}
+          disabledDates={
+            new Set([
+              startOfDay(subDays(demoDate, 6)).getTime(),
+              startOfDay(subDays(demoDate, 4)).getTime(),
+              startOfDay(subDays(demoDate, 2)).getTime(),
+            ])
+          }
+          minDate={subDays(demoDate, 8)}
+          maxDate={addDays(demoDate, 8)}
           onDateChange={setDate}
           closeOnSelect={isSingleChecked}
         />

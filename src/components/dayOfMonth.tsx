@@ -6,6 +6,7 @@ import { DatepickerProps, DayOfMonthBtnStyleProps } from '../utils/commonTypes';
 interface DayOfMonthProps extends DatepickerProps {
   renderProps: RenderProps;
   isInRange?: boolean | null;
+  disabledDates?: Set<number>;
   dateObj: DateObj;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }
@@ -20,6 +21,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   dateObj,
   propsConfigs,
   isInRange,
+  disabledDates,
   renderProps,
   onMouseEnter,
 }) => {
@@ -31,14 +33,12 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
     selectedBtnProps,
     todayBtnProps,
   } = propsConfigs?.dayOfMonthBtnProps || {};
-
+  const disabled = !selectable || disabledDates?.has(date.getTime());
   const styleBtnProps: DayOfMonthBtnStyleProps = useMemo(
     () => ({
       defaultBtnProps: {
         size: 'sm',
         variant: 'ghost',
-        // background: 'transparent',
-        // borderColor: 'transparent',
         // this intends to fill the visual gap from Grid to improve the UX
         // so the button active area is actually larger than what it's seen
         ...defaultBtnProps,
@@ -76,26 +76,20 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
         ...todayBtnProps,
       },
     }),
-    [
-      defaultBtnProps,
-      isInRangeBtnProps,
-      selectedBtnProps,
-      todayBtnProps,
-      selectable,
-    ]
+    [defaultBtnProps, isInRangeBtnProps, selectedBtnProps, todayBtnProps]
   );
 
   return (
     <Button
       {...getDateProps({
         dateObj,
-        disabled: !selectable,
+        disabled: disabled,
         onMouseEnter: onMouseEnter,
       })}
-      isDisabled={!selectable}
+      isDisabled={disabled}
       {...styleBtnProps.defaultBtnProps}
-      {...(isInRange && selectable && styleBtnProps.isInRangeBtnProps)}
-      {...(selected && selectable && styleBtnProps.selectedBtnProps)}
+      {...(isInRange && !disabled && styleBtnProps.isInRangeBtnProps)}
+      {...(selected && !disabled && styleBtnProps.selectedBtnProps)}
       {...(today && styleBtnProps.todayBtnProps)}
     >
       {date.getDate()}

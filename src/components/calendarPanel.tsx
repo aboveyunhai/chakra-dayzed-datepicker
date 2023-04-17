@@ -17,6 +17,7 @@ import { DayOfMonth } from './dayOfMonth';
 interface CalendarPanelProps extends DatepickerProps {
   dayzedHookProps: Omit<DayzedHookProps, 'children' | 'render'>;
   configs: CalendarConfigs;
+  disabledDates?: Set<number>;
   onMouseEnterHighlight?: (date: Date) => void;
   isInRange?: (date: Date) => boolean | null;
 }
@@ -25,6 +26,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
   dayzedHookProps,
   configs,
   propsConfigs,
+  disabledDates,
   onMouseEnterHighlight,
   isInRange,
 }) => {
@@ -125,6 +127,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                       propsConfigs={propsConfigs}
                       renderProps={renderProps}
                       isInRange={isInRange && isInRange(date)}
+                      disabledDates={disabledDates}
                       onMouseEnter={() => {
                         if (onMouseEnterHighlight) onMouseEnterHighlight(date);
                       }}

@@ -24,6 +24,10 @@ export interface SingleDatepickerProps extends DatepickerProps {
   onDateChange: (date: Date) => void;
   configs?: DatepickerConfigs;
   disabled?: boolean;
+  /**
+   * disabledDates: `Uses startOfDay as comparison`
+   */
+  disabledDates?: Set<number>;
   defaultIsOpen?: boolean;
   closeOnSelect?: boolean;
   id?: string;
@@ -42,6 +46,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   configs,
   propsConfigs,
   usePortal,
+  disabledDates,
   defaultIsOpen = false,
   closeOnSelect = true,
   ...props
@@ -133,6 +138,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
                 }}
                 configs={calendarConfigs}
                 propsConfigs={propsConfigs}
+                disabledDates={disabledDates}
               />
             </FocusLock>
           </PopoverBody>
