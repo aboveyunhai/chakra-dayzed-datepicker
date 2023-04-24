@@ -124,14 +124,15 @@ Non Chakra-related configurations :
 
 ### other props: 
 
-Name                  | Type                   | Default value           | Description
-----------------------|------------------------|-------------------------|--------------
-name                  | string                 | undefined               | name attribute for `<input />` element
-usePortal             | boolean                | undefined               | to prevent parent styles from clipping or hiding content
-defaultIsOpen         | boolean                | false                   | open the date panel at the beginning
-closeOnSelect         | boolean                | true                    | close the date panel upon the complete selection
-minDate               | Date                   | undefined               | minimum date
-maxDate               | Date                   | undefined               | maximum date
+Name                  |single/range  | Type                   | Default value           | Description
+----------------------|--------------|------------------------|-------------------------|--------------
+name                  |both          | string                 | undefined               | name attribute for `<input />` element
+usePortal             |both          | boolean                | undefined               | to prevent parent styles from clipping or hiding content
+defaultIsOpen         |both          | boolean                | false                   | open the date panel at the beginning
+closeOnSelect         |both          | boolean                | true                    | close the date panel upon the complete selection
+minDate               |both          | Date                   | undefined               | minimum date
+maxDate               |both          | Date                   | undefined               | maximum date
+disabledDates         |single        | Set<number>            | undefined               | for single datepicker only, uses `startOfDay` as comparison, e.g., `  disabledDates={new Set([startOfDay(new Date()).getTime()}`
 
 For version < `npm@0.1.6`:</br>
 `dayOfMonthBtnProps` extends from `ButtonProps` and has only `selectedBg` support,
