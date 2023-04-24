@@ -14,7 +14,7 @@ import { CalendarConfigs, DatepickerProps } from '../utils/commonTypes';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
 import { DayOfMonth } from './dayOfMonth';
 
-interface CalendarPanelProps extends DatepickerProps {
+export interface CalendarPanelProps extends DatepickerProps {
   dayzedHookProps: Omit<DayzedHookProps, 'children' | 'render'>;
   configs: CalendarConfigs;
   disabledDates?: Set<number>;
