@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.8] - 2023-04-24
+
+ ### Added
+
+ - add `disabledDates` props
+ - export `Calendar` components
+
+  ### Fixed
+
+ - fix `hover disabled stylings`
+
 ## [0.2.7] - 2023-01-29
 
  ### Fixed
