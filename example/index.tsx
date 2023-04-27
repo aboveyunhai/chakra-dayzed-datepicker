@@ -85,7 +85,12 @@ const App = () => {
       <Button size="sm" onClick={toggleColorMode}>
         Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
       </Button>
-      <Tabs variant="soft-rounded" colorScheme="gray" display={'flex'}>
+      <Tabs
+        variant="soft-rounded"
+        colorScheme="gray"
+        display={'flex'}
+        flexDirection={['column', 'column', 'row']}
+      >
         <TabList display={'flex'} flexDir={'column'} gridGap={'1'}>
           <Tab
             borderRadius="0.5rem"
