@@ -10,19 +10,23 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import FocusLock from 'react-focus-lock';
-import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
+import { Month_Names_Short, Weekday_Names_Short } from './utils/calendarUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
   CalendarConfigs,
   DatepickerConfigs,
   DatepickerProps,
+  CalendarLocaleConfigs,
+  DatepickerLocaleConfigs,
   OnDateSelected,
 } from './utils/commonTypes';
+import { daysForLocale, monthsForLocale } from './utils/calendarUtils';
+import * as dateFnsLocales from 'date-fns/locale';
 
 export interface SingleDatepickerProps extends DatepickerProps {
   date?: Date;
   onDateChange: (date: Date) => void;
-  configs?: DatepickerConfigs;
+  configs?: DatepickerConfigs | DatepickerLocaleConfigs;
   disabled?: boolean;
   /**
    * disabledDates: `Uses startOfDay as comparison`
@@ -39,6 +43,13 @@ const DefaultConfigs: CalendarConfigs = {
   dateFormat: 'yyyy-MM-dd',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
+  firstDayOfWeek: 0,
+};
+
+const DefaultLocaleConfigs: CalendarLocaleConfigs = {
+  locale: 'en-US',
+  month: 'short',
+  day: 'short',
   firstDayOfWeek: 0,
 };
 
@@ -66,10 +77,37 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
 
   const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
 
-  const calendarConfigs: CalendarConfigs = {
-    ...DefaultConfigs,
-    ...configs,
-  };
+  let calendarConfigs: CalendarConfigs;
+
+  if (configs !== undefined && 'locale' in configs) {
+    let calendarLocaleConfigs = {
+      ...DefaultLocaleConfigs,
+      ...configs,
+    };
+
+    let currentDateFns =
+      Object.values(dateFnsLocales)
+        .filter((dateFns) => dateFns.code === calendarLocaleConfigs.locale)
+        .pop() || dateFnsLocales.enUS;
+
+    calendarConfigs = {
+      dateFormat: currentDateFns.formatLong?.date({ width: 'short' }),
+      dayNames: daysForLocale(
+        calendarLocaleConfigs.locale,
+        calendarLocaleConfigs.day
+      ),
+      monthNames: monthsForLocale(
+        calendarLocaleConfigs.locale,
+        calendarLocaleConfigs.month
+      ),
+      firstDayOfWeek: calendarLocaleConfigs.firstDayOfWeek,
+    };
+  } else {
+    calendarConfigs = {
+      ...DefaultConfigs,
+      ...configs,
+    };
+  }
 
   const onPopoverClose = () => {
     onClose();

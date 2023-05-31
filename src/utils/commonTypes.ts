@@ -46,3 +46,17 @@ export interface CalendarConfigs {
   dayNames: string[];
   firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
+
+export interface DatepickerLocaleConfigs {
+  locale?: string;
+  month?: 'long' | 'short';
+  day?: 'long' | 'short';
+  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+export interface CalendarLocaleConfigs {
+  locale: string;
+  month: 'long' | 'short';
+  day: 'long' | 'short';
+  firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+}

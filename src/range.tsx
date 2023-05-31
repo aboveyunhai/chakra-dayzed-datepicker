@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Props as DayzedHookProps } from 'dayzed';
-import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
+import { Month_Names_Short, Weekday_Names_Short } from './utils/calendarUtils';
 import {
   Flex,
   Input,
@@ -14,13 +14,17 @@ import {
 import { CalendarPanel } from './components/calendarPanel';
 import {
   CalendarConfigs,
+  CalendarLocaleConfigs,
   DatepickerConfigs,
+  DatepickerLocaleConfigs,
   DatepickerProps,
   OnDateSelected,
   PropsConfigs,
 } from './utils/commonTypes';
 import { format } from 'date-fns';
 import FocusLock from 'react-focus-lock';
+import { daysForLocale, monthsForLocale } from './utils/calendarUtils';
+import * as dateFnsLocales from 'date-fns/locale';
 
 interface RangeCalendarPanelProps {
   dayzedHookProps: DayzedHookProps;
@@ -82,7 +86,7 @@ export const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
 
 export interface RangeDatepickerProps extends DatepickerProps {
   selectedDates: Date[];
-  configs?: DatepickerConfigs;
+  configs?: DatepickerConfigs | DatepickerLocaleConfigs;
   disabled?: boolean;
   defaultIsOpen?: boolean;
   closeOnSelect?: boolean;
@@ -96,6 +100,13 @@ const DefaultConfigs: CalendarConfigs = {
   dateFormat: 'MM/dd/yyyy',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
+  firstDayOfWeek: 0,
+};
+
+const DefaultLocaleConfigs: CalendarLocaleConfigs = {
+  locale: 'en-US',
+  month: 'short',
+  day: 'short',
   firstDayOfWeek: 0,
 };
 
@@ -116,10 +127,37 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
   const [offset, setOffset] = useState(0);
   const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
 
-  const calendarConfigs: CalendarConfigs = {
-    ...DefaultConfigs,
-    ...configs,
-  };
+  let calendarConfigs: CalendarConfigs;
+
+  if (configs !== undefined && 'locale' in configs) {
+    let calendarLocaleConfigs = {
+      ...DefaultLocaleConfigs,
+      ...configs,
+    };
+
+    let currentDateFns =
+      Object.values(dateFnsLocales)
+        .filter((dateFns) => dateFns.code === calendarLocaleConfigs.locale)
+        .pop() || dateFnsLocales.enUS;
+
+    calendarConfigs = {
+      dateFormat: currentDateFns.formatLong?.date({ width: 'short' }),
+      dayNames: daysForLocale(
+        calendarLocaleConfigs.locale,
+        calendarLocaleConfigs.day
+      ),
+      monthNames: monthsForLocale(
+        calendarLocaleConfigs.locale,
+        calendarLocaleConfigs.month
+      ),
+      firstDayOfWeek: calendarLocaleConfigs.firstDayOfWeek,
+    };
+  } else {
+    calendarConfigs = {
+      ...DefaultConfigs,
+      ...configs,
+    };
+  }
 
   const onPopoverClose = () => {
     onClose();
