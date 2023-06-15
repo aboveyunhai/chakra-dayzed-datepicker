@@ -207,6 +207,12 @@ const App = () => {
                         color: 'white',
                       },
                     },
+                    dayLabelProps: {
+                      fontWeight: 'normal'
+                    },
+                    headingProps: {
+                      fontWeight: 'semibold'
+                    }
                   }}
                 />
                 <RangeDatepicker
