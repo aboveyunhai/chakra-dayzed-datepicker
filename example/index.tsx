@@ -207,6 +207,12 @@ const App = () => {
                         color: 'white',
                       },
                     },
+                    weekdayLabelProps: {
+                      fontWeight: 'normal'
+                    },
+                    dateHeadingProps: {
+                      fontWeight: 'semibold'
+                    }
                   }}
                 />
                 <RangeDatepicker
