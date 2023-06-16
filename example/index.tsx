@@ -207,10 +207,10 @@ const App = () => {
                         color: 'white',
                       },
                     },
-                    dayLabelProps: {
+                    weekdayLabelProps: {
                       fontWeight: 'normal'
                     },
-                    headingProps: {
+                    dateHeadingProps: {
                       fontWeight: 'semibold'
                     }
                   }}

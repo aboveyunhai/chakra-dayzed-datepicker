@@ -31,8 +31,8 @@ export interface PropsConfigs {
   dayOfMonthBtnProps?: DayOfMonthBtnStyleProps;
   inputProps?: InputProps;
   popoverCompProps?: PopoverCompProps;
-  headingProps?: HeadingProps;
-  dayLabelProps?: BoxProps;
+  dateHeadingProps?: HeadingProps;
+  weekdayLabelProps?: BoxProps;
 }
 
 export interface DatepickerConfigs {
