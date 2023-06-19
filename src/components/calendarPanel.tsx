@@ -99,7 +99,12 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 getBackProps={getBackProps}
                 propsConfigs={propsConfigs}
               />
-              <Heading size="sm" minWidth={'5rem'} textAlign="center" {...propsConfigs?.dateHeadingProps}>
+              <Heading
+                size="sm"
+                minWidth={'5rem'}
+                textAlign="center"
+                {...propsConfigs?.dateHeadingProps}
+              >
                 {configs.monthNames[calendar.month]} {calendar.year}
               </Heading>
               <DatepickerForwardBtns
@@ -111,7 +116,12 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
             <Divider />
             <SimpleGrid columns={7} spacing={1} textAlign="center">
               {weekdayNames.map((day, dayIdx) => (
-                <Box fontSize="sm" fontWeight="semibold" key={dayIdx} {...propsConfigs?.weekdayLabelProps}>
+                <Box
+                  fontSize="sm"
+                  fontWeight="semibold"
+                  key={dayIdx}
+                  {...propsConfigs?.weekdayLabelProps}
+                >
                   {day}
                 </Box>
               ))}
