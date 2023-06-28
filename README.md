@@ -73,6 +73,25 @@ popoverCompProps = {
   popoverBodyProps
 }
 ```
+To sum them up: 
+```js
+  propsConfigs={{
+    dateNavBtnProps: {},
+    dayOfMonthBtnProps: {
+      defaultBtnProps: {},
+      isInRangeBtnProps: {},
+      selectedBtnProps: {},
+      todayBtnProps: {}
+    },
+    inputProps: {},
+    popoverCompProps: {
+      popoverContentProps: {},
+      popoverBodyProps: {}
+    },
+    weekdayLabelProps: {},
+    dateHeadingProps: {}
+  }}
+```
 
 <br/>Example:
 ```js
@@ -108,6 +127,12 @@ popoverCompProps = {
         color: "white",
       },
     },
+    weekdayLabelProps: {
+      fontWeight: 'normal'
+    },
+    dateHeadingProps: {
+      fontWeight: 'semibold'
+    }
   }}
 ```
 
