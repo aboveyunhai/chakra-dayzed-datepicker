@@ -189,7 +189,7 @@ const App = () => {
                     dayOfMonthBtnProps: {
                       defaultBtnProps: {
                         _hover: {
-                          background: 'blue.300',
+                          background: 'blue.600',
                         },
                       },
                       selectedBtnProps: {
@@ -203,16 +203,28 @@ const App = () => {
                     },
                     popoverCompProps: {
                       popoverContentProps: {
-                        background: 'gray.700',
-                        color: 'white',
+                        background: '#10172b',
+                        color: '#94a3bb',
+                        boxShadow: 'var(--chakra-shadows-base)',
+                      },
+                    },
+                    calendarPanelProps: {
+                      wrapperProps: {
+                        borderColor: 'green',
+                      },
+                      contentProps: {
+                        borderWidth: 0,
+                      },
+                      headerProps: {
+                        padding: '5px',
                       },
                     },
                     weekdayLabelProps: {
-                      fontWeight: 'normal'
+                      fontWeight: 'normal',
                     },
                     dateHeadingProps: {
-                      fontWeight: 'semibold'
-                    }
+                      fontWeight: 'semibold',
+                    },
                   }}
                 />
                 <RangeDatepicker
