@@ -218,6 +218,9 @@ const App = () => {
                       headerProps: {
                         padding: '5px',
                       },
+                      dividerProps: {
+                        display: "none",
+                      },
                     },
                     weekdayLabelProps: {
                       fontWeight: 'normal',
