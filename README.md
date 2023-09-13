@@ -94,6 +94,12 @@ To sum them up:
       popoverContentProps: {},
       popoverBodyProps: {}
     },
+    calendarPanelProps: {
+      wrapperProps: {},
+      contentProps: {},
+      headerProps: {},
+      dividerProps: {},
+    },
     weekdayLabelProps: {},
     dateHeadingProps: {}
   }}
@@ -131,6 +137,20 @@ To sum them up:
       popoverContentProps: {
         background: "gray.700",
         color: "white",
+      },
+    },
+    calendarPanelProps: {
+      wrapperProps: {
+        borderColor: 'green',
+      },
+      contentProps: {
+        borderWidth: 0,
+      },
+      headerProps: {
+        padding: '5px',
+      },
+      dividerProps: {
+        display: "none",
       },
     },
     weekdayLabelProps: {
