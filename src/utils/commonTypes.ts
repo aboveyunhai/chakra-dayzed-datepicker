@@ -1,9 +1,12 @@
 import { ButtonProps } from '@chakra-ui/button';
 import {
   BoxProps,
+  DividerProps,
   HeadingProps,
   InputProps,
   PopoverBodyProps,
+  SimpleGridProps,
+  StackProps,
 } from '@chakra-ui/react';
 import { PopoverContentProps } from '@chakra-ui/react';
 import { DateObj } from 'dayzed';
@@ -31,11 +34,20 @@ export interface PopoverCompProps {
   popoverBodyProps?: PopoverBodyProps;
 }
 
+export interface CalendarPanelProps {
+  wrapperProps?: StackProps;
+  contentProps?: StackProps;
+  headerProps?: StackProps;
+  bodyProps?: SimpleGridProps;
+  dividerProps?: DividerProps;
+}
+
 export interface PropsConfigs {
   dateNavBtnProps?: ButtonProps;
   dayOfMonthBtnProps?: DayOfMonthBtnStyleProps;
   inputProps?: InputProps;
   popoverCompProps?: PopoverCompProps;
+  calendarPanelProps?: CalendarPanelProps;
   dateHeadingProps?: HeadingProps;
   weekdayLabelProps?: BoxProps;
 }
