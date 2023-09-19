@@ -97,6 +97,7 @@ const DefaultConfigs: CalendarConfigs = {
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
   firstDayOfWeek: 0,
+  monthsToDisplay: 2,
 };
 
 export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
@@ -203,7 +204,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
                 dayzedHookProps={{
                   onDateSelected: handleOnDateSelected,
                   selected: selectedDates,
-                  monthsToDisplay: 2,
+                  monthsToDisplay: calendarConfigs.monthsToDisplay,
                   date: dateInView,
                   minDate: minDate,
                   maxDate: maxDate,
