@@ -40,6 +40,7 @@ const DefaultConfigs: CalendarConfigs = {
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
   firstDayOfWeek: 0,
+  monthsToDisplay: 1,
 };
 
 export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
@@ -127,6 +128,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
               <CalendarPanel
                 dayzedHookProps={{
                   showOutsideDays: true,
+                  monthsToDisplay: calendarConfigs.monthsToDisplay,
                   onDateSelected: handleOnDateSelected,
                   selected: selectedDate,
                   date: dateInView,
