@@ -13,7 +13,6 @@ import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
-  CalendarConfigs,
   DatepickerConfigs,
   DatepickerProps,
   OnDateSelected,
