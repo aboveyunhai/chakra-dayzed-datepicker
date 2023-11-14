@@ -43,7 +43,7 @@ const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
 const App = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const demoDate = new Date();
-  const [date, setDate] = useState(demoDate);
+  const [date, setDate] = useState<Date | undefined>(demoDate);
   const [selectedDates, setSelectedDates] = useState<Date[]>([
     new Date(),
     new Date(),
@@ -138,12 +138,20 @@ const App = () => {
           <TabPanel>
             <Panel>
               <Section title="Single:">
-                <Flex alignItems={'center'}>
+                <Flex alignItems={'center'} gap={2}>
                   <Box marginRight={'1rem'}>closeOnSelect:</Box>
                   <Switch
                     isChecked={isSingleChecked}
                     onChange={(e) => setSingleCheck(e.currentTarget.checked)}
                   />
+                  <Button
+                    size={'sm'}
+                    onClick={() => {
+                      setDate(undefined);
+                    }}
+                  >
+                    Set Empty (undefined)
+                  </Button>
                 </Flex>
                 <SingleDatepicker
                   name="date-input"
@@ -162,12 +170,20 @@ const App = () => {
                 />
               </Section>
               <Section title="Range:">
-                <Flex alignItems={'center'}>
+                <Flex alignItems={'center'} gap={2}>
                   <Box marginRight={'1rem'}>closeOnSelect:</Box>
                   <Switch
                     isChecked={isRangeChecked}
                     onChange={(e) => setRangeCheck(e.currentTarget.checked)}
                   />
+                  <Button
+                    size={'sm'}
+                    onClick={() => {
+                      setSelectedDates([]);
+                    }}
+                  >
+                    Set Empty (Empty Array: "[]")
+                  </Button>
                 </Flex>
                 <RangeDatepicker
                   selectedDates={selectedDates}
@@ -219,7 +235,7 @@ const App = () => {
                         padding: '5px',
                       },
                       dividerProps: {
-                        display: "none",
+                        display: 'none',
                       },
                     },
                     weekdayLabelProps: {
