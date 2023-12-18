@@ -32,6 +32,9 @@ yarn add chakra-dayzed-datepicker
 ## Basic usage
 ### Single
 ```jsx
+
+  import { SingleDatepicker } from "chakra-dayzed-datepicker";
+
   const [date, setDate] = useState(new Date());
   
   <SingleDatepicker
@@ -44,6 +47,9 @@ yarn add chakra-dayzed-datepicker
 ### Range:
 Note that this list will have one value during the selection process. Your system won't work if you try to control this directly as `[startDate, endDate]` because we'll try to set `selectedDates` to `[intermediateSelection]` and the length of the resulting `selectedDates` is meaningful to the datepicker.
 ```jsx
+
+  import { RangeDatepicker } from "chakra-dayzed-datepicker";
+  
   const [selectedDates, setSelectedDates] = useState<Date[]>([new Date(), new Date()]);
   
   <RangeDatepicker
@@ -72,6 +78,31 @@ popoverCompProps = {
   popoverContentProps,
   popoverBodyProps
 }
+```
+To sum them up: 
+```js
+  propsConfigs={{
+    dateNavBtnProps: {},
+    dayOfMonthBtnProps: {
+      defaultBtnProps: {},
+      isInRangeBtnProps: {},
+      selectedBtnProps: {},
+      todayBtnProps: {}
+    },
+    inputProps: {},
+    popoverCompProps: {
+      popoverContentProps: {},
+      popoverBodyProps: {}
+    },
+    calendarPanelProps: {
+      wrapperProps: {},
+      contentProps: {},
+      headerProps: {},
+      dividerProps: {},
+    },
+    weekdayLabelProps: {},
+    dateHeadingProps: {}
+  }}
 ```
 
 <br/>Example:
@@ -108,6 +139,26 @@ popoverCompProps = {
         color: "white",
       },
     },
+    calendarPanelProps: {
+      wrapperProps: {
+        borderColor: 'green',
+      },
+      contentProps: {
+        borderWidth: 0,
+      },
+      headerProps: {
+        padding: '5px',
+      },
+      dividerProps: {
+        display: "none",
+      },
+    },
+    weekdayLabelProps: {
+      fontWeight: 'normal'
+    },
+    dateHeadingProps: {
+      fontWeight: 'semibold'
+    }
   }}
 ```
 

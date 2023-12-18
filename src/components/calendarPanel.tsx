@@ -83,6 +83,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
     <Stack
       className="datepicker-calendar"
       direction={['column', 'column', 'row']}
+      {...propsConfigs?.calendarPanelProps?.wrapperProps}
       {...arrowKeysReact.getEvents()}
     >
       {calendars.map((calendar, calendarIdx) => {
@@ -92,14 +93,20 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
             height="100%"
             borderWidth="1px"
             padding="0.5rem 0.75rem"
+            {...propsConfigs?.calendarPanelProps?.contentProps}
           >
-            <HStack>
+            <HStack {...propsConfigs?.calendarPanelProps?.headerProps}>
               <DatepickerBackBtns
                 calendars={calendars}
                 getBackProps={getBackProps}
                 propsConfigs={propsConfigs}
               />
-              <Heading size="sm" minWidth={'5rem'} textAlign="center">
+              <Heading
+                size="sm"
+                minWidth={'5rem'}
+                textAlign="center"
+                {...propsConfigs?.dateHeadingProps}
+              >
                 {configs.monthNames[calendar.month]} {calendar.year}
               </Heading>
               <DatepickerForwardBtns
@@ -108,10 +115,20 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 propsConfigs={propsConfigs}
               />
             </HStack>
-            <Divider />
-            <SimpleGrid columns={7} spacing={1} textAlign="center">
+            <Divider {...propsConfigs?.calendarPanelProps?.dividerProps} />
+            <SimpleGrid
+              columns={7}
+              spacing={1}
+              textAlign="center"
+              {...propsConfigs?.calendarPanelProps?.bodyProps}
+            >
               {weekdayNames.map((day, dayIdx) => (
-                <Box fontSize="sm" fontWeight="semibold" key={dayIdx}>
+                <Box
+                  fontSize="sm"
+                  fontWeight="semibold"
+                  key={dayIdx}
+                  {...propsConfigs?.weekdayLabelProps}
+                >
                   {day}
                 </Box>
               ))}
