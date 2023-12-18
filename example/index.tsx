@@ -1,6 +1,6 @@
 import 'react-app-polyfill/ie11';
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import {
   Box,
   Button,
@@ -442,12 +442,14 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({ config });
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
   <>
     <ColorModeScript />
     <ChakraProvider theme={theme}>
       <App />
     </ChakraProvider>
-  </>,
-  document.getElementById('root')
+  </>
 );
