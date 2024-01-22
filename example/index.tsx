@@ -66,7 +66,7 @@ const App = () => {
         <GitHubButton
           href="https://github.com/aboveyunhai/chakra-dayzed-datepicker"
           data-size="large"
-          data-show-count="true"
+          data-show-count="false"
           aria-label="Star aboveyunhai/chakra-dayzed-datepicker on GitHub"
         >
           Star
@@ -145,21 +145,45 @@ const App = () => {
                     onChange={(e) => setSingleCheck(e.currentTarget.checked)}
                   />
                 </Flex>
-                <SingleDatepicker
-                  name="date-input"
-                  date={date}
-                  disabledDates={
-                    new Set([
-                      startOfDay(subDays(demoDate, 6)).getTime(),
-                      startOfDay(subDays(demoDate, 4)).getTime(),
-                      startOfDay(subDays(demoDate, 2)).getTime(),
-                    ])
-                  }
-                  minDate={subDays(demoDate, 8)}
-                  maxDate={addDays(demoDate, 8)}
-                  onDateChange={setDate}
-                  closeOnSelect={isSingleChecked}
-                />
+                {/* chakra ui add prefix for the trigger for some reasons? */}
+                <Flex style={{ gap: '1rem' }} alignItems="center">
+                  <label htmlFor={`popover-trigger-default`}>Default:</label>
+                  <SingleDatepicker
+                    id="default"
+                    date={date}
+                    disabledDates={
+                      new Set([
+                        startOfDay(subDays(demoDate, 6)).getTime(),
+                        startOfDay(subDays(demoDate, 4)).getTime(),
+                        startOfDay(subDays(demoDate, 2)).getTime(),
+                      ])
+                    }
+                    propsConfigs={{}}
+                    minDate={subDays(demoDate, 8)}
+                    maxDate={addDays(demoDate, 8)}
+                    onDateChange={setDate}
+                    closeOnSelect={isSingleChecked}
+                  />
+                </Flex>
+                <Flex style={{ gap: '1rem' }} alignItems="center">
+                  <label htmlFor={`popover-trigger-input`}>Input:</label>
+                  <SingleDatepicker
+                    id="input"
+                    triggerVariant="input"
+                    date={date}
+                    disabledDates={
+                      new Set([
+                        startOfDay(subDays(demoDate, 6)).getTime(),
+                        startOfDay(subDays(demoDate, 4)).getTime(),
+                        startOfDay(subDays(demoDate, 2)).getTime(),
+                      ])
+                    }
+                    minDate={subDays(demoDate, 8)}
+                    maxDate={addDays(demoDate, 8)}
+                    onDateChange={setDate}
+                    closeOnSelect={isSingleChecked}
+                  />
+                </Flex>
               </Section>
               <Section title="Range:">
                 <Flex alignItems={'center'}>
@@ -169,11 +193,29 @@ const App = () => {
                     onChange={(e) => setRangeCheck(e.currentTarget.checked)}
                   />
                 </Flex>
-                <RangeDatepicker
-                  selectedDates={selectedDates}
-                  onDateChange={setSelectedDates}
-                  closeOnSelect={isRangeChecked}
-                />
+                <Flex style={{ gap: '1rem' }} alignItems="center">
+                  <label htmlFor={`popover-trigger-default-range`}>
+                    Default:
+                  </label>
+                  <RangeDatepicker
+                    id="default-range"
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    closeOnSelect={isRangeChecked}
+                  />
+                </Flex>
+                <Flex style={{ gap: '1rem' }} alignItems="center">
+                  <label htmlFor={`popover-trigger-input-range`}>
+                    Input:
+                  </label>
+                  <RangeDatepicker
+                    id="input-range"
+                    triggerVariant="input"
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    closeOnSelect={isRangeChecked}
+                  />
+                </Flex>
               </Section>
             </Panel>
           </TabPanel>
@@ -219,7 +261,7 @@ const App = () => {
                         padding: '5px',
                       },
                       dividerProps: {
-                        display: "none",
+                        display: 'none',
                       },
                     },
                     weekdayLabelProps: {
