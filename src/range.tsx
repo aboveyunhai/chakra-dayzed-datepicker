@@ -226,6 +226,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
         <Flex position="relative" alignItems={'center'}>
           <PopoverAnchor>
             <Input
+              id={id}
               onKeyPress={(e) => {
                 if (e.key === ' ' && !isOpen) {
                   e.preventDefault();

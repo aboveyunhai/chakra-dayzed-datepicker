@@ -152,6 +152,7 @@ const App = () => {
                   <Flex alignItems={'center'} gap={2}>
                     <Box marginRight={'1rem'}>closeOnSelect:</Box>
                     <Switch
+                      name="closeOnSelect-switch"
                       isChecked={isSingleChecked}
                       onChange={(e) => setSingleCheck(e.currentTarget.checked)}
                     />
@@ -185,7 +186,7 @@ const App = () => {
                     />
                   </Flex>
                   <Flex gap="1rem" alignItems="center">
-                    <label htmlFor={`popover-trigger-input`}>Input:</label>
+                    <label htmlFor={`input`}>Input:</label>
                     <SingleDatepicker
                       id="input"
                       triggerVariant="input"
@@ -208,6 +209,7 @@ const App = () => {
                   <Flex alignItems={'center'} gap={2}>
                     <Box marginRight={'1rem'}>closeOnSelect:</Box>
                     <Switch
+                      name="closeOnSelect-switch"
                       isChecked={isRangeChecked}
                       onChange={(e) => setRangeCheck(e.currentTarget.checked)}
                     />
@@ -232,9 +234,7 @@ const App = () => {
                     />
                   </Flex>
                   <Flex gap="1rem" alignItems="center">
-                    <label htmlFor={`popover-trigger-input-range`}>
-                      Input:
-                    </label>
+                    <label htmlFor={`input-range`}>Input:</label>
                     <RangeDatepicker
                       id="input-range"
                       triggerVariant="input"
@@ -554,7 +554,6 @@ const RangeCalendarDemo = () => {
 const Section: React.FC<React.PropsWithChildren<{ title?: string }>> = ({
   title,
   children,
-  sectionProps,
 }) => (
   <VStack spacing={3} alignItems="flex-start" padding={'0.25rem'}>
     <Heading size="md">{title}</Heading>

@@ -189,13 +189,13 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
         <Flex position="relative" alignItems={'center'}>
           <PopoverAnchor>
             <Input
+              id={id}
               onKeyPress={(e) => {
                 if (e.key === ' ' && !isOpen) {
                   e.preventDefault();
                   onOpen();
                 }
               }}
-              id={id}
               autoComplete="off"
               width={'10rem'}
               disabled={disabled}
