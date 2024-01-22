@@ -41,6 +41,7 @@ interface SingleProps extends DatepickerProps {
   id?: string;
   name?: string;
   usePortal?: boolean;
+  portalRef?: React.MutableRefObject<null>;
 }
 
 export type VariantProps =
@@ -88,6 +89,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
     maxDate,
     configs,
     usePortal,
+    portalRef,
     disabledDates,
     defaultIsOpen,
     triggerVariant,
@@ -223,7 +225,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
         </Flex>
       ) : null}
       {children ? children(selectedDate) : null}
-      <PopoverContentWrapper>
+      <PopoverContentWrapper
+        {...(usePortal ? { containerRef: portalRef } : {})}
+      >
         <PopoverContent
           width="100%"
           {...propsConfigs?.popoverCompProps?.popoverContentProps}

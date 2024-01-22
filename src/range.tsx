@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Props as DayzedHookProps } from 'dayzed';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import {
@@ -96,6 +96,7 @@ interface RangeProps extends DatepickerProps {
   id?: string;
   name?: string;
   usePortal?: boolean;
+  portalRef?: React.MutableRefObject<null>;
 }
 
 export type RangeDatepickerProps = RangeProps & VariantProps;
@@ -122,6 +123,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
     id,
     name,
     usePortal,
+    portalRef,
     defaultIsOpen,
     closeOnSelect,
     selectedDates,
@@ -231,7 +233,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
                 }
               }}
               autoComplete="off"
-              width={'15rem'}
+              width={'16rem'}
               isDisabled={disabled}
               name={name}
               value={intVal}
@@ -258,7 +260,9 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
         </Flex>
       ) : null}
       {children ? children(selectedDates) : null}
-      <PopoverContentWrapper>
+      <PopoverContentWrapper
+        {...(usePortal ? { containerRef: portalRef } : {})}
+      >
         <PopoverContent
           width="100%"
           {...propsConfigs?.popoverCompProps?.popoverContentProps}
