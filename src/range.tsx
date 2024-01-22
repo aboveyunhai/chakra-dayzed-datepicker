@@ -100,11 +100,12 @@ interface RangeProps extends DatepickerProps {
 
 export type RangeDatepickerProps = RangeProps & VariantProps;
 
-const DefaultConfigs: CalendarConfigs = {
+const DefaultConfigs: Required<DatepickerConfigs> = {
   dateFormat: 'MM/dd/yyyy',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
   firstDayOfWeek: 0,
+  monthsToDisplay: 2,
 };
 
 const defaultProps = {
@@ -144,7 +145,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
       <CalendarIcon />
     );
 
-  const calendarConfigs: CalendarConfigs = {
+  const datepickerConfigs = {
     ...DefaultConfigs,
     ...configs,
   };
@@ -186,11 +187,11 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
 
   // eventually we want to allow user to freely type their own input and parse the input
   let intVal = selectedDates[0]
-    ? `${format(selectedDates[0], calendarConfigs.dateFormat)}`
-    : '';
+    ? `${format(selectedDates[0], datepickerConfigs.dateFormat)}`
+    : `${datepickerConfigs.dateFormat}`;
   intVal += selectedDates[1]
-    ? ` - ${format(selectedDates[1], calendarConfigs.dateFormat)}`
-    : ` - ${calendarConfigs.dateFormat}`;
+    ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat)}`
+    : ` - ${datepickerConfigs.dateFormat}`;
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
 
@@ -211,6 +212,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
             variant={'outline'}
             lineHeight={1}
             paddingX="1rem"
+            fontSize={'sm'}
             disabled={disabled}
             {...propsConfigs?.triggerBtnProps}
           >
@@ -267,15 +269,15 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
                 dayzedHookProps={{
                   onDateSelected: handleOnDateSelected,
                   selected: selectedDates,
-                  monthsToDisplay: 2,
+                  monthsToDisplay: datepickerConfigs.monthsToDisplay,
                   date: dateInView,
                   minDate: minDate,
                   maxDate: maxDate,
                   offset: offset,
                   onOffsetChanged: setOffset,
-                  firstDayOfWeek: calendarConfigs.firstDayOfWeek,
+                  firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
                 }}
-                configs={calendarConfigs}
+                configs={datepickerConfigs}
                 propsConfigs={propsConfigs}
                 selected={selectedDates}
               />

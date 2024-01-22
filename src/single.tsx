@@ -19,7 +19,6 @@ import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
-  CalendarConfigs,
   DatepickerConfigs,
   DatepickerProps,
   OnDateSelected,
@@ -63,11 +62,12 @@ export type VariantProps =
 
 export type SingleDatepickerProps = SingleProps & VariantProps;
 
-const DefaultConfigs: CalendarConfigs = {
+const DefaultConfigs: Required<DatepickerConfigs> = {
   dateFormat: 'yyyy-MM-dd',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
   firstDayOfWeek: 0,
+  monthsToDisplay: 1,
 };
 
 const defaultProps = {
@@ -108,12 +108,13 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
       <CalendarIcon />
     );
 
-  const calendarConfigs: CalendarConfigs = {
+  const datepickerConfigs = {
     ...DefaultConfigs,
     ...configs,
   };
+
   const [tempInput, setInputVal] = useState(
-    selectedDate ? format(selectedDate, calendarConfigs.dateFormat) : ''
+    selectedDate ? format(selectedDate, datepickerConfigs.dateFormat) : ''
   );
 
   const onPopoverClose = () => {
@@ -136,7 +137,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
     setInputVal(event.target.value);
     const newDate = parse(
       event.target.value,
-      calendarConfigs.dateFormat,
+      datepickerConfigs.dateFormat,
       new Date()
     );
     if (!(newDate instanceof Date && !isNaN(newDate.getTime()))) {
@@ -151,9 +152,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
 
   useEffect(() => {
     if (selectedDate) {
-      setInputVal(format(selectedDate, calendarConfigs.dateFormat));
+      setInputVal(format(selectedDate, datepickerConfigs.dateFormat));
     }
-  }, [selectedDate, calendarConfigs.dateFormat]);
+  }, [selectedDate, datepickerConfigs.dateFormat]);
 
   return (
     <Popover
@@ -173,10 +174,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
             lineHeight={1}
             paddingX="1rem"
             disabled={disabled}
+            fontSize={'sm'}
             {...propsConfigs?.triggerBtnProps}
           >
             {selectedDate
-              ? format(selectedDate, calendarConfigs.dateFormat)
+              ? format(selectedDate, datepickerConfigs.dateFormat)
               : ''}
           </Button>
         </PopoverTrigger>
@@ -193,6 +195,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
               }}
               id={id}
               autoComplete="off"
+              width={'10rem'}
               disabled={disabled}
               isDisabled={disabled}
               name={name}
@@ -230,6 +233,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
               <CalendarPanel
                 dayzedHookProps={{
                   showOutsideDays: true,
+                  monthsToDisplay: datepickerConfigs.monthsToDisplay,
                   onDateSelected: handleOnDateSelected,
                   selected: selectedDate,
                   date: dateInView,
@@ -237,9 +241,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
                   maxDate: maxDate,
                   offset: offset,
                   onOffsetChanged: setOffset,
-                  firstDayOfWeek: calendarConfigs.firstDayOfWeek,
+                  firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
                 }}
-                configs={calendarConfigs}
+                configs={datepickerConfigs}
                 propsConfigs={propsConfigs}
                 disabledDates={disabledDates}
               />
