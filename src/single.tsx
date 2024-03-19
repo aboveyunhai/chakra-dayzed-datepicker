@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Box,
   Button,
   ButtonProps,
   Flex,
@@ -203,6 +202,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
               name={name}
               value={tempInput}
               onChange={handleInputChange}
+              paddingRight={'2.5rem'}
               {...propsConfigs?.inputProps}
             />
           </PopoverAnchor>

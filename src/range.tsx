@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Props as DayzedHookProps } from 'dayzed';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import {
   Button,
   Flex,
   Input,
-  InputProps,
   Popover,
   PopoverAnchor,
   PopoverBody,
@@ -235,6 +234,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
               }}
               autoComplete="off"
               width={'16rem'}
+              paddingRight={'2.5rem'}
               isDisabled={disabled}
               name={name}
               value={intVal}
