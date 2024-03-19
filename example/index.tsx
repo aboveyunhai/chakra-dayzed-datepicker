@@ -1,5 +1,5 @@
 import 'react-app-polyfill/ie11';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
   Box,
@@ -12,6 +12,13 @@ import {
   Heading,
   HStack,
   Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   StackDivider,
   Switch,
   Tab,
@@ -22,6 +29,7 @@ import {
   Text,
   ThemeConfig,
   useColorMode,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import {
@@ -51,6 +59,8 @@ const App = () => {
   const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeek>(1);
   const [isSingleChecked, setSingleCheck] = useState(true);
   const [isRangeChecked, setRangeCheck] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const modalRef = useRef(null);
 
   return (
     <VStack
@@ -66,7 +76,7 @@ const App = () => {
         <GitHubButton
           href="https://github.com/aboveyunhai/chakra-dayzed-datepicker"
           data-size="large"
-          data-show-count="true"
+          data-show-count="false"
           aria-label="Star aboveyunhai/chakra-dayzed-datepicker on GitHub"
         >
           Star
@@ -137,60 +147,148 @@ const App = () => {
         <TabPanels height={'20rem'}>
           <TabPanel>
             <Panel>
-              <Section title="Single:">
-                <Flex alignItems={'center'} gap={2}>
-                  <Box marginRight={'1rem'}>closeOnSelect:</Box>
-                  <Switch
-                    isChecked={isSingleChecked}
-                    onChange={(e) => setSingleCheck(e.currentTarget.checked)}
-                  />
-                  <Button
-                    size={'sm'}
-                    onClick={() => {
-                      setDate(undefined);
-                    }}
-                  >
-                    Set Empty (undefined)
-                  </Button>
-                </Flex>
-                <SingleDatepicker
-                  name="date-input"
-                  date={date}
-                  disabledDates={
-                    new Set([
-                      startOfDay(subDays(demoDate, 6)).getTime(),
-                      startOfDay(subDays(demoDate, 4)).getTime(),
-                      startOfDay(subDays(demoDate, 2)).getTime(),
-                    ])
-                  }
-                  minDate={subDays(demoDate, 8)}
-                  maxDate={addDays(demoDate, 8)}
-                  onDateChange={setDate}
-                  closeOnSelect={isSingleChecked}
-                />
-              </Section>
-              <Section title="Range:">
-                <Flex alignItems={'center'} gap={2}>
-                  <Box marginRight={'1rem'}>closeOnSelect:</Box>
-                  <Switch
-                    isChecked={isRangeChecked}
-                    onChange={(e) => setRangeCheck(e.currentTarget.checked)}
-                  />
-                  <Button
-                    size={'sm'}
-                    onClick={() => {
-                      setSelectedDates([]);
-                    }}
-                  >
-                    Set Empty (Empty Array: "[]")
-                  </Button>
-                </Flex>
-                <RangeDatepicker
-                  selectedDates={selectedDates}
-                  onDateChange={setSelectedDates}
-                  closeOnSelect={isRangeChecked}
-                />
-              </Section>
+              <Flex flexDir={'column'} gap={3} pb="5rem">
+                <Section title="Single:">
+                  <Flex alignItems={'center'} gap={2}>
+                    <Box marginRight={'1rem'}>closeOnSelect:</Box>
+                    <Switch
+                      name="closeOnSelect-switch"
+                      isChecked={isSingleChecked}
+                      onChange={(e) => setSingleCheck(e.currentTarget.checked)}
+                    />
+                    <Button
+                      size={'sm'}
+                      onClick={() => {
+                        setDate(undefined);
+                      }}
+                    >
+                      Set Empty (undefined)
+                    </Button>
+                  </Flex>
+                  {/* chakra ui add prefix for the trigger for some reasons? */}
+                  <Flex gap="1rem" alignItems="center">
+                    <label htmlFor={`popover-trigger-default`}>Default:</label>
+                    <SingleDatepicker
+                      id="default"
+                      date={date}
+                      disabledDates={
+                        new Set([
+                          startOfDay(subDays(demoDate, 6)).getTime(),
+                          startOfDay(subDays(demoDate, 4)).getTime(),
+                          startOfDay(subDays(demoDate, 2)).getTime(),
+                        ])
+                      }
+                      propsConfigs={{}}
+                      minDate={subDays(demoDate, 8)}
+                      maxDate={addDays(demoDate, 8)}
+                      onDateChange={setDate}
+                      closeOnSelect={isSingleChecked}
+                    />
+                  </Flex>
+                  <Flex gap="1rem" alignItems="center">
+                    <label htmlFor={`input`}>Input:</label>
+                    <SingleDatepicker
+                      id="input"
+                      triggerVariant="input"
+                      date={date}
+                      disabledDates={
+                        new Set([
+                          startOfDay(subDays(demoDate, 6)).getTime(),
+                          startOfDay(subDays(demoDate, 4)).getTime(),
+                          startOfDay(subDays(demoDate, 2)).getTime(),
+                        ])
+                      }
+                      minDate={subDays(demoDate, 8)}
+                      maxDate={addDays(demoDate, 8)}
+                      onDateChange={setDate}
+                      closeOnSelect={isSingleChecked}
+                    />
+                  </Flex>
+                </Section>
+                <Section title="Range:">
+                  <Flex alignItems={'center'} gap={2}>
+                    <Box marginRight={'1rem'}>closeOnSelect:</Box>
+                    <Switch
+                      name="closeOnSelect-switch"
+                      isChecked={isRangeChecked}
+                      onChange={(e) => setRangeCheck(e.currentTarget.checked)}
+                    />
+                    <Button
+                      size={'sm'}
+                      onClick={() => {
+                        setSelectedDates([]);
+                      }}
+                    >
+                      Set Empty (Empty Array: "[]")
+                    </Button>
+                  </Flex>
+                  <Flex gap="1rem" alignItems="center">
+                    <label htmlFor={`popover-trigger-default-range`}>
+                      Default:
+                    </label>
+                    <RangeDatepicker
+                      id="default-range"
+                      selectedDates={selectedDates}
+                      onDateChange={setSelectedDates}
+                      closeOnSelect={isRangeChecked}
+                    />
+                  </Flex>
+                  <Flex gap="1rem" alignItems="center">
+                    <label htmlFor={`input-range`}>Input:</label>
+                    <RangeDatepicker
+                      id="input-range"
+                      triggerVariant="input"
+                      selectedDates={selectedDates}
+                      onDateChange={setSelectedDates}
+                      closeOnSelect={isRangeChecked}
+                    />
+                  </Flex>
+                </Section>
+                <Section title="Inside Modal:">
+                  <Button onClick={onOpen}>Open Modal</Button>
+                  <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent ref={modalRef}>
+                      <ModalHeader>Modal Title</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
+                        <Flex flexDir={'column'} gap={2}>
+                          <div>Default:</div>
+                          <SingleDatepicker
+                            date={date}
+                            onDateChange={setDate}
+                          />
+                          <RangeDatepicker
+                            selectedDates={selectedDates}
+                            onDateChange={setSelectedDates}
+                          />
+                          <div>
+                            if <code>{`usePortal={true}`} </code> <br />
+                            please add <code> {`portalRef={modalRef}`}</code>
+                          </div>
+                          <SingleDatepicker
+                            date={date}
+                            onDateChange={setDate}
+                            portalRef={modalRef}
+                          />
+                          <RangeDatepicker
+                            selectedDates={selectedDates}
+                            onDateChange={setSelectedDates}
+                            usePortal={true}
+                            portalRef={modalRef}
+                          />
+                        </Flex>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                          Close
+                        </Button>
+                        <Button variant="ghost">Secondary Action</Button>
+                      </ModalFooter>
+                    </ModalContent>
+                  </Modal>
+                </Section>
+              </Flex>
             </Panel>
           </TabPanel>
           <TabPanel>
