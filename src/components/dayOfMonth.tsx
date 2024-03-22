@@ -89,7 +89,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
       isDisabled={disabled}
       {...styleBtnProps.defaultBtnProps}
       {...(isInRange && !disabled && styleBtnProps.isInRangeBtnProps)}
-      {...(selected && !disabled && styleBtnProps.selectedBtnProps)}
+      {...(selected && styleBtnProps.selectedBtnProps)}
       {...(today && styleBtnProps.todayBtnProps)}
     >
       {date.getDate()}
