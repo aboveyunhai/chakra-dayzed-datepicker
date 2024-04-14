@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.0] - 2024-04-13
+
+### Changed
+
+- breaking: default `<input>` -> `<button>` so it can't be editable,  old `<input>` as varaint will have an addtional trigger to ensure the correct sementic
+
+ ### Added
+
+ - add `variant` to fix input trigger (PR #73)
+ - fix position inside modal
+ - allow selected styling while being disabled (kudos @namolnad PR #77)
+
 ## [0.2.10] - 2023-09-13
 
  ### Added
