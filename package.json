@@ -57,6 +57,7 @@
     }
   ],
   "devDependencies": {
+    "@chakra-ui/react": "^1.7.3",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@size-limit/preset-small-lib": "^6.0.4",
@@ -75,7 +76,6 @@
   },
   "dependencies": {
     "react-focus-lock": "^2.9.5",
-    "@chakra-ui/react": "^1.7.3",
     "date-fns": "^2.23.0",
     "dayzed": "^3.2.2"
   }
