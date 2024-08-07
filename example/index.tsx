@@ -48,9 +48,10 @@ import { subDays, addDays, startOfDay, format } from 'date-fns';
 type FirstDayOfWeek = DatepickerConfigs['firstDayOfWeek'];
 const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
 
+const demoDate = new Date();
+
 const App = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const demoDate = new Date();
   const [date, setDate] = useState<Date | undefined>(demoDate);
   const [selectedDates, setSelectedDates] = useState<Date[]>([
     new Date(),
