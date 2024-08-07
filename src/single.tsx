@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Button,
   ButtonProps,
@@ -45,10 +51,7 @@ interface SingleProps extends DatepickerProps {
 
 export type VariantProps =
   | {
-      propsConfigs?: PropsConfigs;
-    }
-  | {
-      triggerVariant: 'default';
+      triggerVariant?: 'default';
       propsConfigs?: PropsConfigs;
     }
   | {
@@ -70,49 +73,41 @@ const DefaultConfigs: Required<DatepickerConfigs> = {
   monthsToDisplay: 1,
 };
 
-const defaultProps = {
-  defaultIsOpen: false,
-  closeOnSelect: true,
-  triggerVariant: 'default' as const,
-};
-
-export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
-  const mergedProps = { ...defaultProps, ...props };
-  const {
-    date: selectedDate,
-    name,
-    disabled,
-    onDateChange,
-    id,
-    minDate,
-    maxDate,
-    configs,
-    usePortal,
-    portalRef,
-    disabledDates,
-    defaultIsOpen,
-    triggerVariant,
-    propsConfigs,
-    closeOnSelect,
-    children,
-  } = mergedProps;
-
+export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
+  date: selectedDate,
+  name,
+  disabled,
+  onDateChange,
+  id,
+  minDate,
+  maxDate,
+  configs,
+  usePortal,
+  portalRef,
+  disabledDates,
+  defaultIsOpen = false,
+  closeOnSelect = true,
+  children,
+  ...restProps
+}) => {
   const [dateInView, setDateInView] = useState(selectedDate);
   const [offset, setOffset] = useState(0);
+  const internalUpdate = useRef(false);
 
   const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
 
   const Icon =
-    mergedProps.triggerVariant === 'input' && mergedProps.triggerIcon ? (
-      mergedProps.triggerIcon
-    ) : (
-      <CalendarIcon />
-    );
+    restProps.triggerVariant === 'input'
+      ? restProps?.triggerIcon ?? <CalendarIcon />
+      : null;
 
-  const datepickerConfigs = {
-    ...DefaultConfigs,
-    ...configs,
-  };
+  const datepickerConfigs = useMemo(
+    () => ({
+      ...DefaultConfigs,
+      ...configs,
+    }),
+    [configs]
+  );
 
   const [tempInput, setInputVal] = useState(
     selectedDate ? format(selectedDate, datepickerConfigs.dateFormat) : ''
@@ -125,37 +120,54 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
   };
 
   // dayzed utils
-  const handleOnDateSelected: OnDateSelected = ({ selectable, date }) => {
-    if (!selectable) return;
-    if (date instanceof Date && !isNaN(date.getTime())) {
-      onDateChange(date);
-      if (closeOnSelect) onClose();
-      return;
-    }
-  };
+  const handleOnDateSelected: OnDateSelected = useCallback(
+    ({ selectable, date }) => {
+      if (!selectable) return;
+      if (date instanceof Date && !isNaN(date.getTime())) {
+        internalUpdate.current = true;
+        onDateChange(date);
+        setInputVal(date ? format(date, datepickerConfigs.dateFormat) : '');
+        if (closeOnSelect) onClose();
+        return;
+      }
+    },
+    [closeOnSelect, datepickerConfigs.dateFormat, onClose, onDateChange]
+  );
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputVal(event.target.value);
-    const newDate = parse(
-      event.target.value,
-      datepickerConfigs.dateFormat,
-      new Date()
-    );
-    if (!(newDate instanceof Date && !isNaN(newDate.getTime()))) {
-      return;
-    }
-    const isDisabled = disabledDates?.has(startOfDay(newDate).getTime());
-    if (isDisabled) return;
-    onDateChange(newDate);
-  };
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      internalUpdate.current = true;
+      setInputVal(event.target.value);
+      const newDate = parse(
+        event.target.value,
+        datepickerConfigs.dateFormat,
+        new Date()
+      );
+      if (!(newDate instanceof Date && !isNaN(newDate.getTime()))) {
+        return;
+      }
+      const isDisabled = disabledDates?.has(startOfDay(newDate).getTime());
+      if (isDisabled) return;
+      onDateChange(newDate);
+      setDateInView(newDate);
+    },
+    [datepickerConfigs.dateFormat, disabledDates, onDateChange]
+  );
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
 
   useEffect(() => {
-    if (selectedDate) {
-      setInputVal(format(selectedDate, datepickerConfigs.dateFormat));
+    if (internalUpdate.current) {
+      internalUpdate.current = false;
+      return;
     }
-  }, [selectedDate, datepickerConfigs.dateFormat]);
+    setInputVal(
+      typeof selectedDate !== 'undefined'
+        ? format(selectedDate, datepickerConfigs.dateFormat)
+        : ''
+    );
+    setDateInView(selectedDate);
+  }, [datepickerConfigs.dateFormat, selectedDate]);
 
   return (
     <Popover
@@ -167,7 +179,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
       onClose={onPopoverClose}
       isLazy
     >
-      {!children && triggerVariant === 'default' ? (
+      {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
         <PopoverTrigger>
           <Button
             type="button"
@@ -176,7 +188,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
             paddingX="1rem"
             disabled={disabled}
             fontSize={'sm'}
-            {...propsConfigs?.triggerBtnProps}
+            {...restProps.propsConfigs?.triggerBtnProps}
           >
             {selectedDate
               ? format(selectedDate, datepickerConfigs.dateFormat)
@@ -184,7 +196,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
           </Button>
         </PopoverTrigger>
       ) : null}
-      {!children && triggerVariant === 'input' ? (
+      {!children && restProps.triggerVariant === 'input' ? (
         <Flex position="relative" alignItems={'center'}>
           <PopoverAnchor>
             <Input
@@ -203,7 +215,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
               value={tempInput}
               onChange={handleInputChange}
               paddingRight={'2.5rem'}
-              {...propsConfigs?.inputProps}
+              {...restProps.propsConfigs?.inputProps}
             />
           </PopoverAnchor>
           <PopoverTrigger>
@@ -217,7 +229,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
               type="button"
               disabled={disabled}
               padding={'8px'}
-              {...propsConfigs?.triggerIconBtnProps}
+              {...restProps.propsConfigs?.triggerIconBtnProps}
             >
               {Icon}
             </Button>
@@ -230,9 +242,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
       >
         <PopoverContent
           width="100%"
-          {...propsConfigs?.popoverCompProps?.popoverContentProps}
+          {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
         >
-          <PopoverBody {...propsConfigs?.popoverCompProps?.popoverBodyProps}>
+          <PopoverBody
+            {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
+          >
             <FocusLock>
               <CalendarPanel
                 dayzedHookProps={{
@@ -248,7 +262,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = (props) => {
                   firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
                 }}
                 configs={datepickerConfigs}
-                propsConfigs={propsConfigs}
+                propsConfigs={restProps.propsConfigs}
                 disabledDates={disabledDates}
               />
             </FocusLock>
