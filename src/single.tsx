@@ -6,19 +6,20 @@ import React, {
   useState,
 } from 'react';
 import {
-  Button,
-  ButtonProps,
   Flex,
   Input,
   InputProps,
-  Popover,
+  Portal,
   PopoverAnchor,
+  useDisclosure,
+  PopoverTriggerProps,
+} from '@chakra-ui/react';
+import {
+  PopoverRoot,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Portal,
-  useDisclosure,
-} from '@chakra-ui/react';
+} from './components/snippets/popover';
 import { format, parse, startOfDay } from 'date-fns';
 import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
@@ -59,7 +60,7 @@ export type VariantProps =
       triggerIcon?: React.ReactNode;
       propsConfigs?: Omit<PropsConfigs, 'triggerBtnProps'> & {
         inputProps?: InputProps;
-        triggerIconBtnProps?: ButtonProps;
+        triggerIconBtnProps?: PopoverTriggerProps;
       };
     };
 
@@ -94,7 +95,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   const [offset, setOffset] = useState(0);
   const internalUpdate = useRef(false);
 
-  const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
+  const { onOpen, onClose, open: isOpen } = useDisclosure({ defaultOpen: defaultIsOpen });
 
   const Icon =
     restProps.triggerVariant === 'input'
@@ -170,7 +171,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   }, [datepickerConfigs.dateFormat, selectedDate]);
 
   return (
-    <Popover
+    <PopoverRoot
       id={id}
       placement="bottom-start"
       variant="responsive"
@@ -180,20 +181,18 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
       isLazy
     >
       {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
-        <PopoverTrigger>
-          <Button
-            type="button"
-            variant={'outline'}
-            lineHeight={1}
-            paddingX="1rem"
-            disabled={disabled}
-            fontSize={'sm'}
-            {...restProps.propsConfigs?.triggerBtnProps}
-          >
-            {selectedDate
-              ? format(selectedDate, datepickerConfigs.dateFormat)
-              : ''}
-          </Button>
+        <PopoverTrigger
+          type="button"
+          variant={'outline'}
+          lineHeight={1}
+          paddingX="1rem"
+          disabled={disabled}
+          fontSize={'sm'}
+          {...restProps.propsConfigs?.triggerBtnProps}
+        >
+          {selectedDate
+            ? format(selectedDate, datepickerConfigs.dateFormat)
+            : ''}
         </PopoverTrigger>
       ) : null}
       {!children && restProps.triggerVariant === 'input' ? (
@@ -210,7 +209,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
               autoComplete="off"
               width={'10rem'}
               disabled={disabled}
-              isDisabled={disabled}
               name={name}
               value={tempInput}
               onChange={handleInputChange}
@@ -218,21 +216,19 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
               {...restProps.propsConfigs?.inputProps}
             />
           </PopoverAnchor>
-          <PopoverTrigger>
-            <Button
-              position="absolute"
-              variant={'ghost'}
-              right="0"
-              size="sm"
-              marginRight="5px"
-              zIndex={1}
-              type="button"
-              disabled={disabled}
-              padding={'8px'}
-              {...restProps.propsConfigs?.triggerIconBtnProps}
-            >
-              {Icon}
-            </Button>
+          <PopoverTrigger
+            position="absolute"
+            variant={'ghost'}
+            right="0"
+            size="sm"
+            marginRight="5px"
+            zIndex={1}
+            type="button"
+            disabled={disabled}
+            padding={'8px'}
+            {...restProps.propsConfigs?.triggerIconBtnProps}
+          >
+            {Icon}
           </PopoverTrigger>
         </Flex>
       ) : null}
@@ -269,6 +265,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           </PopoverBody>
         </PopoverContent>
       </PopoverContentWrapper>
-    </Popover>
+    </PopoverRoot>
   );
 };

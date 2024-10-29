@@ -1,36 +1,21 @@
 import 'react-app-polyfill/ie11';
 import React, { useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import {
   Box,
   Button,
-  ChakraProvider,
-  ColorModeScript,
-  Divider,
-  extendTheme,
+  Separator,
   Flex,
   Heading,
   HStack,
   Link,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  StackDivider,
-  Switch,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
+  StackSeparator,
   Tabs,
   Text,
-  ThemeConfig,
-  useColorMode,
   useDisclosure,
   VStack,
+  // createSystem,
+  // defaultConfig,
 } from '@chakra-ui/react';
 import {
   SingleDatepicker,
@@ -42,6 +27,18 @@ import {
   OnDateSelected,
   RangeCalendarPanel,
 } from '../src';
+import {
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+} from "./snippets/dialog";
+import { Switch } from "./snippets/switch";
+import { Provider } from './snippets/provider';
+import { useColorMode } from './snippets/color-mode';
 import GitHubButton from 'react-github-btn';
 import { subDays, addDays, startOfDay, format } from 'date-fns';
 
@@ -60,17 +57,17 @@ const App = () => {
   const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeek>(1);
   const [isSingleChecked, setSingleCheck] = useState(true);
   const [isRangeChecked, setRangeCheck] = useState(true);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open: isOpen, onOpen, onClose } = useDisclosure();
   const modalRef = useRef(null);
 
   return (
     <VStack
       paddingX={{ base: '2rem', md: '8rem' }}
       paddingY={{ base: '1rem', md: '4rem' }}
-      spacing={4}
+      gap={4}
       minHeight={'600px'}
       alignItems="flex-start"
-      divider={<StackDivider />}
+      separator={<StackSeparator />}
     >
       <Heading>Chakra-Dayzed-Datepicker</Heading>
       <Flex gridGap={5} height="28px">
@@ -96,357 +93,363 @@ const App = () => {
       <Button size="sm" onClick={toggleColorMode}>
         Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
       </Button>
-      <Tabs
-        variant="soft-rounded"
+      <Tabs.Root
+        variant="subtle"
         colorScheme="gray"
         display={'flex'}
         flexDirection={['column', 'column', 'row']}
+        defaultValue={0}
       >
-        <TabList display={'flex'} flexDir={'column'} gridGap={'1'}>
-          <Tab
+        <Tabs.List display={'flex'} flexDir={'column'} gridGap={'1'}>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value={0}
           >
             Single & Range
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value={1}
           >
             Custom Styles
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             fontSize={'1rem'}
             justifyContent={'flex-start'}
+            value={2}
           >
             Custom&nbsp;<Text fontSize="0.8rem">Month/Weekday/Format</Text>
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value={3}
           >
             With Offset
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value={4}
           >
             Calendar
-          </Tab>
-        </TabList>
-        <TabPanels height={'20rem'}>
-          <TabPanel>
-            <Panel>
-              <Flex flexDir={'column'} gap={3} pb="5rem">
-                <Section title="Single:">
-                  <Flex alignItems={'center'} gap={2}>
-                    <Box marginRight={'1rem'}>closeOnSelect:</Box>
-                    <Switch
-                      name="closeOnSelect-switch"
-                      isChecked={isSingleChecked}
-                      onChange={(e) => setSingleCheck(e.currentTarget.checked)}
-                    />
-                    <Button
-                      size={'sm'}
-                      onClick={() => {
-                        setDate(undefined);
-                      }}
-                    >
-                      Set Empty (undefined)
-                    </Button>
-                  </Flex>
-                  {/* chakra ui add prefix for the trigger for some reasons? */}
-                  <Flex gap="1rem" alignItems="center">
-                    <label htmlFor={`popover-trigger-default`}>Default:</label>
-                    <SingleDatepicker
-                      id="default"
-                      date={date}
-                      disabledDates={
-                        new Set([
-                          startOfDay(subDays(demoDate, 6)).getTime(),
-                          startOfDay(subDays(demoDate, 4)).getTime(),
-                          startOfDay(subDays(demoDate, 2)).getTime(),
-                        ])
-                      }
-                      propsConfigs={{}}
-                      minDate={subDays(demoDate, 8)}
-                      maxDate={addDays(demoDate, 8)}
-                      onDateChange={setDate}
-                      closeOnSelect={isSingleChecked}
-                    />
-                  </Flex>
-                  <Flex gap="1rem" alignItems="center">
-                    <label htmlFor={`input`}>Input:</label>
-                    <SingleDatepicker
-                      id="input"
-                      triggerVariant="input"
-                      date={date}
-                      disabledDates={
-                        new Set([
-                          startOfDay(subDays(demoDate, 6)).getTime(),
-                          startOfDay(subDays(demoDate, 4)).getTime(),
-                          startOfDay(subDays(demoDate, 2)).getTime(),
-                        ])
-                      }
-                      minDate={subDays(demoDate, 8)}
-                      maxDate={addDays(demoDate, 8)}
-                      onDateChange={setDate}
-                      closeOnSelect={isSingleChecked}
-                    />
-                  </Flex>
-                </Section>
-                <Section title="Range:">
-                  <Flex alignItems={'center'} gap={2}>
-                    <Box marginRight={'1rem'}>closeOnSelect:</Box>
-                    <Switch
-                      name="closeOnSelect-switch"
-                      isChecked={isRangeChecked}
-                      onChange={(e) => setRangeCheck(e.currentTarget.checked)}
-                    />
-                    <Button
-                      size={'sm'}
-                      onClick={() => {
-                        setSelectedDates([]);
-                      }}
-                    >
-                      Set Empty (Empty Array: "[]")
-                    </Button>
-                  </Flex>
-                  <Flex gap="1rem" alignItems="center">
-                    <label htmlFor={`popover-trigger-default-range`}>
-                      Default:
-                    </label>
-                    <RangeDatepicker
-                      id="default-range"
-                      selectedDates={selectedDates}
-                      onDateChange={setSelectedDates}
-                      closeOnSelect={isRangeChecked}
-                    />
-                  </Flex>
-                  <Flex gap="1rem" alignItems="center">
-                    <label htmlFor={`input-range`}>Input:</label>
-                    <RangeDatepicker
-                      id="input-range"
-                      triggerVariant="input"
-                      selectedDates={selectedDates}
-                      onDateChange={setSelectedDates}
-                      closeOnSelect={isRangeChecked}
-                    />
-                  </Flex>
-                </Section>
-                <Section title="Inside Modal:">
-                  <Button onClick={onOpen}>Open Modal</Button>
-                  <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent ref={modalRef}>
-                      <ModalHeader>Modal Title</ModalHeader>
-                      <ModalCloseButton />
-                      <ModalBody>
-                        <Flex flexDir={'column'} gap={2}>
-                          <div>Default:</div>
-                          <SingleDatepicker
-                            date={date}
-                            onDateChange={setDate}
-                          />
-                          <RangeDatepicker
-                            selectedDates={selectedDates}
-                            onDateChange={setSelectedDates}
-                          />
-                          <div>
-                            if <code>{`usePortal={true}`} </code> <br />
-                            please add <code> {`portalRef={modalRef}`}</code>
-                          </div>
-                          <SingleDatepicker
-                            date={date}
-                            onDateChange={setDate}
-                            portalRef={modalRef}
-                          />
-                          <RangeDatepicker
-                            selectedDates={selectedDates}
-                            onDateChange={setSelectedDates}
-                            usePortal={true}
-                            portalRef={modalRef}
-                          />
-                        </Flex>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
-                          Close
-                        </Button>
-                        <Button variant="ghost">Secondary Action</Button>
-                      </ModalFooter>
-                    </ModalContent>
-                  </Modal>
-                </Section>
-              </Flex>
-            </Panel>
-          </TabPanel>
-          <TabPanel>
-            <Panel>
-              <Section title="Custom Styles:">
-                Custom Styles:
-                <SingleDatepicker
-                  name="date-input"
-                  date={date}
-                  onDateChange={setDate}
-                  propsConfigs={{
-                    dayOfMonthBtnProps: {
-                      defaultBtnProps: {
-                        _hover: {
-                          background: 'blue.600',
-                        },
-                      },
-                      selectedBtnProps: {
-                        background: '#0085f230',
-                      },
-                    },
-                    dateNavBtnProps: {
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value={0}>
+          <Panel>
+            <Flex flexDir={'column'} gap={3} pb="5rem">
+              <Section title="Single:">
+                <Flex alignItems={'center'} gap={2}>
+                  <Box marginRight={'1rem'}>closeOnSelect:</Box>
+                  <Switch
+                    name="closeOnSelect-switch"
+                    checked={isSingleChecked}
+                    onChange={(e) => setSingleCheck(e.currentTarget.checked)}
+                  />
+                  <Button
+                    size={'sm'}
+                    onClick={() => {
+                      setDate(undefined);
+                    }}
+                  >
+                    Set Empty (undefined)
+                  </Button>
+                </Flex>
+                {/* chakra ui add prefix for the trigger for some reasons? */}
+                <Flex gap="1rem" alignItems="center">
+                  <label htmlFor={`popover-trigger-default`}>Default:</label>
+                  <SingleDatepicker
+                    id="default"
+                    date={date}
+                    disabledDates={
+                      new Set([
+                        startOfDay(subDays(demoDate, 6)).getTime(),
+                        startOfDay(subDays(demoDate, 4)).getTime(),
+                        startOfDay(subDays(demoDate, 2)).getTime(),
+                      ])
+                    }
+                    propsConfigs={{}}
+                    minDate={subDays(demoDate, 8)}
+                    maxDate={addDays(demoDate, 8)}
+                    onDateChange={setDate}
+                    closeOnSelect={isSingleChecked}
+                  />
+                </Flex>
+                <Flex gap="1rem" alignItems="center">
+                  <label htmlFor={`input`}>Input:</label>
+                  <SingleDatepicker
+                    id="input"
+                    triggerVariant="input"
+                    date={date}
+                    disabledDates={
+                      new Set([
+                        startOfDay(subDays(demoDate, 6)).getTime(),
+                        startOfDay(subDays(demoDate, 4)).getTime(),
+                        startOfDay(subDays(demoDate, 2)).getTime(),
+                      ])
+                    }
+                    minDate={subDays(demoDate, 8)}
+                    maxDate={addDays(demoDate, 8)}
+                    onDateChange={setDate}
+                    closeOnSelect={isSingleChecked}
+                  />
+                </Flex>
+              </Section>
+              <Section title="Range:">
+                <Flex alignItems={'center'} gap={2}>
+                  <Box marginRight={'1rem'}>closeOnSelect:</Box>
+                  <Switch
+                    name="closeOnSelect-switch"
+                    checked={isRangeChecked}
+                    onChange={(e) => setRangeCheck(e.currentTarget.checked)}
+                  />
+                  <Button
+                    size={'sm'}
+                    onClick={() => {
+                      setSelectedDates([]);
+                    }}
+                  >
+                    Set Empty (Empty Array: "[]")
+                  </Button>
+                </Flex>
+                <Flex gap="1rem" alignItems="center">
+                  <label htmlFor={`popover-trigger-default-range`}>
+                    Default:
+                  </label>
+                  <RangeDatepicker
+                    id="default-range"
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    closeOnSelect={isRangeChecked}
+                  />
+                </Flex>
+                <Flex gap="1rem" alignItems="center">
+                  <label htmlFor={`input-range`}>Input:</label>
+                  <RangeDatepicker
+                    id="input-range"
+                    triggerVariant="input"
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    closeOnSelect={isRangeChecked}
+                  />
+                </Flex>
+              </Section>
+              <Section title="Inside Modal:">
+                <Button onClick={onOpen}>Open Modal</Button>
+                <DialogRoot isOpen={isOpen} onClose={onClose}>
+                  {/* <ModalOverlay /> */}
+                  <DialogContent ref={modalRef}>
+                    <DialogHeader>
+                      <DialogTitle>Date Picker</DialogTitle>
+                    </DialogHeader>
+                    <DialogCloseTrigger />
+                    <DialogBody>
+                      <Flex flexDir={'column'} gap={2}>
+                        <div>Default:</div>
+                        <SingleDatepicker
+                          date={date}
+                          onDateChange={setDate}
+                        />
+                        <RangeDatepicker
+                          selectedDates={selectedDates}
+                          onDateChange={setSelectedDates}
+                        />
+                        <div>
+                          if <code>{`usePortal={true}`} </code> <br />
+                          please add <code> {`portalRef={modalRef}`}</code>
+                        </div>
+                        <SingleDatepicker
+                          date={date}
+                          onDateChange={setDate}
+                          portalRef={modalRef}
+                        />
+                        <RangeDatepicker
+                          selectedDates={selectedDates}
+                          onDateChange={setSelectedDates}
+                          usePortal={true}
+                          portalRef={modalRef}
+                        />
+                      </Flex>
+                    </DialogBody>
+                    <DialogFooter>
+                      <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        Close
+                      </Button>
+                      <Button variant="ghost">Secondary Action</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </DialogRoot>
+              </Section>
+            </Flex>
+          </Panel>
+        </Tabs.Content>
+        <Tabs.Content value={1}>
+          <Panel>
+            <Section title="Custom Styles:">
+              Custom Styles:
+              <SingleDatepicker
+                name="date-input"
+                date={date}
+                onDateChange={setDate}
+                propsConfigs={{
+                  dayOfMonthBtnProps: {
+                    defaultBtnProps: {
                       _hover: {
-                        background: '#0085f230',
+                        background: 'blue.600',
                       },
                     },
-                    popoverCompProps: {
-                      popoverContentProps: {
-                        background: '#10172b',
-                        color: '#94a3bb',
-                        boxShadow: 'var(--chakra-shadows-base)',
+                    selectedBtnProps: {
+                      background: '#0085f230',
+                    },
+                  },
+                  dateNavBtnProps: {
+                    _hover: {
+                      background: '#0085f230',
+                    },
+                  },
+                  popoverCompProps: {
+                    popoverContentProps: {
+                      background: '#10172b',
+                      color: '#94a3bb',
+                      boxShadow: 'var(--chakra-shadows-base)',
+                    },
+                  },
+                  calendarPanelProps: {
+                    wrapperProps: {
+                      borderColor: 'green',
+                    },
+                    contentProps: {
+                      borderWidth: 0,
+                    },
+                    headerProps: {
+                      padding: '5px',
+                    },
+                    dividerProps: {
+                      display: 'none',
+                    },
+                  },
+                  weekdayLabelProps: {
+                    fontWeight: 'normal',
+                  },
+                  dateHeadingProps: {
+                    fontWeight: 'semibold',
+                  },
+                }}
+              />
+              <RangeDatepicker
+                selectedDates={selectedDates}
+                onDateChange={setSelectedDates}
+                propsConfigs={{
+                  dateNavBtnProps: {
+                    colorScheme: 'blue',
+                    variant: 'outline',
+                  },
+                  dayOfMonthBtnProps: {
+                    defaultBtnProps: {
+                      borderColor: 'red.300',
+                      _hover: {
+                        background: 'blue.400',
                       },
                     },
-                    calendarPanelProps: {
-                      wrapperProps: {
-                        borderColor: 'green',
-                      },
-                      contentProps: {
-                        borderWidth: 0,
-                      },
-                      headerProps: {
-                        padding: '5px',
-                      },
-                      dividerProps: {
-                        display: 'none',
-                      },
+                    isInRangeBtnProps: {
+                      color: 'purple.800',
+                      borderColor: 'blue.300',
                     },
-                    weekdayLabelProps: {
-                      fontWeight: 'normal',
+                    selectedBtnProps: {
+                      background: 'blue.200',
+                      borderColor: 'blue.300',
+                      color: 'blue.600',
                     },
-                    dateHeadingProps: {
-                      fontWeight: 'semibold',
+                    todayBtnProps: {
+                      background: 'teal.200',
+                      color: 'teal.700',
                     },
-                  }}
-                />
-                <RangeDatepicker
-                  selectedDates={selectedDates}
-                  onDateChange={setSelectedDates}
-                  propsConfigs={{
-                    dateNavBtnProps: {
-                      colorScheme: 'blue',
-                      variant: 'outline',
-                    },
-                    dayOfMonthBtnProps: {
-                      defaultBtnProps: {
-                        borderColor: 'red.300',
-                        _hover: {
-                          background: 'blue.400',
-                        },
-                      },
-                      isInRangeBtnProps: {
-                        color: 'purple.800',
-                        borderColor: 'blue.300',
-                      },
-                      selectedBtnProps: {
-                        background: 'blue.200',
-                        borderColor: 'blue.300',
-                        color: 'blue.600',
-                      },
-                      todayBtnProps: {
-                        background: 'teal.200',
-                        color: 'teal.700',
-                      },
-                    },
-                    inputProps: {
-                      size: 'sm',
-                    },
-                  }}
-                />
-              </Section>
-            </Panel>
-          </TabPanel>
-          <TabPanel>
-            <Panel>
-              <Section title="Custom Month/Weekday/Format:">
-                <Box>Check the month name and day labels</Box>
-                <RangeDatepicker
-                  selectedDates={selectedDates}
-                  onDateChange={setSelectedDates}
-                  configs={{
-                    dateFormat: 'yyyy-MM-dd',
-                    dayNames: 'abcdefg'.split(''), // length of 7
-                    monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
-                  }}
-                />
-              </Section>
-            </Panel>
-          </TabPanel>
-          <TabPanel>
-            <Panel>
-              <Section title="With Offset:">
-                <Box>
-                  First Day of Week: {Weekday_Names_Short[firstDayOfWeek || 0]}
-                </Box>
-                <HStack spacing={1}>
-                  {offsets.map((e) => (
-                    <Button
-                      key={e}
-                      onClick={() => setFirstDayOfWeek(e)}
-                      backgroundColor={
-                        firstDayOfWeek === e ? 'green.300' : undefined
-                      }
-                    >
-                      {e}
-                    </Button>
-                  ))}
-                </HStack>
-                <SingleDatepicker
-                  name="date-input"
-                  date={date}
-                  onDateChange={setDate}
-                  configs={{
-                    firstDayOfWeek,
-                  }}
-                />
-                <RangeDatepicker
-                  selectedDates={selectedDates}
-                  onDateChange={setSelectedDates}
-                  configs={{
-                    firstDayOfWeek,
-                  }}
-                />
-              </Section>
-            </Panel>
-          </TabPanel>
-          <TabPanel>
-            <Panel>
-              <Section title="Single Calendar">
-                <SingleCalendarDemo />
-              </Section>
-              <Section title="Range Calendar">
-                <RangeCalendarDemo />
-              </Section>
-            </Panel>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+                  },
+                  inputProps: {
+                    size: 'sm',
+                  },
+                }}
+              />
+            </Section>
+          </Panel>
+        </Tabs.Content>
+        <Tabs.Content value={2}>
+          <Panel>
+            <Section title="Custom Month/Weekday/Format:">
+              <Box>Check the month name and day labels</Box>
+              <RangeDatepicker
+                selectedDates={selectedDates}
+                onDateChange={setSelectedDates}
+                configs={{
+                  dateFormat: 'yyyy-MM-dd',
+                  dayNames: 'abcdefg'.split(''), // length of 7
+                  monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
+                }}
+              />
+            </Section>
+          </Panel>
+        </Tabs.Content>
+        <Tabs.Content value={3}>
+          <Panel>
+            <Section title="With Offset:">
+              <Box>
+                First Day of Week: {Weekday_Names_Short[firstDayOfWeek || 0]}
+              </Box>
+              <HStack gap={1}>
+                {offsets.map((e) => (
+                  <Button
+                    key={e}
+                    onClick={() => setFirstDayOfWeek(e)}
+                    backgroundColor={
+                      firstDayOfWeek === e ? 'green.300' : undefined
+                    }
+                  >
+                    {e}
+                  </Button>
+                ))}
+              </HStack>
+              <SingleDatepicker
+                name="date-input"
+                date={date}
+                onDateChange={setDate}
+                configs={{
+                  firstDayOfWeek,
+                }}
+              />
+              <RangeDatepicker
+                selectedDates={selectedDates}
+                onDateChange={setSelectedDates}
+                configs={{
+                  firstDayOfWeek,
+                }}
+              />
+            </Section>
+          </Panel>
+        </Tabs.Content>
+        <Tabs.Content value={4}>
+          <Panel>
+            <Section title="Single Calendar">
+              <SingleCalendarDemo />
+            </Section>
+            <Section title="Range Calendar">
+              <RangeCalendarDemo />
+            </Section>
+          </Panel>
+        </Tabs.Content>
+      </Tabs.Root>
     </VStack>
   );
 };
@@ -556,7 +559,7 @@ const Section: React.FC<React.PropsWithChildren<{ title?: string }>> = ({
   title,
   children,
 }) => (
-  <VStack spacing={3} alignItems="flex-start" padding={'0.25rem'}>
+  <VStack gap={3} alignItems="flex-start" padding={'0.25rem'}>
     <Heading size="md">{title}</Heading>
     {children}
   </VStack>
@@ -565,25 +568,34 @@ const Section: React.FC<React.PropsWithChildren<{ title?: string }>> = ({
 const Panel: React.FC<React.PropsWithChildren<{}>> = ({ children }) => (
   <Flex>
     <Box>
-      <Divider orientation="vertical" width={'1rem'} />
+      <Separator orientation="vertical" width={'1rem'} />
     </Box>
     <Box>{children}</Box>
   </Flex>
 );
 
-const config: ThemeConfig = {
-  initialColorMode: 'light',
-  useSystemColorMode: false,
-};
+// const config: ThemeConfig = {
+//   initialColorMode: 'light',
+//   useSystemColorMode: false,
+// };
 
-const theme = extendTheme({ config });
+// const theme = createSystem(defaultConfig, {
+//   theme: {
+//     tokens: {
+//       fonts: {
+//         heading: { value: `'Figtree', sans-serif` },
+//         body: { value: `'Figtree', sans-serif` },
+//       },
+//     },
+//   },
+// })
 
-ReactDOM.render(
-  <>
-    <ColorModeScript />
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
-  </>,
-  document.getElementById('root')
+// const theme = extendTheme({ config });
+
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(
+  <Provider>
+    <App />
+  </Provider>
 );
