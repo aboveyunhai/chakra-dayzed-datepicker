@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { Props as DayzedHookProps } from 'dayzed';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import {
-  Button,
   Flex,
   Input,
-  Popover,
   PopoverAnchor,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
+import {
+  PopoverRoot,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from './components/snippets/popover';
 import { CalendarPanel } from './components/calendarPanel';
 import {
   CalendarConfigs,
@@ -137,7 +138,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
   // chakra popover utils
   const [dateInView, setDateInView] = useState(selectedDates[0] || new Date());
   const [offset, setOffset] = useState(0);
-  const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
+  const { onOpen, onClose, open: isOpen } = useDisclosure({ defaultOpen: defaultIsOpen });
 
   const Icon =
     mergedProps.triggerVariant === 'input' && mergedProps.triggerIcon ? (
@@ -197,7 +198,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
 
   return (
-    <Popover
+    <PopoverRoot
       id={id}
       placement="bottom-start"
       variant="responsive"
@@ -207,18 +208,16 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
       isLazy
     >
       {!children && triggerVariant === 'default' ? (
-        <PopoverTrigger>
-          <Button
-            type="button"
-            variant={'outline'}
-            lineHeight={1}
-            paddingX="1rem"
-            fontSize={'sm'}
-            disabled={disabled}
-            {...propsConfigs?.triggerBtnProps}
-          >
-            {intVal}
-          </Button>
+        <PopoverTrigger
+          type="button"
+          variant={'outline'}
+          lineHeight={1}
+          paddingX="1rem"
+          fontSize={'sm'}
+          disabled={disabled}
+          {...propsConfigs?.triggerBtnProps}
+        >
+          {intVal}
         </PopoverTrigger>
       ) : null}
       {!children && triggerVariant === 'input' ? (
@@ -235,28 +234,26 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
               autoComplete="off"
               width={'16rem'}
               paddingRight={'2.5rem'}
-              isDisabled={disabled}
+              disabled={disabled}
               name={name}
               value={intVal}
               onChange={(e) => e.target.value}
               {...propsConfigs?.inputProps}
             />
           </PopoverAnchor>
-          <PopoverTrigger>
-            <Button
-              position="absolute"
-              variant={'ghost'}
-              right="0"
-              size="sm"
-              marginRight="5px"
-              zIndex={1}
-              type="button"
-              disabled={disabled}
-              padding={'8px'}
-              {...propsConfigs?.triggerIconBtnProps}
-            >
-              {Icon}
-            </Button>
+          <PopoverTrigger
+            position="absolute"
+            variant={'ghost'}
+            right="0"
+            size="sm"
+            marginRight="5px"
+            zIndex={1}
+            type="button"
+            disabled={disabled}
+            padding={'8px'}
+            {...propsConfigs?.triggerIconBtnProps}
+          >
+            {Icon}
           </PopoverTrigger>
         </Flex>
       ) : null}
@@ -290,6 +287,6 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
           </PopoverBody>
         </PopoverContent>
       </PopoverContentWrapper>
-    </Popover>
+    </PopoverRoot>
   );
 };

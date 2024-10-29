@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react';
+import { ButtonProps, Button } from './snippets/button';
 import { DateObj, RenderProps } from 'dayzed';
 import React, { useMemo } from 'react';
 import { DatepickerProps, DayOfMonthBtnStyleProps } from '../utils/commonTypes';
@@ -86,7 +86,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
         disabled: disabled,
         onMouseEnter: onMouseEnter,
       })}
-      isDisabled={disabled}
+      disabled={disabled}
       {...styleBtnProps.defaultBtnProps}
       {...(isInRange && !disabled && styleBtnProps.isInRangeBtnProps)}
       {...(selected && styleBtnProps.selectedBtnProps)}
