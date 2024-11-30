@@ -2,7 +2,7 @@ import {
   HStack,
   VStack,
   Heading,
-  Divider,
+  Separator,
   SimpleGrid,
   Box,
   Stack,
@@ -116,10 +116,10 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 propsConfigs={propsConfigs}
               />
             </HStack>
-            <Divider {...propsConfigs?.calendarPanelProps?.dividerProps} />
+            <Separator {...propsConfigs?.calendarPanelProps?.dividerProps} />
             <SimpleGrid
               columns={7}
-              spacing={1}
+              gap={1}
               textAlign="center"
               {...propsConfigs?.calendarPanelProps?.bodyProps}
             >

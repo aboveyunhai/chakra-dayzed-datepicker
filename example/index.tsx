@@ -1,34 +1,21 @@
 import 'react-app-polyfill/ie11';
-import React, { useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { StrictMode, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import {
   Box,
   Button,
   ChakraProvider,
-  ColorModeScript,
-  Divider,
-  extendTheme,
+  createSystem,
+  defaultConfig,
+  DialogTrigger,
   Flex,
   Heading,
   HStack,
   Link,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  StackDivider,
-  Switch,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
+  Separator,
+  StackSeparator,
   Tabs,
   Text,
-  ThemeConfig,
-  useColorMode,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
@@ -44,6 +31,17 @@ import {
 } from '../src';
 import GitHubButton from 'react-github-btn';
 import { subDays, addDays, startOfDay, format } from 'date-fns';
+import { Switch } from './snippet/switch';
+import {
+  DialogBackdrop,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+} from './snippet/dialog';
+import { ThemeProvider, useTheme } from './snippet/color-mode';
 
 type FirstDayOfWeek = DatepickerConfigs['firstDayOfWeek'];
 const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
@@ -51,7 +49,7 @@ const offsets: FirstDayOfWeek[] = [0, 1, 2, 3, 4, 5, 6];
 const demoDate = new Date();
 
 const App = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { theme, setTheme } = useTheme();
   const [date, setDate] = useState<Date | undefined>(demoDate);
   const [selectedDates, setSelectedDates] = useState<Date[]>([
     new Date(),
@@ -60,17 +58,17 @@ const App = () => {
   const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeek>(1);
   const [isSingleChecked, setSingleCheck] = useState(true);
   const [isRangeChecked, setRangeCheck] = useState(true);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open: isOpen, onOpen, onClose } = useDisclosure();
   const modalRef = useRef(null);
 
   return (
     <VStack
       paddingX={{ base: '2rem', md: '8rem' }}
       paddingY={{ base: '1rem', md: '4rem' }}
-      spacing={4}
+      gap={4}
       minHeight={'600px'}
       alignItems="flex-start"
-      divider={<StackDivider />}
+      separator={<StackSeparator />}
     >
       <Heading>Chakra-Dayzed-Datepicker</Heading>
       <Flex gridGap={5} height="28px">
@@ -93,60 +91,70 @@ const App = () => {
         If you used light/dark theme, just be aware of your style under specific
         mode.
       </p>
-      <Button size="sm" onClick={toggleColorMode}>
-        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+      <Button
+        size="sm"
+        onClick={() => {
+          setTheme(theme === 'dark' ? 'light' : 'dark');
+        }}
+      >
+        Toggle {theme === 'light' ? 'Dark' : 'Light'}
       </Button>
-      <Tabs
-        variant="soft-rounded"
+      <Tabs.Root
+        variant="plain"
         colorScheme="gray"
         display={'flex'}
         flexDirection={['column', 'column', 'row']}
       >
-        <TabList display={'flex'} flexDir={'column'} gridGap={'1'}>
-          <Tab
+        <Tabs.List display={'flex'} flexDir={'column'} gridGap={'1'}>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value="tab-1"
           >
             Single & Range
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value="tab-2"
           >
             Custom Styles
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             fontSize={'1rem'}
             justifyContent={'flex-start'}
+            value="tab-3"
           >
             Custom&nbsp;<Text fontSize="0.8rem">Month/Weekday/Format</Text>
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value="tab-4"
           >
             With Offset
-          </Tab>
-          <Tab
+          </Tabs.Trigger>
+          <Tabs.Trigger
             borderRadius="0.5rem"
             height="2rem"
             width="15rem"
             justifyContent={'flex-start'}
+            value="tab-5"
           >
             Calendar
-          </Tab>
-        </TabList>
-        <TabPanels height={'20rem'}>
-          <TabPanel>
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.ContentGroup height={'20rem'}>
+          <Tabs.Content value="tab-1">
             <Panel>
               <Flex flexDir={'column'} gap={3} pb="5rem">
                 <Section title="Single:">
@@ -154,8 +162,10 @@ const App = () => {
                     <Box marginRight={'1rem'}>closeOnSelect:</Box>
                     <Switch
                       name="closeOnSelect-switch"
-                      isChecked={isSingleChecked}
-                      onChange={(e) => setSingleCheck(e.currentTarget.checked)}
+                      checked={isSingleChecked}
+                      onCheckedChange={(e: any) =>
+                        setSingleCheck(e.currentTarget.checked)
+                      }
                     />
                     <Button
                       size={'sm'}
@@ -211,8 +221,10 @@ const App = () => {
                     <Box marginRight={'1rem'}>closeOnSelect:</Box>
                     <Switch
                       name="closeOnSelect-switch"
-                      isChecked={isRangeChecked}
-                      onChange={(e) => setRangeCheck(e.currentTarget.checked)}
+                      checked={isRangeChecked}
+                      onCheckedChange={(e: any) =>
+                        setRangeCheck(e.currentTarget.checked)
+                      }
                     />
                     <Button
                       size={'sm'}
@@ -246,13 +258,15 @@ const App = () => {
                   </Flex>
                 </Section>
                 <Section title="Inside Modal:">
-                  <Button onClick={onOpen}>Open Modal</Button>
-                  <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent ref={modalRef}>
-                      <ModalHeader>Modal Title</ModalHeader>
-                      <ModalCloseButton />
-                      <ModalBody>
+                  <DialogRoot isOpen={isOpen} onClose={onClose}>
+                    <DialogBackdrop />
+                    <DialogTrigger asChild>
+                      <Button onClick={onOpen}>Open Modal</Button>
+                    </DialogTrigger>
+                    <DialogContent ref={modalRef}>
+                      <DialogHeader>Modal Title</DialogHeader>
+                      <DialogCloseTrigger />
+                      <DialogBody>
                         <Flex flexDir={'column'} gap={2}>
                           <div>Default:</div>
                           <SingleDatepicker
@@ -279,20 +293,20 @@ const App = () => {
                             portalRef={modalRef}
                           />
                         </Flex>
-                      </ModalBody>
-                      <ModalFooter>
+                      </DialogBody>
+                      <DialogFooter>
                         <Button colorScheme="blue" mr={3} onClick={onClose}>
                           Close
                         </Button>
                         <Button variant="ghost">Secondary Action</Button>
-                      </ModalFooter>
-                    </ModalContent>
-                  </Modal>
+                      </DialogFooter>
+                    </DialogContent>
+                  </DialogRoot>
                 </Section>
               </Flex>
             </Panel>
-          </TabPanel>
-          <TabPanel>
+          </Tabs.Content>
+          <Tabs.Content value="tab-2">
             <Panel>
               <Section title="Custom Styles:">
                 Custom Styles:
@@ -381,8 +395,8 @@ const App = () => {
                 />
               </Section>
             </Panel>
-          </TabPanel>
-          <TabPanel>
+          </Tabs.Content>
+          <Tabs.Content value="tab-3">
             <Panel>
               <Section title="Custom Month/Weekday/Format:">
                 <Box>Check the month name and day labels</Box>
@@ -397,14 +411,14 @@ const App = () => {
                 />
               </Section>
             </Panel>
-          </TabPanel>
-          <TabPanel>
+          </Tabs.Content>
+          <Tabs.Content value="tab-4">
             <Panel>
               <Section title="With Offset:">
                 <Box>
                   First Day of Week: {Weekday_Names_Short[firstDayOfWeek || 0]}
                 </Box>
-                <HStack spacing={1}>
+                <HStack gap={1}>
                   {offsets.map((e) => (
                     <Button
                       key={e}
@@ -434,8 +448,8 @@ const App = () => {
                 />
               </Section>
             </Panel>
-          </TabPanel>
-          <TabPanel>
+          </Tabs.Content>
+          <Tabs.Content value="tab-5">
             <Panel>
               <Section title="Single Calendar">
                 <SingleCalendarDemo />
@@ -444,9 +458,9 @@ const App = () => {
                 <RangeCalendarDemo />
               </Section>
             </Panel>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+          </Tabs.Content>
+        </Tabs.ContentGroup>
+      </Tabs.Root>
     </VStack>
   );
 };
@@ -556,7 +570,7 @@ const Section: React.FC<React.PropsWithChildren<{ title?: string }>> = ({
   title,
   children,
 }) => (
-  <VStack spacing={3} alignItems="flex-start" padding={'0.25rem'}>
+  <VStack gap={3} alignItems="flex-start" padding={'0.25rem'}>
     <Heading size="md">{title}</Heading>
     {children}
   </VStack>
@@ -565,25 +579,30 @@ const Section: React.FC<React.PropsWithChildren<{ title?: string }>> = ({
 const Panel: React.FC<React.PropsWithChildren<{}>> = ({ children }) => (
   <Flex>
     <Box>
-      <Divider orientation="vertical" width={'1rem'} />
+      <Separator orientation="vertical" width={'1rem'} />
     </Box>
     <Box>{children}</Box>
   </Flex>
 );
 
-const config: ThemeConfig = {
-  initialColorMode: 'light',
-  useSystemColorMode: false,
-};
+const system = createSystem(defaultConfig, {
+  theme: {
+    tokens: {
+      fonts: {
+        heading: { value: `'Figtree', sans-serif` },
+        body: { value: `'Figtree', sans-serif` },
+      },
+    },
+  },
+});
 
-const theme = extendTheme({ config });
-
-ReactDOM.render(
-  <>
-    <ColorModeScript />
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
-  </>,
-  document.getElementById('root')
+const root = createRoot(document.getElementById('root')!);
+root.render(
+  <StrictMode>
+    <ThemeProvider defaultTheme="light">
+      <ChakraProvider value={system}>
+        <App />
+      </ChakraProvider>
+    </ThemeProvider>
+  </StrictMode>
 );
