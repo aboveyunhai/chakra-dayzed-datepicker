@@ -6,16 +6,9 @@ import React, {
   useState,
 } from 'react';
 import {
-  Button,
-  ButtonProps,
   Flex,
   Input,
   InputProps,
-  Popover,
-  PopoverAnchor,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -29,7 +22,16 @@ import {
   OnDateSelected,
   PropsConfigs,
 } from './utils/commonTypes';
-import { CalendarIcon } from './components/calendarIcon';
+import { CalendarIcon } from './components/calendar-icon';
+import { Button, ButtonProps } from './components/snippets/button';
+import {
+  PopoverAnchor,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from './components/snippets/popover';
 
 interface SingleProps extends DatepickerProps {
   date?: Date;
@@ -94,7 +96,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   const [offset, setOffset] = useState(0);
   const internalUpdate = useRef(false);
 
-  const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
+  const {
+    onOpen,
+    onClose,
+    open: isOpen,
+  } = useDisclosure({ defaultOpen: defaultIsOpen });
 
   const Icon =
     restProps.triggerVariant === 'input'
@@ -170,7 +176,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   }, [datepickerConfigs.dateFormat, selectedDate]);
 
   return (
-    <Popover
+    <PopoverRoot
       id={id}
       placement="bottom-start"
       variant="responsive"
@@ -180,7 +186,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
       isLazy
     >
       {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
-        <PopoverTrigger>
+        <PopoverTrigger asChild>
           <Button
             type="button"
             variant={'outline'}
@@ -210,7 +216,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
               autoComplete="off"
               width={'10rem'}
               disabled={disabled}
-              isDisabled={disabled}
               name={name}
               value={tempInput}
               onChange={handleInputChange}
@@ -218,7 +223,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
               {...restProps.propsConfigs?.inputProps}
             />
           </PopoverAnchor>
-          <PopoverTrigger>
+          <PopoverTrigger asChild>
             <Button
               position="absolute"
               variant={'ghost'}
@@ -239,10 +244,12 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
       {children ? children(selectedDate) : null}
       <PopoverContentWrapper
         {...(usePortal ? { containerRef: portalRef } : {})}
+        portalled={false}
       >
         <PopoverContent
           width="100%"
           {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
+          portalled={false}
         >
           <PopoverBody
             {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
@@ -269,6 +276,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           </PopoverBody>
         </PopoverContent>
       </PopoverContentWrapper>
-    </Popover>
+    </PopoverRoot>
   );
 };

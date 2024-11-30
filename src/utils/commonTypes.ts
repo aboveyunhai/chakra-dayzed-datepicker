@@ -1,15 +1,15 @@
-import { ButtonProps } from '@chakra-ui/button';
 import {
   BoxProps,
-  DividerProps,
   HeadingProps,
   InputProps,
   PopoverBodyProps,
+  SeparatorProps,
   SimpleGridProps,
   StackProps,
 } from '@chakra-ui/react';
-import { PopoverContentProps } from '@chakra-ui/react';
 import { DateObj } from 'dayzed';
+import { ButtonProps } from '../components/snippets/button';
+import { PopoverContentProps } from '../components/snippets/popover';
 
 export type OnDateSelected = (
   selectedDate: DateObj,
@@ -39,7 +39,7 @@ export interface CalendarPanelProps {
   contentProps?: StackProps;
   headerProps?: StackProps;
   bodyProps?: SimpleGridProps;
-  dividerProps?: DividerProps;
+  dividerProps?: SeparatorProps;
 }
 
 export interface PropsConfigs {
