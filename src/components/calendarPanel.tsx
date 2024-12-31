@@ -6,6 +6,8 @@ import {
   SimpleGrid,
   Box,
   Stack,
+  Flex,
+  Select,
 } from '@chakra-ui/react';
 import { useDayzed, Props as DayzedHookProps } from 'dayzed';
 import { ArrowKeysReact } from '../utils/reactKeysArrow';
@@ -20,6 +22,9 @@ export interface CalendarPanelProps extends DatepickerProps {
   disabledDates?: Set<number>;
   onMouseEnterHighlight?: (date: Date) => void;
   isInRange?: (date: Date) => boolean | null;
+  handleMonthChange?: (ev: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleYearChange?: (ev: React.ChangeEvent<HTMLSelectElement>) => void;
+  showYearMonthPicker?: boolean;
 }
 
 export const CalendarPanel: React.FC<CalendarPanelProps> = ({
@@ -29,6 +34,9 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
   disabledDates,
   onMouseEnterHighlight,
   isInRange,
+  showYearMonthPicker,
+  handleMonthChange,
+  handleYearChange,
 }) => {
   const renderProps = useDayzed(dayzedHookProps);
   const { calendars, getBackProps, getForwardProps } = renderProps;
@@ -101,14 +109,33 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 getBackProps={getBackProps}
                 propsConfigs={propsConfigs}
               />
-              <Heading
-                size="sm"
-                minWidth={'5rem'}
-                textAlign="center"
-                {...propsConfigs?.dateHeadingProps}
-              >
-                {configs.monthNames[calendar.month]} {calendar.year}
-              </Heading>
+              {showYearMonthPicker ? (
+                <Flex flexDir="row">
+                  <Select onChange={handleMonthChange} {...propsConfigs?.monthSelectProps}>
+                    {configs.monthNames.map((month, idx) => (
+                      <option key={idx} value={idx}>
+                        {month}
+                      </option>
+                    ))}
+                  </Select>
+                  <Select onChange={handleYearChange} {...propsConfigs?.yearSelectProps}>
+                    {configs.years.map((year, idx) => (
+                      <option key={idx} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </Select>
+                </Flex>
+              ) : (
+                <Heading
+                  size="sm"
+                  minWidth={'5rem'}
+                  textAlign="center"
+                  {...propsConfigs?.dateHeadingProps}
+                >
+                  {configs.monthNames[calendar.month]} {calendar.year}
+                </Heading>
+              )}
               <DatepickerForwardBtns
                 calendars={calendars}
                 getForwardProps={getForwardProps}

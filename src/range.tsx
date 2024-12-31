@@ -106,6 +106,7 @@ const DefaultConfigs: Required<DatepickerConfigs> = {
   dayNames: Weekday_Names_Short,
   firstDayOfWeek: 0,
   monthsToDisplay: 2,
+  years: []
 };
 
 const defaultProps = {

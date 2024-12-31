@@ -5,6 +5,7 @@ import {
   HeadingProps,
   InputProps,
   PopoverBodyProps,
+  SelectProps,
   SimpleGridProps,
   StackProps,
 } from '@chakra-ui/react';
@@ -51,6 +52,8 @@ export interface PropsConfigs {
   calendarPanelProps?: CalendarPanelProps;
   dateHeadingProps?: HeadingProps;
   weekdayLabelProps?: BoxProps;
+  yearSelectProps?: SelectProps;
+  monthSelectProps?: SelectProps;
 }
 
 export interface DatepickerConfigs {
@@ -59,6 +62,7 @@ export interface DatepickerConfigs {
   dayNames?: string[];
   firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   monthsToDisplay?: number;
+  years?: number[]
 }
 
 export interface CalendarConfigs {
@@ -66,4 +70,5 @@ export interface CalendarConfigs {
   monthNames: string[];
   dayNames: string[];
   firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  years: number[];
 }

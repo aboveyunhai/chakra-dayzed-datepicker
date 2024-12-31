@@ -47,6 +47,7 @@ interface SingleProps extends DatepickerProps {
   name?: string;
   usePortal?: boolean;
   portalRef?: React.MutableRefObject<null>;
+  showYearMonthPicker?: boolean
 }
 
 export type VariantProps =
@@ -71,6 +72,8 @@ const DefaultConfigs: Required<DatepickerConfigs> = {
   dayNames: Weekday_Names_Short,
   firstDayOfWeek: 0,
   monthsToDisplay: 1,
+  // Populates the years from now until 120 years ago.
+  years: Array.from({ length: 120 }, (_, i) => new Date().getFullYear() - i),
 };
 
 export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
@@ -88,10 +91,15 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   defaultIsOpen = false,
   closeOnSelect = true,
   children,
+  showYearMonthPicker,
   ...restProps
 }) => {
   const [dateInView, setDateInView] = useState(selectedDate);
   const [offset, setOffset] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState(selectedDate ? selectedDate.getMonth(): new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(selectedDate ? selectedDate.getFullYear() : new Date().getFullYear());
+  const [selectedDay] = useState(selectedDate ? selectedDate.getDate() : new Date().getDate());
+
   const internalUpdate = useRef(false);
 
   const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
@@ -153,6 +161,22 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     },
     [datepickerConfigs.dateFormat, disabledDates, onDateChange]
   );
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    let newZeroBasedMonth = e.target.value as unknown as number;
+    let newDateInView = new Date(selectedYear, newZeroBasedMonth, selectedDay);
+    setSelectedMonth(newDateInView.getMonth());
+    setDateInView(newDateInView);
+    setOffset(0);
+  };
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    let newYear = e.target.value as unknown as number;
+    let newDateInView = new Date(newYear, selectedMonth, selectedDay);
+    setSelectedYear(newDateInView.getFullYear());
+    setDateInView(newDateInView);
+    setOffset(0);
+  };
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
 
@@ -264,6 +288,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
                 configs={datepickerConfigs}
                 propsConfigs={restProps.propsConfigs}
                 disabledDates={disabledDates}
+                handleMonthChange={handleMonthChange}
+                handleYearChange={handleYearChange}
+                showYearMonthPicker={showYearMonthPicker}
               />
             </FocusLock>
           </PopoverBody>
