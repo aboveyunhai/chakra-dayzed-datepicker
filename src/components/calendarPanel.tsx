@@ -111,14 +111,22 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
               />
               {showYearMonthPicker ? (
                 <Flex flexDir="row">
-                  <Select onChange={handleMonthChange} {...propsConfigs?.monthSelectProps}>
+                  <Select
+                    onChange={handleMonthChange}
+                    {...propsConfigs?.monthSelectProps}
+                    value={calendar.month}
+                  >
                     {configs.monthNames.map((month, idx) => (
                       <option key={idx} value={idx}>
                         {month}
                       </option>
                     ))}
                   </Select>
-                  <Select onChange={handleYearChange} {...propsConfigs?.yearSelectProps}>
+                  <Select
+                    onChange={handleYearChange}
+                    {...propsConfigs?.yearSelectProps}
+                    value={calendar.year}
+                  >
                     {configs.years.map((year, idx) => (
                       <option key={idx} value={year}>
                         {year}
