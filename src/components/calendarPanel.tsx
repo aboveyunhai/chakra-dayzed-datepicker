@@ -20,6 +20,8 @@ export interface CalendarPanelProps extends DatepickerProps {
   disabledDates?: Set<number>;
   onMouseEnterHighlight?: (date: Date) => void;
   isInRange?: (date: Date) => boolean | null;
+  isFirstSelectedDate?: (date: Date) => boolean | null;
+  isLastSelectedDate?: (date: Date) => boolean | null;
 }
 
 export const CalendarPanel: React.FC<CalendarPanelProps> = ({
@@ -29,6 +31,8 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
   disabledDates,
   onMouseEnterHighlight,
   isInRange,
+  isFirstSelectedDate,
+  isLastSelectedDate
 }) => {
   const renderProps = useDayzed(dayzedHookProps);
   const { calendars, getBackProps, getForwardProps } = renderProps;
@@ -136,6 +140,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 return week.map((dateObj, index) => {
                   const key = `${calendar.month}-${calendar.year}-${weekIdx}-${index}`;
                   if (!dateObj) return <Box key={key} />;
+                  
                   const { date } = dateObj;
                   return (
                     <DayOfMonth
@@ -143,6 +148,8 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
                       dateObj={dateObj}
                       propsConfigs={propsConfigs}
                       renderProps={renderProps}
+                      isFirstSelectedDate={isFirstSelectedDate && isFirstSelectedDate(date)}
+                      isLastSelectedDate={isLastSelectedDate && isLastSelectedDate(date)}
                       isInRange={isInRange && isInRange(date)}
                       disabledDates={disabledDates}
                       onMouseEnter={() => {

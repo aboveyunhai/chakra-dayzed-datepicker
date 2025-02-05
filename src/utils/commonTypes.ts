@@ -44,6 +44,7 @@ export interface CalendarPanelProps {
 
 export interface PropsConfigs {
   dateNavBtnProps?: ButtonProps;
+  dateNavBackwardBtnProps?: ButtonProps;
   dayOfMonthBtnProps?: DayOfMonthBtnStyleProps;
   inputProps?: InputProps;
   triggerBtnProps?: ButtonProps;

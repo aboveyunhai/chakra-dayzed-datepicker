@@ -6,6 +6,8 @@ import { DatepickerProps, DayOfMonthBtnStyleProps } from '../utils/commonTypes';
 interface DayOfMonthProps extends DatepickerProps {
   renderProps: RenderProps;
   isInRange?: boolean | null;
+  isFirstSelectedDate?: boolean | null;
+  isLastSelectedDate?: boolean | null;
   disabledDates?: Set<number>;
   dateObj: DateObj;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement> | undefined;
@@ -24,8 +26,14 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   disabledDates,
   renderProps,
   onMouseEnter,
+  isFirstSelectedDate,
+  isLastSelectedDate
 }) => {
   const { date, selected, selectable, today } = dateObj;
+  const rangeClassName = isInRange && !(isLastSelectedDate || isFirstSelectedDate)  ? 'is-in-range-calendar-button' : '';
+  const lastSelectedClassName= isLastSelectedDate ? 'is-last-selected-calendar-button' : '';
+  const firstSelectedClassName= isFirstSelectedDate ? 'is-first-selected-calendar-button' : '';
+  const todayButtonClassName= today ? 'is-today-calendar-button' : '';
   const { getDateProps } = renderProps;
   const {
     defaultBtnProps,
@@ -81,6 +89,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
 
   return (
     <Button
+      className={`${rangeClassName} ${todayButtonClassName} ${lastSelectedClassName} ${firstSelectedClassName}`}
       {...getDateProps({
         dateObj,
         disabled: disabled,

@@ -71,6 +71,30 @@ export const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
     }
   };
 
+  const isFirstSelectedDate = (date: Date): boolean => {
+    if (!Array.isArray(selected) || selected.length === 0) {
+      return false;
+    }
+
+    if (selected.length === 1) {
+      return hoveredDate ? selected[0].getTime() < hoveredDate.getTime() : false;
+    }
+
+    return selected.length > 0 && selected[0].getTime() === date.getTime();
+  };
+
+const isLastSelectedDate = (date: Date): boolean => {
+  if (!Array.isArray(selected) || selected.length === 0) {
+    return false;
+  }
+
+  if (selected.length === 1) {
+    return hoveredDate ? selected[0].getTime() > hoveredDate.getTime() : false;
+  }
+
+  return selected[selected.length - 1].getTime() === date.getTime();
+};
+
   return (
     <Flex onMouseLeave={onMouseLeave}>
       <CalendarPanel
@@ -79,6 +103,8 @@ export const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
         propsConfigs={propsConfigs}
         isInRange={isInRange}
         onMouseEnterHighlight={onMouseEnterHighlight}
+        isFirstSelectedDate={isFirstSelectedDate}
+        isLastSelectedDate={isLastSelectedDate}
       />
     </Flex>
   );

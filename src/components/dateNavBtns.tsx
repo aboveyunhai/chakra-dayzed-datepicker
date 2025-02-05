@@ -18,6 +18,8 @@ export const DatepickerBackBtns: React.FC<DatepickerBackBtnsProps> = (
 ) => {
   const { calendars, getBackProps } = props;
   const customBtnProps = props.propsConfigs?.dateNavBtnProps;
+  const customBtnBackwardProps = props.propsConfigs?.dateNavBackwardBtnProps;
+
   return (
     <Fragment>
       <Button
@@ -27,16 +29,12 @@ export const DatepickerBackBtns: React.FC<DatepickerBackBtnsProps> = (
         })}
         {...DefaultBtnStyle}
         {...customBtnProps}
-      >
-        {'<<'}
-      </Button>
+      />
       <Button
         {...getBackProps({ calendars })}
         {...DefaultBtnStyle}
-        {...customBtnProps}
-      >
-        {'<'}
-      </Button>
+        {...customBtnBackwardProps}
+      />
     </Fragment>
   );
 };
@@ -51,15 +49,15 @@ export const DatepickerForwardBtns: React.FC<DatepickerForwardBtnsProps> = (
 ) => {
   const { calendars, getForwardProps } = props;
   const customBtnProps = props.propsConfigs?.dateNavBtnProps;
+  const customBtnBackwardProps = props.propsConfigs?.dateNavBackwardBtnProps;
+
   return (
     <Fragment>
       <Button
         {...getForwardProps({ calendars })}
         {...DefaultBtnStyle}
-        {...customBtnProps}
-      >
-        {'>'}
-      </Button>
+        {...customBtnBackwardProps}
+      />
       <Button
         {...getForwardProps({
           calendars,
@@ -67,9 +65,7 @@ export const DatepickerForwardBtns: React.FC<DatepickerForwardBtnsProps> = (
         })}
         {...DefaultBtnStyle}
         {...customBtnProps}
-      >
-        {'>>'}
-      </Button>
+      />
     </Fragment>
   );
 };
