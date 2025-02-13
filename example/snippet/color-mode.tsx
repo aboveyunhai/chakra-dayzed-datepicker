@@ -1,73 +1,34 @@
-import { createContext, useContext, useLayoutEffect, useState } from 'react';
+import { ThemeProvider, useTheme } from 'next-themes';
+import { ThemeProviderProps } from 'next-themes/dist/types';
+import React from 'react';
 
-type Theme = 'dark' | 'light' | 'system';
-
-type ThemeProviderProps = {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
-  storageKey?: string;
-};
-
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-};
-
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
-
-export function ThemeProvider({
-  children,
-  defaultTheme = 'system',
-  storageKey = 'vite-ui-theme',
-  ...props
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
-
-  useLayoutEffect(() => {
-    const root = window.document.documentElement;
-
-    root.classList.remove('light', 'dark');
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme);
-  }, [theme]);
-
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
-    },
-  };
-
+export function ColorModeProvider(props: ThemeProviderProps) {
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
-    </ThemeProviderContext.Provider>
+    <ThemeProvider attribute="class" disableTransitionOnChange {...props} />
   );
 }
 
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
+export type ColorMode = 'light' | 'dark';
 
-  if (context === undefined)
-    throw new Error('useTheme must be used within a ThemeProvider');
+export interface UseColorModeReturn {
+  colorMode: ColorMode;
+  setColorMode: (colorMode: ColorMode) => void;
+  toggleColorMode: () => void;
+}
 
-  return context;
-};
+export function useColorMode(): UseColorModeReturn {
+  const { resolvedTheme, setTheme } = useTheme();
+  const toggleColorMode = () => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+  };
+  return {
+    colorMode: resolvedTheme as ColorMode,
+    setColorMode: setTheme,
+    toggleColorMode,
+  };
+}
+
+export function useColorModeValue<T>(light: T, dark: T) {
+  const { colorMode } = useColorMode();
+  return colorMode === 'dark' ? dark : light;
+}

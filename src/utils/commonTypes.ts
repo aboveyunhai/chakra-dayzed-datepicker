@@ -1,14 +1,14 @@
 import {
   BoxProps,
+  ButtonProps,
   HeadingProps,
   InputProps,
   PopoverBodyProps,
-  SeparatorProps,
   SimpleGridProps,
   StackProps,
+  SeparatorProps,
 } from '@chakra-ui/react';
 import { DateObj } from 'dayzed';
-import { ButtonProps } from '../components/snippets/button';
 import { PopoverContentProps } from '../components/snippets/popover';
 
 export type OnDateSelected = (

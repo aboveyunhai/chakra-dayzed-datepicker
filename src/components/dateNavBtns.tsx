@@ -1,7 +1,7 @@
 import { Calendar, GetBackForwardPropsOptions } from 'dayzed';
 import React, { Fragment } from 'react';
-import { Button, ButtonProps } from './snippets/button';
 import { DatepickerProps } from '../utils/commonTypes';
+import { Button, ButtonProps } from '@chakra-ui/react';
 
 export interface DatepickerBackBtnsProps extends DatepickerProps {
   calendars: Calendar[];

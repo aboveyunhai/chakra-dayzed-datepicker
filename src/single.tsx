@@ -5,15 +5,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  Flex,
-  Input,
-  InputProps,
-  Portal,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Button, ButtonProps, Flex, Input, InputProps } from '@chakra-ui/react';
 import { format, parse, startOfDay } from 'date-fns';
-import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
@@ -23,10 +16,8 @@ import {
   PropsConfigs,
 } from './utils/commonTypes';
 import { CalendarIcon } from './components/calendar-icon';
-import { Button, ButtonProps } from './components/snippets/button';
 import {
   PopoverAnchor,
-  PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverRoot,
@@ -84,7 +75,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   minDate,
   maxDate,
   configs,
-  usePortal,
+  usePortal = false,
   portalRef,
   disabledDates,
   defaultIsOpen = false,
@@ -96,16 +87,17 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   const [offset, setOffset] = useState(0);
   const internalUpdate = useRef(false);
 
-  const {
-    onOpen,
-    onClose,
-    open: isOpen,
-  } = useDisclosure({ defaultOpen: defaultIsOpen });
+  const [open, setOpen] = useState(defaultIsOpen);
 
-  const Icon =
-    restProps.triggerVariant === 'input'
-      ? restProps?.triggerIcon ?? <CalendarIcon />
+  const Icon = useMemo(() => {
+    return restProps.triggerVariant === 'input'
+      ? restProps.triggerIcon ?? <CalendarIcon />
       : null;
+  }, [
+    // @ts-expect-error
+    restProps.triggerIcon,
+    restProps.triggerVariant,
+  ]);
 
   const datepickerConfigs = useMemo(
     () => ({
@@ -119,12 +111,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     selectedDate ? format(selectedDate, datepickerConfigs.dateFormat) : ''
   );
 
-  const onPopoverClose = () => {
-    onClose();
-    setDateInView(selectedDate);
-    setOffset(0);
-  };
-
   // dayzed utils
   const handleOnDateSelected: OnDateSelected = useCallback(
     ({ selectable, date }) => {
@@ -133,11 +119,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
         internalUpdate.current = true;
         onDateChange(date);
         setInputVal(date ? format(date, datepickerConfigs.dateFormat) : '');
-        if (closeOnSelect) onClose();
+        if (closeOnSelect) setOpen(false);
         return;
       }
     },
-    [closeOnSelect, datepickerConfigs.dateFormat, onClose, onDateChange]
+    [closeOnSelect, datepickerConfigs.dateFormat, onDateChange]
   );
 
   const handleInputChange = useCallback(
@@ -160,8 +146,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     [datepickerConfigs.dateFormat, disabledDates, onDateChange]
   );
 
-  const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
-
   useEffect(() => {
     if (internalUpdate.current) {
       internalUpdate.current = false;
@@ -178,12 +162,19 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   return (
     <PopoverRoot
       id={id}
-      placement="bottom-start"
-      variant="responsive"
-      isOpen={isOpen}
-      onOpen={onOpen}
-      onClose={onPopoverClose}
-      isLazy
+      positioning={{ placement: 'bottom-start' }}
+      open={open}
+      onOpenChange={(e) => {
+        if (e.open) {
+          setOpen(e.open);
+        } else {
+          setOpen(e.open);
+          setDateInView(selectedDate);
+          setOffset(0);
+        }
+      }}
+      lazyMount={true}
+      unmountOnExit={true}
     >
       {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
         <PopoverTrigger asChild>
@@ -194,6 +185,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
             paddingX="1rem"
             disabled={disabled}
             fontSize={'sm'}
+            rounded={'md'}
             {...restProps.propsConfigs?.triggerBtnProps}
           >
             {selectedDate
@@ -207,10 +199,10 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           <PopoverAnchor>
             <Input
               id={id}
-              onKeyPress={(e) => {
-                if (e.key === ' ' && !isOpen) {
+              onKeyUp={(e) => {
+                if (e.key === ' ' && !open) {
                   e.preventDefault();
-                  onOpen();
+                  setOpen(true);
                 }
               }}
               autoComplete="off"
@@ -228,8 +220,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
               position="absolute"
               variant={'ghost'}
               right="0"
-              size="sm"
+              size="xs"
               marginRight="5px"
+              rounded={'md'}
               zIndex={1}
               type="button"
               disabled={disabled}
@@ -242,40 +235,39 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
         </Flex>
       ) : null}
       {children ? children(selectedDate) : null}
-      <PopoverContentWrapper
-        {...(usePortal ? { containerRef: portalRef } : {})}
-        portalled={false}
+      <PopoverContent
+        width="100%"
+        portalled={usePortal}
+        portalRef={portalRef}
+        {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
       >
-        <PopoverContent
-          width="100%"
-          {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
-          portalled={false}
+        <PopoverBody
+          rounded={'md'}
+          borderColor={'border'}
+          borderWidth={1}
+          paddingX="3"
+          paddingY="2"
+          {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
         >
-          <PopoverBody
-            {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
-          >
-            <FocusLock>
-              <CalendarPanel
-                dayzedHookProps={{
-                  showOutsideDays: true,
-                  monthsToDisplay: datepickerConfigs.monthsToDisplay,
-                  onDateSelected: handleOnDateSelected,
-                  selected: selectedDate,
-                  date: dateInView,
-                  minDate: minDate,
-                  maxDate: maxDate,
-                  offset: offset,
-                  onOffsetChanged: setOffset,
-                  firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
-                }}
-                configs={datepickerConfigs}
-                propsConfigs={restProps.propsConfigs}
-                disabledDates={disabledDates}
-              />
-            </FocusLock>
-          </PopoverBody>
-        </PopoverContent>
-      </PopoverContentWrapper>
+          <CalendarPanel
+            dayzedHookProps={{
+              showOutsideDays: true,
+              monthsToDisplay: datepickerConfigs.monthsToDisplay,
+              onDateSelected: handleOnDateSelected,
+              selected: selectedDate,
+              date: dateInView,
+              minDate: minDate,
+              maxDate: maxDate,
+              offset: offset,
+              onOffsetChanged: setOffset,
+              firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
+            }}
+            configs={datepickerConfigs}
+            propsConfigs={restProps.propsConfigs}
+            disabledDates={disabledDates}
+          />
+        </PopoverBody>
+      </PopoverContent>
     </PopoverRoot>
   );
 };
