@@ -13,7 +13,7 @@
     "url": "git+https://github.com/aboveyunhai/chakra-dayzed-datepicker.git"
   },
   "engines": {
-    "node": ">=17"
+    "node": ">=18"
   },
   "scripts": {
     "start": "dts watch",
