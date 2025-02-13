@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "next-themes": "^0.3.0",
     "react-app-polyfill": "^1.0.6",
     "react-github-btn": "^1.4.0"
   },
@@ -22,7 +23,7 @@
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "typescript": "^4",
+    "typescript": "^5.7.3",
     "vite": "latest",
     "vite-preset-react": "latest"
   }

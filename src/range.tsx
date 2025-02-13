@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Props as DayzedHookProps } from './utils/dayzed/utils';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
-import { Flex, Input, Portal, useDisclosure } from '@chakra-ui/react';
+import { Button, Flex, Input } from '@chakra-ui/react';
 import { CalendarPanel } from './components/calendarPanel';
 import {
   CalendarConfigs,
@@ -11,10 +11,8 @@ import {
   PropsConfigs,
 } from './utils/commonTypes';
 import { format } from 'date-fns';
-import FocusLock from 'react-focus-lock';
 import { VariantProps } from './single';
 import { CalendarIcon } from './components/calendar-icon';
-import { Button } from './components/snippets/button';
 import {
   PopoverAnchor,
   PopoverBody,
@@ -36,7 +34,7 @@ export const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
   propsConfigs,
   selected,
 }) => {
-  const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
+  const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null);
 
   // Calendar level
   const onMouseLeave = () => {
@@ -51,7 +49,7 @@ export const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
     setHoveredDate(date);
   };
 
-  const isInRange = (date: Date) => {
+  const checkInRange = (date: Date) => {
     if (!Array.isArray(selected) || !selected?.length) {
       return false;
     }
@@ -61,7 +59,7 @@ export const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
       return firstSelected < date && secondSelected > date;
     } else {
       return (
-        hoveredDate &&
+        !!hoveredDate &&
         ((firstSelected < date && hoveredDate >= date) ||
           (date < firstSelected && date >= hoveredDate))
       );
@@ -74,7 +72,7 @@ export const RangeCalendarPanel: React.FC<RangeCalendarPanelProps> = ({
         dayzedHookProps={dayzedHookProps}
         configs={configs}
         propsConfigs={propsConfigs}
-        isInRange={isInRange}
+        checkInRange={checkInRange}
         onMouseEnterHighlight={onMouseEnterHighlight}
       />
     </Flex>
@@ -105,57 +103,37 @@ const DefaultConfigs: Required<DatepickerConfigs> = {
   monthsToDisplay: 2,
 };
 
-const defaultProps = {
-  defaultIsOpen: false,
-  closeOnSelect: true,
-  triggerVariant: 'default' as const,
-};
-
-export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
-  const mergedProps = { ...defaultProps, ...props };
-  const {
-    configs,
-    propsConfigs,
-    id,
-    name,
-    usePortal,
-    portalRef,
-    defaultIsOpen,
-    closeOnSelect,
-    selectedDates,
-    minDate,
-    maxDate,
-    onDateChange,
-    disabled,
-    children,
-    triggerVariant,
-  } = mergedProps;
-
+export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
+  configs,
+  id,
+  name,
+  selectedDates,
+  minDate,
+  maxDate,
+  onDateChange,
+  disabled,
+  children,
+  usePortal = false,
+  portalRef,
+  defaultIsOpen = false,
+  closeOnSelect = true,
+  ...restProps
+}) => {
   // chakra popover utils
-  const [dateInView, setDateInView] = useState(selectedDates[0] || new Date());
-  const [offset, setOffset] = useState(0);
-  const {
-    onOpen,
-    onClose,
-    open: isOpen,
-  } = useDisclosure({ defaultOpen: defaultIsOpen });
+  const [dateInView, setDateInView] = React.useState(
+    selectedDates[0] || new Date()
+  );
+  const [offset, setOffset] = React.useState(0);
+  const [open, setOpen] = React.useState(defaultIsOpen);
 
   const Icon =
-    mergedProps.triggerVariant === 'input' && mergedProps.triggerIcon ? (
-      mergedProps.triggerIcon
-    ) : (
-      <CalendarIcon />
-    );
+    restProps.triggerVariant === 'input'
+      ? restProps.triggerIcon ?? <CalendarIcon />
+      : null;
 
   const datepickerConfigs = {
     ...DefaultConfigs,
     ...configs,
-  };
-
-  const onPopoverClose = () => {
-    onClose();
-    setDateInView(selectedDates[0] || new Date());
-    setOffset(0);
   };
 
   const handleOnDateSelected: OnDateSelected = ({ selectable, date }) => {
@@ -173,7 +151,9 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
         }
         onDateChange(newDates);
 
-        if (closeOnSelect) onClose();
+        if (closeOnSelect) {
+          setOpen(false);
+        }
         return;
       }
 
@@ -195,42 +175,50 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
     ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat)}`
     : ` - ${datepickerConfigs.dateFormat}`;
 
-  const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
-
   return (
     <PopoverRoot
       id={id}
-      placement="bottom-start"
-      variant="responsive"
-      isOpen={isOpen}
-      onOpen={onOpen}
-      onClose={onPopoverClose}
-      isLazy
+      positioning={{
+        placement: 'bottom-start',
+      }}
+      open={open}
+      onOpenChange={(e) => {
+        if (e.open) {
+          setOpen(e.open);
+        } else {
+          setOpen(e.open);
+          setDateInView(selectedDates[0] || new Date());
+          setOffset(0);
+        }
+      }}
+      lazyMount={true}
+      unmountOnExit={true}
     >
-      {!children && triggerVariant === 'default' ? (
+      {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
         <PopoverTrigger asChild>
           <Button
             type="button"
             variant={'outline'}
             lineHeight={1}
             paddingX="1rem"
-            fontSize={'sm'}
             disabled={disabled}
-            {...propsConfigs?.triggerBtnProps}
+            fontSize={'sm'}
+            rounded={'md'}
+            {...restProps.propsConfigs?.triggerBtnProps}
           >
             {intVal}
           </Button>
         </PopoverTrigger>
       ) : null}
-      {!children && triggerVariant === 'input' ? (
+      {!children && restProps.triggerVariant === 'input' ? (
         <Flex position="relative" alignItems={'center'}>
           <PopoverAnchor>
             <Input
               id={id}
-              onKeyPress={(e) => {
-                if (e.key === ' ' && !isOpen) {
+              onKeyUp={(e) => {
+                if (e.key === ' ' && !open) {
                   e.preventDefault();
-                  onOpen();
+                  setOpen(true);
                 }
               }}
               autoComplete="off"
@@ -240,10 +228,10 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
               name={name}
               value={intVal}
               onChange={(e) => e.target.value}
-              {...propsConfigs?.inputProps}
+              {...restProps.propsConfigs?.inputProps}
             />
           </PopoverAnchor>
-          <PopoverTrigger>
+          <PopoverTrigger asChild>
             <Button
               position="absolute"
               variant={'ghost'}
@@ -254,7 +242,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
               type="button"
               disabled={disabled}
               padding={'8px'}
-              {...propsConfigs?.triggerIconBtnProps}
+              {...restProps.propsConfigs?.triggerIconBtnProps}
             >
               {Icon}
             </Button>
@@ -262,35 +250,33 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
         </Flex>
       ) : null}
       {children ? children(selectedDates) : null}
-      <PopoverContentWrapper
-        {...(usePortal ? { containerRef: portalRef } : {})}
+      <PopoverContent
+        width="100%"
+        portalled={usePortal}
+        portalRef={portalRef}
+        {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
       >
-        <PopoverContent
-          width="100%"
-          {...propsConfigs?.popoverCompProps?.popoverContentProps}
+        <PopoverBody
+          {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
         >
-          <PopoverBody {...propsConfigs?.popoverCompProps?.popoverBodyProps}>
-            <FocusLock>
-              <RangeCalendarPanel
-                dayzedHookProps={{
-                  onDateSelected: handleOnDateSelected,
-                  selected: selectedDates,
-                  monthsToDisplay: datepickerConfigs.monthsToDisplay,
-                  date: dateInView,
-                  minDate: minDate,
-                  maxDate: maxDate,
-                  offset: offset,
-                  onOffsetChanged: setOffset,
-                  firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
-                }}
-                configs={datepickerConfigs}
-                propsConfigs={propsConfigs}
-                selected={selectedDates}
-              />
-            </FocusLock>
-          </PopoverBody>
-        </PopoverContent>
-      </PopoverContentWrapper>
+          <RangeCalendarPanel
+            dayzedHookProps={{
+              onDateSelected: handleOnDateSelected,
+              selected: selectedDates,
+              monthsToDisplay: datepickerConfigs.monthsToDisplay,
+              date: dateInView,
+              minDate: minDate,
+              maxDate: maxDate,
+              offset: offset,
+              onOffsetChanged: setOffset,
+              firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
+            }}
+            configs={datepickerConfigs}
+            propsConfigs={restProps.propsConfigs}
+            selected={selectedDates}
+          />
+        </PopoverBody>
+      </PopoverContent>
     </PopoverRoot>
   );
 };
