@@ -7,9 +7,9 @@ import {
   SimpleGridProps,
   StackProps,
   SeparatorProps,
+  PopoverContentProps,
 } from '@chakra-ui/react';
 import { DateObj } from 'dayzed';
-import { PopoverContentProps } from '../components/snippets/popover';
 
 export type OnDateSelected = (
   selectedDate: DateObj,

@@ -1,7 +1,8 @@
 import { DateObj, RenderProps } from 'dayzed';
 import * as React from 'react';
 import { DatepickerProps, DayOfMonthBtnStyleProps } from '../utils/commonTypes';
-import { Button } from '@chakra-ui/react';
+import { Button } from './button';
+import { ButtonProps } from '@chakra-ui/react';
 
 interface DayOfMonthProps extends DatepickerProps {
   getDateProps: RenderProps['getDateProps'];
@@ -23,6 +24,20 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
   const { selected, selectable, today, date } = dateObj;
   const disabled = !selectable || !!disabledDates?.has(dateObj.date.getTime());
 
+  const styleProps = React.useMemo(() => {
+    let output: ButtonProps = { ...styleBtnProps.defaultBtnProps };
+    if (isInRange && !disabled) {
+      Object.assign(output, styleBtnProps.isInRangeBtnProps);
+    }
+    if (selected) {
+      Object.assign(output, styleBtnProps.selectedBtnProps);
+    }
+    if (today) {
+      Object.assign(output, styleBtnProps.todayBtnProps);
+    }
+    return output;
+  }, [disabled, isInRange, selected, styleBtnProps, today]);
+
   return (
     <Button
       {...getDateProps({
@@ -34,10 +49,7 @@ export const DayOfMonth: React.FC<DayOfMonthProps> = ({
           }
         },
       })}
-      {...styleBtnProps.defaultBtnProps}
-      {...(isInRange && !disabled && styleBtnProps.isInRangeBtnProps)}
-      {...(selected && styleBtnProps.selectedBtnProps)}
-      {...(today && styleBtnProps.todayBtnProps)}
+      {...styleProps}
     >
       {date.getDate()}
     </Button>
