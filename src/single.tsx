@@ -12,15 +12,10 @@ import {
   Input,
   InputProps,
   Popover,
-  PopoverAnchor,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
+  PopoverBodyProps,
   Portal,
-  useDisclosure,
 } from '@chakra-ui/react';
 import { format, parse, startOfDay } from 'date-fns';
-import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import { CalendarPanel } from './components/calendarPanel';
 import {
@@ -29,7 +24,7 @@ import {
   OnDateSelected,
   PropsConfigs,
 } from './utils/commonTypes';
-import { CalendarIcon } from './components/calendarIcon';
+import { CalendarIcon } from './components/calendar-icon';
 
 interface SingleProps extends DatepickerProps {
   date?: Date;
@@ -65,6 +60,26 @@ export type VariantProps =
 
 export type SingleDatepickerProps = SingleProps & VariantProps;
 
+export const Default_Trigger_Icon_Btn_Props: ButtonProps = {
+  position: 'absolute',
+  variant: 'ghost',
+  right: '0',
+  size: 'xs',
+  marginRight: '5px',
+  rounded: 'md',
+  zIndex: 1,
+  type: 'button',
+  padding: '8px',
+};
+
+export const Default_Popover_Body_Props: PopoverBodyProps = {
+  rounded: 'md',
+  borderColor: 'border',
+  borderWidth: 1,
+  paddingX: '3',
+  paddingY: '2',
+};
+
 const DefaultConfigs: Required<DatepickerConfigs> = {
   dateFormat: 'yyyy-MM-dd',
   monthNames: Month_Names_Short,
@@ -82,7 +97,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   minDate,
   maxDate,
   configs,
-  usePortal,
+  usePortal = false,
   portalRef,
   disabledDates,
   defaultIsOpen = false,
@@ -94,12 +109,17 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   const [offset, setOffset] = useState(0);
   const internalUpdate = useRef(false);
 
-  const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
+  const [open, setOpen] = useState(defaultIsOpen);
 
-  const Icon =
-    restProps.triggerVariant === 'input'
-      ? restProps?.triggerIcon ?? <CalendarIcon />
+  const Icon = useMemo(() => {
+    return restProps.triggerVariant === 'input'
+      ? restProps.triggerIcon ?? <CalendarIcon />
       : null;
+  }, [
+    // @ts-expect-error
+    restProps.triggerIcon,
+    restProps.triggerVariant,
+  ]);
 
   const datepickerConfigs = useMemo(
     () => ({
@@ -113,12 +133,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     selectedDate ? format(selectedDate, datepickerConfigs.dateFormat) : ''
   );
 
-  const onPopoverClose = () => {
-    onClose();
-    setDateInView(selectedDate);
-    setOffset(0);
-  };
-
   // dayzed utils
   const handleOnDateSelected: OnDateSelected = useCallback(
     ({ selectable, date }) => {
@@ -127,11 +141,11 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
         internalUpdate.current = true;
         onDateChange(date);
         setInputVal(date ? format(date, datepickerConfigs.dateFormat) : '');
-        if (closeOnSelect) onClose();
+        if (closeOnSelect) setOpen(false);
         return;
       }
     },
-    [closeOnSelect, datepickerConfigs.dateFormat, onClose, onDateChange]
+    [closeOnSelect, datepickerConfigs.dateFormat, onDateChange]
   );
 
   const handleInputChange = useCallback(
@@ -154,8 +168,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
     [datepickerConfigs.dateFormat, disabledDates, onDateChange]
   );
 
-  const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
-
   useEffect(() => {
     if (internalUpdate.current) {
       internalUpdate.current = false;
@@ -170,17 +182,27 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   }, [datepickerConfigs.dateFormat, selectedDate]);
 
   return (
-    <Popover
-      id={id}
-      placement="bottom-start"
-      variant="responsive"
-      isOpen={isOpen}
-      onOpen={onOpen}
-      onClose={onPopoverClose}
-      isLazy
+    <Popover.Root
+      ids={{
+        trigger: id,
+      }}
+      open={open}
+      onOpenChange={(e) => {
+        if (e.open) {
+          setOpen(e.open);
+        } else {
+          setOpen(e.open);
+          setDateInView(selectedDate);
+          setOffset(0);
+        }
+      }}
+      portalled={usePortal}
+      lazyMount={true}
+      unmountOnExit={true}
+      {...restProps.propsConfigs?.popoverCompProps?.popoverRootProps}
     >
       {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
-        <PopoverTrigger>
+        <Popover.Trigger asChild>
           <Button
             type="button"
             variant={'outline'}
@@ -188,66 +210,60 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
             paddingX="1rem"
             disabled={disabled}
             fontSize={'sm'}
+            rounded={'md'}
             {...restProps.propsConfigs?.triggerBtnProps}
           >
             {selectedDate
               ? format(selectedDate, datepickerConfigs.dateFormat)
               : ''}
           </Button>
-        </PopoverTrigger>
+        </Popover.Trigger>
       ) : null}
       {!children && restProps.triggerVariant === 'input' ? (
         <Flex position="relative" alignItems={'center'}>
-          <PopoverAnchor>
+          <Popover.Anchor>
             <Input
-              id={id}
-              onKeyPress={(e) => {
-                if (e.key === ' ' && !isOpen) {
+              onKeyUp={(e) => {
+                if (e.key === ' ' && !open) {
                   e.preventDefault();
-                  onOpen();
+                  setOpen(true);
                 }
               }}
               autoComplete="off"
               width={'10rem'}
               disabled={disabled}
-              isDisabled={disabled}
               name={name}
               value={tempInput}
               onChange={handleInputChange}
               paddingRight={'2.5rem'}
               {...restProps.propsConfigs?.inputProps}
             />
-          </PopoverAnchor>
-          <PopoverTrigger>
+          </Popover.Anchor>
+          <Popover.Trigger asChild>
             <Button
-              position="absolute"
-              variant={'ghost'}
-              right="0"
-              size="sm"
-              marginRight="5px"
-              zIndex={1}
-              type="button"
+              {...Default_Trigger_Icon_Btn_Props}
               disabled={disabled}
-              padding={'8px'}
               {...restProps.propsConfigs?.triggerIconBtnProps}
             >
               {Icon}
             </Button>
-          </PopoverTrigger>
+          </Popover.Trigger>
         </Flex>
       ) : null}
       {children ? children(selectedDate) : null}
-      <PopoverContentWrapper
-        {...(usePortal ? { containerRef: portalRef } : {})}
-      >
-        <PopoverContent
-          width="100%"
-          {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
-        >
-          <PopoverBody
-            {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
+      <Portal>
+        <Popover.Positioner>
+          <Popover.Content
+            width="100%"
+            {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
           >
-            <FocusLock>
+            <Popover.Arrow>
+              <Popover.ArrowTip />
+            </Popover.Arrow>
+            <Popover.Body
+              {...Default_Popover_Body_Props}
+              {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
+            >
               <CalendarPanel
                 dayzedHookProps={{
                   showOutsideDays: true,
@@ -265,10 +281,10 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
                 propsConfigs={restProps.propsConfigs}
                 disabledDates={disabledDates}
               />
-            </FocusLock>
-          </PopoverBody>
-        </PopoverContent>
-      </PopoverContentWrapper>
-    </Popover>
+            </Popover.Body>
+          </Popover.Content>
+        </Popover.Positioner>
+      </Portal>
+    </Popover.Root>
   );
 };
