@@ -183,6 +183,9 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
 
   return (
     <Popover.Root
+      ids={{
+        trigger: id,
+      }}
       open={open}
       onOpenChange={(e) => {
         if (e.open) {
@@ -196,6 +199,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
       portalled={usePortal}
       lazyMount={true}
       unmountOnExit={true}
+      {...restProps.propsConfigs?.popoverCompProps?.popoverRootProps}
     >
       {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
         <Popover.Trigger asChild>
@@ -219,7 +223,6 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
         <Flex position="relative" alignItems={'center'}>
           <Popover.Anchor>
             <Input
-              id={id}
               onKeyUp={(e) => {
                 if (e.key === ' ' && !open) {
                   e.preventDefault();

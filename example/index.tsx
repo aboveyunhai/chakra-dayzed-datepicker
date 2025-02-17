@@ -179,7 +179,7 @@ const App = () => {
                       </Flex>
                       {/* chakra ui add prefix for the trigger for some reasons? */}
                       <Flex gap="1rem" alignItems="center">
-                        <label>Default:</label>
+                        <label htmlFor="default">Default:</label>
                         <SingleDatepicker
                           id="default"
                           date={date}
@@ -238,9 +238,7 @@ const App = () => {
                         </Button>
                       </Flex>
                       <Flex gap="1rem" alignItems="center">
-                        <label htmlFor={`popover-trigger-default-range`}>
-                          Default:
-                        </label>
+                        <label htmlFor={`default-range`}>Default:</label>
                         <RangeDatepicker
                           id="default-range"
                           selectedDates={selectedDates}

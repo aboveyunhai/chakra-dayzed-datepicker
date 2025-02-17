@@ -5,6 +5,7 @@ import {
   InputProps,
   PopoverBodyProps,
   PopoverContentProps,
+  PopoverRootProps,
   SeparatorProps,
   SimpleGridProps,
   StackProps,
@@ -30,6 +31,7 @@ export interface DayOfMonthBtnStyleProps {
 }
 
 export interface PopoverCompProps {
+  popoverRootProps?: PopoverRootProps;
   popoverContentProps?: PopoverContentProps;
   popoverBodyProps?: PopoverBodyProps;
 }
