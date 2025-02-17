@@ -1,7 +1,7 @@
 import React from 'react';
 import { Props as DayzedHookProps } from './utils/dayzed/utils';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
-import { Button, Flex, Input } from '@chakra-ui/react';
+import { Button, Flex, Input, Popover, Portal } from '@chakra-ui/react';
 import { CalendarPanel } from './components/calendarPanel';
 import {
   CalendarConfigs,
@@ -11,15 +11,12 @@ import {
   PropsConfigs,
 } from './utils/commonTypes';
 import { format } from 'date-fns';
-import { VariantProps } from './single';
-import { CalendarIcon } from './components/calendar-icon';
 import {
-  PopoverAnchor,
-  PopoverBody,
-  PopoverContent,
-  PopoverRoot,
-  PopoverTrigger,
-} from './components/snippets/popover';
+  Default_Popover_Body_Props,
+  Default_Trigger_Icon_Btn_Props,
+  VariantProps,
+} from './single';
+import { CalendarIcon } from './components/calendar-icon';
 
 interface RangeCalendarPanelProps {
   dayzedHookProps: DayzedHookProps;
@@ -176,11 +173,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
     : ` - ${datepickerConfigs.dateFormat}`;
 
   return (
-    <PopoverRoot
-      id={id}
-      positioning={{
-        placement: 'bottom-start',
-      }}
+    <Popover.Root
       open={open}
       onOpenChange={(e) => {
         if (e.open) {
@@ -195,7 +188,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
       unmountOnExit={true}
     >
       {!children && (restProps.triggerVariant ?? 'default') === 'default' ? (
-        <PopoverTrigger asChild>
+        <Popover.Trigger asChild>
           <Button
             type="button"
             variant={'outline'}
@@ -208,11 +201,11 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
           >
             {intVal}
           </Button>
-        </PopoverTrigger>
+        </Popover.Trigger>
       ) : null}
       {!children && restProps.triggerVariant === 'input' ? (
         <Flex position="relative" alignItems={'center'}>
-          <PopoverAnchor>
+          <Popover.Anchor>
             <Input
               id={id}
               onKeyUp={(e) => {
@@ -230,53 +223,52 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = ({
               onChange={(e) => e.target.value}
               {...restProps.propsConfigs?.inputProps}
             />
-          </PopoverAnchor>
-          <PopoverTrigger asChild>
+          </Popover.Anchor>
+          <Popover.Trigger asChild>
             <Button
-              position="absolute"
-              variant={'ghost'}
-              right="0"
-              size="sm"
-              marginRight="5px"
-              zIndex={1}
-              type="button"
+              {...Default_Trigger_Icon_Btn_Props}
               disabled={disabled}
-              padding={'8px'}
               {...restProps.propsConfigs?.triggerIconBtnProps}
             >
               {Icon}
             </Button>
-          </PopoverTrigger>
+          </Popover.Trigger>
         </Flex>
       ) : null}
       {children ? children(selectedDates) : null}
-      <PopoverContent
-        width="100%"
-        portalled={usePortal}
-        portalRef={portalRef}
-        {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
-      >
-        <PopoverBody
-          {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
-        >
-          <RangeCalendarPanel
-            dayzedHookProps={{
-              onDateSelected: handleOnDateSelected,
-              selected: selectedDates,
-              monthsToDisplay: datepickerConfigs.monthsToDisplay,
-              date: dateInView,
-              minDate: minDate,
-              maxDate: maxDate,
-              offset: offset,
-              onOffsetChanged: setOffset,
-              firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
-            }}
-            configs={datepickerConfigs}
-            propsConfigs={restProps.propsConfigs}
-            selected={selectedDates}
-          />
-        </PopoverBody>
-      </PopoverContent>
-    </PopoverRoot>
+      <Portal disabled={!usePortal} container={portalRef}>
+        <Popover.Positioner>
+          <Popover.Content
+            width="100%"
+            {...restProps.propsConfigs?.popoverCompProps?.popoverContentProps}
+          >
+            <Popover.Body
+              {...Default_Popover_Body_Props}
+              {...restProps.propsConfigs?.popoverCompProps?.popoverBodyProps}
+            >
+              <Popover.Arrow>
+                <Popover.ArrowTip />
+              </Popover.Arrow>
+              <RangeCalendarPanel
+                dayzedHookProps={{
+                  onDateSelected: handleOnDateSelected,
+                  selected: selectedDates,
+                  monthsToDisplay: datepickerConfigs.monthsToDisplay,
+                  date: dateInView,
+                  minDate: minDate,
+                  maxDate: maxDate,
+                  offset: offset,
+                  onOffsetChanged: setOffset,
+                  firstDayOfWeek: datepickerConfigs.firstDayOfWeek,
+                }}
+                configs={datepickerConfigs}
+                propsConfigs={restProps.propsConfigs}
+                selected={selectedDates}
+              />
+            </Popover.Body>
+          </Popover.Content>
+        </Popover.Positioner>
+      </Portal>
+    </Popover.Root>
   );
 };

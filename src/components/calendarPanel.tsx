@@ -102,6 +102,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
         size: 'xs',
         rounded: 'md',
         variant: 'ghost',
+        position: 'relative', // for _after position
         // this intends to fill the visual gap from Grid to improve the UX
         // so the button active area is actually larger than what it's seen
         ...defaultBtnProps,

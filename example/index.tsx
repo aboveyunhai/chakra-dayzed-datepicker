@@ -6,7 +6,6 @@ import {
   Button,
   ChakraProvider,
   defaultSystem,
-  DialogTrigger,
   Flex,
   Heading,
   HStack,
@@ -39,6 +38,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogRoot,
+  DialogTrigger,
 } from './snippet/dialog';
 import { ColorModeProvider, useColorMode } from './snippet/color-mode';
 
@@ -179,9 +179,7 @@ const App = () => {
                       </Flex>
                       {/* chakra ui add prefix for the trigger for some reasons? */}
                       <Flex gap="1rem" alignItems="center">
-                        <label htmlFor={`popover-trigger-default`}>
-                          Default:
-                        </label>
+                        <label>Default:</label>
                         <SingleDatepicker
                           id="default"
                           date={date}
@@ -278,12 +276,10 @@ const App = () => {
                               <SingleDatepicker
                                 date={date}
                                 onDateChange={setDate}
-                                usePortal={false}
                               />
                               <RangeDatepicker
                                 selectedDates={selectedDates}
                                 onDateChange={setSelectedDates}
-                                usePortal={false}
                               />
                               <div>
                                 if <code>{`usePortal={true}`} </code> <br />
