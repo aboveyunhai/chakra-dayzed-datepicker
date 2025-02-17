@@ -8,6 +8,7 @@ import {
   StackProps,
   SeparatorProps,
   PopoverContentProps,
+  PopoverRootProps,
 } from '@chakra-ui/react';
 import { DateObj } from 'dayzed';
 
@@ -30,6 +31,7 @@ export interface DayOfMonthBtnStyleProps {
 }
 
 export interface PopoverCompProps {
+  popoverRootProps?: PopoverRootProps;
   popoverContentProps?: PopoverContentProps;
   popoverBodyProps?: PopoverBodyProps;
 }
