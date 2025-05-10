@@ -101,7 +101,7 @@ interface RangeProps extends DatepickerProps {
 
 export type RangeDatepickerProps = RangeProps & VariantProps;
 
-const DefaultConfigs: Required<DatepickerConfigs> = {
+const DefaultConfigs: Required<Omit<DatepickerConfigs, 'emptyDatePlaceholder'>> = {
   dateFormat: 'MM/dd/yyyy',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
