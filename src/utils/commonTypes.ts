@@ -54,6 +54,7 @@ export interface PropsConfigs {
 }
 
 export interface DatepickerConfigs {
+  emptyDatePlaceholder?: string;
   dateFormat?: string;
   monthNames?: string[];
   dayNames?: string[];
