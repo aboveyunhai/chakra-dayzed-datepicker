@@ -21,7 +21,7 @@ import {
   OnDateSelected,
   PropsConfigs,
 } from './utils/commonTypes';
-import { format } from 'date-fns';
+import { format, Locale } from 'date-fns';
 import FocusLock from 'react-focus-lock';
 import { VariantProps } from './single';
 import { CalendarIcon } from './components/calendarIcon';
@@ -96,6 +96,7 @@ interface RangeProps extends DatepickerProps {
   name?: string;
   usePortal?: boolean;
   portalRef?: React.MutableRefObject<null>;
+  locale?: Locale;
 }
 
 export type RangeDatepickerProps = RangeProps & VariantProps;
@@ -132,6 +133,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
     disabled,
     children,
     triggerVariant,
+    locale,
   } = mergedProps;
 
   // chakra popover utils
@@ -188,10 +190,10 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
 
   // eventually we want to allow user to freely type their own input and parse the input
   let intVal = selectedDates[0]
-    ? `${format(selectedDates[0], datepickerConfigs.dateFormat)}`
+    ? `${format(selectedDates[0], datepickerConfigs.dateFormat, { locale })}`
     : `${datepickerConfigs.dateFormat}`;
   intVal += selectedDates[1]
-    ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat)}`
+    ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat, { locale })}`
     : ` - ${datepickerConfigs.dateFormat}`;
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
