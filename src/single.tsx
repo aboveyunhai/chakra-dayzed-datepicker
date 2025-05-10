@@ -65,7 +65,7 @@ export type VariantProps =
 
 export type SingleDatepickerProps = SingleProps & VariantProps;
 
-const DefaultConfigs: Required<DatepickerConfigs> = {
+const DefaultConfigs: Required<Omit<DatepickerConfigs, 'emptyDatePlaceholder'>> = {
   dateFormat: 'yyyy-MM-dd',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
