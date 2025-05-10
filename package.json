@@ -75,7 +75,7 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "date-fns": "^2.23.0",
+    "date-fns": "^4.1.0",
     "dayzed": "^3.2.2",
     "react-focus-lock": "^2.9.5"
   }
