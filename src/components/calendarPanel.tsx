@@ -2,7 +2,6 @@ import {
   HStack,
   VStack,
   Heading,
-  Divider,
   SimpleGrid,
   Box,
   Stack,
@@ -13,6 +12,7 @@ import React, { useCallback, useMemo } from 'react';
 import { CalendarConfigs, DatepickerProps } from '../utils/commonTypes';
 import { DatepickerBackBtns, DatepickerForwardBtns } from './dateNavBtns';
 import { DayOfMonth } from './dayOfMonth';
+import { Divider } from '@chakra-ui/layout';
 
 export interface CalendarPanelProps extends DatepickerProps {
   dayzedHookProps: Omit<DayzedHookProps, 'children' | 'render'>;
@@ -118,7 +118,7 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
             <Divider {...propsConfigs?.calendarPanelProps?.dividerProps} />
             <SimpleGrid
               columns={7}
-              spacing={1}
+              gap={1}
               textAlign="center"
               {...propsConfigs?.calendarPanelProps?.bodyProps}
             >

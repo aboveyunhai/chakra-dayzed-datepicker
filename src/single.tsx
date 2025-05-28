@@ -5,20 +5,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  Button,
-  ButtonProps,
-  Flex,
-  Input,
-  InputProps,
-  Popover,
-  PopoverAnchor,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Portal,
-  useDisclosure,
-} from '@chakra-ui/react';
 import { format, parse, startOfDay } from 'date-fns';
 import FocusLock from 'react-focus-lock';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
@@ -30,6 +16,10 @@ import {
   PropsConfigs,
 } from './utils/commonTypes';
 import { CalendarIcon } from './components/calendarIcon';
+import { Input, InputProps, PopoverBody, Portal, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/button';
+import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from '@chakra-ui/popover';
+import { Flex } from '@chakra-ui/layout';
 
 interface SingleProps extends DatepickerProps {
   date?: Date;
@@ -94,7 +84,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   const [offset, setOffset] = useState(0);
   const internalUpdate = useRef(false);
 
-  const { onOpen, onClose, isOpen } = useDisclosure({ defaultIsOpen });
+  const { onOpen, onClose, open } = useDisclosure({ defaultOpen: defaultIsOpen });
 
   const Icon =
     restProps.triggerVariant === 'input'
@@ -174,7 +164,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
       id={id}
       placement="bottom-start"
       variant="responsive"
-      isOpen={isOpen}
+      isOpen={open}
       onOpen={onOpen}
       onClose={onPopoverClose}
       isLazy
@@ -201,20 +191,19 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
           <PopoverAnchor>
             <Input
               id={id}
-              onKeyPress={(e) => {
-                if (e.key === ' ' && !isOpen) {
+              onKeyUp={(e) => {
+                if (e.key === ' ' && !open) {
                   e.preventDefault();
                   onOpen();
                 }
               }}
               autoComplete="off"
               width={'10rem'}
+              paddingRight={'2.5rem'}
               disabled={disabled}
-              isDisabled={disabled}
               name={name}
               value={tempInput}
               onChange={handleInputChange}
-              paddingRight={'2.5rem'}
               {...restProps.propsConfigs?.inputProps}
             />
           </PopoverAnchor>

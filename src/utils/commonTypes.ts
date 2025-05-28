@@ -1,7 +1,7 @@
 import { ButtonProps } from '@chakra-ui/button';
+import { DividerProps } from '@chakra-ui/layout';
 import {
   BoxProps,
-  DividerProps,
   HeadingProps,
   InputProps,
   PopoverBodyProps,
