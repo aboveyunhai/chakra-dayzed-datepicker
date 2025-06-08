@@ -4,6 +4,7 @@ import {
   DividerProps,
   HeadingProps,
   InputProps,
+  PlacementWithLogical,
   PopoverBodyProps,
   SimpleGridProps,
   StackProps,
@@ -30,6 +31,7 @@ export interface DayOfMonthBtnStyleProps {
 }
 
 export interface PopoverCompProps {
+  placement?: PlacementWithLogical;
   popoverContentProps?: PopoverContentProps;
   popoverBodyProps?: PopoverBodyProps;
 }
@@ -54,6 +56,7 @@ export interface PropsConfigs {
 }
 
 export interface DatepickerConfigs {
+  emptyDatePlaceholder?: string;
   dateFormat?: string;
   monthNames?: string[];
   dayNames?: string[];

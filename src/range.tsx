@@ -21,7 +21,7 @@ import {
   OnDateSelected,
   PropsConfigs,
 } from './utils/commonTypes';
-import { format } from 'date-fns';
+import { format, Locale } from 'date-fns';
 import FocusLock from 'react-focus-lock';
 import { VariantProps } from './single';
 import { CalendarIcon } from './components/calendarIcon';
@@ -96,11 +96,12 @@ interface RangeProps extends DatepickerProps {
   name?: string;
   usePortal?: boolean;
   portalRef?: React.MutableRefObject<null>;
+  locale?: Locale;
 }
 
 export type RangeDatepickerProps = RangeProps & VariantProps;
 
-const DefaultConfigs: Required<DatepickerConfigs> = {
+const DefaultConfigs: Required<Omit<DatepickerConfigs, 'emptyDatePlaceholder'>> = {
   dateFormat: 'MM/dd/yyyy',
   monthNames: Month_Names_Short,
   dayNames: Weekday_Names_Short,
@@ -132,6 +133,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
     disabled,
     children,
     triggerVariant,
+    locale,
   } = mergedProps;
 
   // chakra popover utils
@@ -188,18 +190,18 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
 
   // eventually we want to allow user to freely type their own input and parse the input
   let intVal = selectedDates[0]
-    ? `${format(selectedDates[0], datepickerConfigs.dateFormat)}`
-    : `${datepickerConfigs.dateFormat}`;
+    ? `${format(selectedDates[0], datepickerConfigs.dateFormat, { locale })}`
+    : `${datepickerConfigs.emptyDatePlaceholder ?? datepickerConfigs.dateFormat}`;
   intVal += selectedDates[1]
-    ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat)}`
-    : ` - ${datepickerConfigs.dateFormat}`;
+    ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat, { locale })}`
+    : ` - ${datepickerConfigs.emptyDatePlaceholder ?? datepickerConfigs.dateFormat}`;
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
 
   return (
     <Popover
       id={id}
-      placement="bottom-start"
+      placement={propsConfigs?.popoverCompProps?.placement ?? "bottom-start"}
       variant="responsive"
       isOpen={isOpen}
       onOpen={onOpen}
