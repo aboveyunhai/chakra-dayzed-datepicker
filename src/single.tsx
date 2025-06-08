@@ -172,7 +172,7 @@ export const SingleDatepicker: React.FC<SingleDatepickerProps> = ({
   return (
     <Popover
       id={id}
-      placement="bottom-start"
+      placement={restProps.propsConfigs?.popoverCompProps?.placement ?? "bottom-start"}
       variant="responsive"
       isOpen={isOpen}
       onOpen={onOpen}

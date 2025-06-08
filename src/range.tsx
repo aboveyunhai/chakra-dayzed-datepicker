@@ -201,7 +201,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
   return (
     <Popover
       id={id}
-      placement="bottom-start"
+      placement={propsConfigs?.popoverCompProps?.placement ?? "bottom-start"}
       variant="responsive"
       isOpen={isOpen}
       onOpen={onOpen}
