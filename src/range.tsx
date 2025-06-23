@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Props as DayzedHookProps } from 'dayzed';
+import { Props as DayzedHookProps } from './utils/dayzed/utils';
 import { Month_Names_Short, Weekday_Names_Short } from './utils/calanderUtils';
 import {
   Button,

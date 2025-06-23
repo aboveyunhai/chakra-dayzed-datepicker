@@ -7,7 +7,8 @@ import {
   Box,
   Stack,
 } from '@chakra-ui/react';
-import { useDayzed, Props as DayzedHookProps } from 'dayzed';
+import { useDayzed } from '../utils/dayzed/dayzed';
+import { Props as DayzedHookProps } from '../utils/dayzed/utils';
 import { ArrowKeysReact } from '../utils/reactKeysArrow';
 import React, { useCallback, useMemo } from 'react';
 import { CalendarConfigs, DatepickerProps } from '../utils/commonTypes';
