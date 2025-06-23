@@ -76,7 +76,6 @@
   },
   "dependencies": {
     "date-fns": "^2.23.0",
-    "dayzed": "^3.2.2",
     "react-focus-lock": "^2.9.5"
   }
 }

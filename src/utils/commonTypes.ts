@@ -9,7 +9,7 @@ import {
   StackProps,
 } from '@chakra-ui/react';
 import { PopoverContentProps } from '@chakra-ui/react';
-import { DateObj } from 'dayzed';
+import { DateObj } from './dayzed/utils';
 
 export type OnDateSelected = (
   selectedDate: DateObj,
