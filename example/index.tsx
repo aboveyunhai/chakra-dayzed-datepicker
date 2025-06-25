@@ -54,8 +54,8 @@ const App = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const [date, setDate] = useState<Date | undefined>(demoDate);
   const [selectedDates, setSelectedDates] = useState<Date[]>([
-    new Date(),
-    new Date(),
+    // new Date(),
+    // new Date(),
   ]);
   const [firstDayOfWeek, setFirstDayOfWeek] = useState<FirstDayOfWeek>(1);
   const [isSingleChecked, setSingleCheck] = useState(true);
@@ -109,6 +109,14 @@ const App = () => {
             width="15rem"
             justifyContent={'flex-start'}
           >
+            Placeholder
+          </Tab>
+          <Tab
+            borderRadius="0.5rem"
+            height="2rem"
+            width="15rem"
+            justifyContent={'flex-start'}
+          >
             Single & Range
           </Tab>
           <Tab
@@ -146,6 +154,71 @@ const App = () => {
           </Tab>
         </TabList>
         <TabPanels height={'20rem'}>
+          <TabPanel>
+            <Panel>
+              <>
+                <Section title="Button:">
+                  <Box>Using placeholder on button trigger</Box>
+                  <RangeDatepicker
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    configs={{
+                      dateFormat: 'yyyy-MM-dd',
+                      dayNames: 'abcdefg'.split(''), // length of 7
+                      monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
+                    }}
+                    placeholder='Click to select a range date'
+                  />
+                </Section>
+                <Section title="Button (No fill):">
+                  <Box>Don't fill missing end range</Box>
+                  <RangeDatepicker
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    configs={{
+                      dateFormat: 'yyyy-MM-dd',
+                      dayNames: 'abcdefg'.split(''), // length of 7
+                      monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
+                    }}
+                    placeholder='Click to select a range date'
+                    fillEmpty={false}
+                  />
+                </Section>
+
+                <Section title="Input:">
+                  <Box>Using placeholder on input</Box>
+                  <RangeDatepicker
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    configs={{
+                      dateFormat: 'yyyy-MM-dd',
+                      dayNames: 'abcdefg'.split(''), // length of 7
+                      monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
+                    }}
+                    triggerVariant="input"
+                    placeholder='Click to select a range date'
+                  />
+                </Section>
+
+                <Section title="Input (No fill):">
+                  <Box>Don't fill missing end range</Box>
+                  <RangeDatepicker
+                    selectedDates={selectedDates}
+                    onDateChange={setSelectedDates}
+                    configs={{
+                      dateFormat: 'yyyy-MM-dd',
+                      dayNames: 'abcdefg'.split(''), // length of 7
+                      monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
+                    }}
+                    triggerVariant="input"
+                    placeholder='Click to select a range date'
+                    fillEmpty={false}
+                  />
+                </Section>
+              </>
+            </Panel>
+          </TabPanel>
+
           <TabPanel>
             <Panel>
               <Flex flexDir={'column'} gap={3} pb="5rem">
@@ -394,6 +467,7 @@ const App = () => {
                     dayNames: 'abcdefg'.split(''), // length of 7
                     monthNames: 'ABCDEFGHIJKL'.split(''), // length of 12
                   }}
+                  placeholder='Click to select a range date'
                 />
               </Section>
             </Panel>

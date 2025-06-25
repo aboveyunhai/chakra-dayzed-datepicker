@@ -96,6 +96,8 @@ interface RangeProps extends DatepickerProps {
   name?: string;
   usePortal?: boolean;
   portalRef?: React.MutableRefObject<null>;
+  placeholder?: string;
+  fillEmpty?: boolean;
 }
 
 export type RangeDatepickerProps = RangeProps & VariantProps;
@@ -108,7 +110,8 @@ const DefaultConfigs: Required<DatepickerConfigs> = {
   monthsToDisplay: 2,
 };
 
-const defaultProps = {
+const defaultProps: Partial<RangeDatepickerProps> = {
+  fillEmpty: true,
   defaultIsOpen: false,
   closeOnSelect: true,
   triggerVariant: 'default' as const,
@@ -132,6 +135,8 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
     disabled,
     children,
     triggerVariant,
+    placeholder,
+    fillEmpty
   } = mergedProps;
 
   // chakra popover utils
@@ -186,13 +191,20 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
     }
   };
 
-  // eventually we want to allow user to freely type their own input and parse the input
-  let intVal = selectedDates[0]
-    ? `${format(selectedDates[0], datepickerConfigs.dateFormat)}`
-    : `${datepickerConfigs.dateFormat}`;
-  intVal += selectedDates[1]
-    ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat)}`
-    : ` - ${datepickerConfigs.dateFormat}`;
+  let intVal = null;
+
+  if (selectedDates?.filter(x => x).length) {
+    // eventually we want to allow user to freely type their own input and parse the input
+    intVal = selectedDates[0]
+      ? `${format(selectedDates[0], datepickerConfigs.dateFormat)}`
+      : `${datepickerConfigs.dateFormat}`;
+  
+    intVal += selectedDates[1]
+        ? ` - ${format(selectedDates[1], datepickerConfigs.dateFormat)}`
+        : fillEmpty
+        ? ` - ${datepickerConfigs.dateFormat}`
+        : '';
+  }
 
   const PopoverContentWrapper = usePortal ? Portal : React.Fragment;
 
@@ -217,7 +229,10 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
             disabled={disabled}
             {...propsConfigs?.triggerBtnProps}
           >
-            {intVal}
+            {
+              // Use placehold or empty string as default value
+              intVal ?? placeholder
+            }
           </Button>
         </PopoverTrigger>
       ) : null}
@@ -237,6 +252,7 @@ export const RangeDatepicker: React.FC<RangeDatepickerProps> = (props) => {
               paddingRight={'2.5rem'}
               isDisabled={disabled}
               name={name}
+              placeholder={placeholder}
               value={intVal}
               onChange={(e) => e.target.value}
               {...propsConfigs?.inputProps}
