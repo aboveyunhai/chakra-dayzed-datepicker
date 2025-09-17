@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2025-09-17
+
+- Migrate to Chakra UI v3.
+- Bump the version of the library to 3.0.0 so it is consistent with Chakra UI v3.
+- Add minimum requirement for Chakra UI version 
+
 ## [0.3.1] - 2025-06-23
 
 - Remove `dayzed` dependency and add internal implementation
