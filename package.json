@@ -42,7 +42,10 @@
     "endOfLine": "auto"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
   },
   "name": "chakra-dayzed-datepicker",
   "author": "aboveyunhai",
