@@ -1,5 +1,5 @@
 {
-  "version": "0.3.1",
+  "version": "3.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -13,11 +13,12 @@
     "url": "git+https://github.com/aboveyunhai/chakra-dayzed-datepicker.git"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "scripts": {
     "start": "dts watch",
     "build": "dts build",
+    "exmaple": "cd example && npm start",
     "test": "dts test --passWithNoTests",
     "lint": "dts lint",
     "prepare": "dts build",
@@ -25,7 +26,8 @@
     "analyze": "size-limit --why"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "@chakra-ui/react": ">=3",
+    "react": ">=18"
   },
   "husky": {
     "hooks": {
@@ -40,7 +42,10 @@
     "endOfLine": "auto"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
   },
   "name": "chakra-dayzed-datepicker",
   "author": "aboveyunhai",
@@ -57,25 +62,23 @@
     }
   ],
   "devDependencies": {
-    "@chakra-ui/react": "^1.7.3",
-    "@emotion/react": "^11.4.0",
-    "@emotion/styled": "^11.3.0",
+    "@chakra-ui/react": "^3.27.0",
+    "@emotion/react": "^11.14.0",
     "@size-limit/preset-small-lib": "^6.0.4",
     "@tsconfig/create-react-app": "^1.0.2",
     "@tsconfig/recommended": "^1.0.1",
-    "@types/react": "^17.0.15",
-    "@types/react-dom": "^17.0.9",
-    "dts-cli": "^1.6.3",
-    "framer-motion": "^4.1.17",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "dts-cli": "^2.0.5",
     "husky": "^7.0.4",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "size-limit": "^6.0.4",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.4"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
-    "date-fns": "^2.23.0",
+    "date-fns": "^4.1.0",
     "react-focus-lock": "^2.9.5"
   }
 }
